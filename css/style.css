@@ -21,7 +21,9 @@
     text-transform: capitalize;
     transition: .2s linear;
 }
-
+h3,h1,p{
+    cursor: default;
+}
 html{
     font-size: 62.5%;
     overflow-x: hidden;
@@ -419,13 +421,20 @@ section{
 
 .portfolio .box-container .box .content h3{
     font-size: 2.5rem;
-    color:var(--black);
+    color:var(--green);
     text-transform: uppercase;
     transform: translateY(-5rem);
     opacity: 0;
     transition-delay: .3s;
 }
-
+.portfolio .box-container .box .content p{
+    font-size: 13px; 
+    color: var(--black);
+}
+.portfolio .box-container .box .content p a{
+    font-size: 15px; 
+    color:var(--green);
+}
 .portfolio .box-container .box:hover .content h3{
     transform: translateY(0rem);
     opacity: 1;
