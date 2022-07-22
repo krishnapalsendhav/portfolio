@@ -5,6 +5,7 @@
     --black:#444;
     --light-color:#777;
     --bg-color:#e6e6e6;
+    --scroll-bg-color:#e6e6e6;
     --border:.1rem solid rgba(0,0,0,.2);
     --box-shadow:.4rem .4rem 1rem #ccc,
                 -.4rem -.4rem 1rem #fff;
@@ -21,6 +22,18 @@
     text-transform: capitalize;
     transition: .2s linear;
 }
+html::-webkit-scrollbar{
+    width:1.4rem;
+}
+
+html::-webkit-scrollbar-track{
+    background:var(--scroll-bg-color);
+}
+
+html::-webkit-scrollbar-thumb{
+    background:var(--green);
+}
+
 h3,h1,p{
     cursor: default;
 }
@@ -39,6 +52,7 @@ body.active{
     --black:#fff;
     --light-color:#ddd;
     --bg-color:#222;
+    --scroll-bg-color:#222;
     --border:.1rem solid rgba(0,0,0,.4);
     --box-shadow:.4rem .4rem 1rem #111,
                 -.4rem -.4rem 1rem #333;
