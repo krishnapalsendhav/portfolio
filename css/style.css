@@ -77,7 +77,7 @@ section{
     box-shadow: var(--box-shadow);
 }
 
-.btn:hover{
+.btn:focus{
     box-shadow: var(--box-shadow-inset);
     color:var(--green);
 }
@@ -140,7 +140,7 @@ section{
     color:var(--black);
 }
 
-.header .navbar a:hover{
+.header .navbar a:focus{
     box-shadow: var(--box-shadow-inset);
     color: var(--green);
 }
@@ -162,7 +162,7 @@ section{
     display: none;
 }
 
-#menu-btn:hover{
+#menu-btn:focus{
     color:var(--green);
     box-shadow: var(--box-shadow-inset);
 }
@@ -183,7 +183,7 @@ section{
     background: var(--bg-color);
 }
 
-#theme-toggler:hover{
+#theme-toggler:focus{
     color:var(--green);
     box-shadow: var(--box-shadow-inset);
 }
@@ -228,7 +228,7 @@ section{
     border-radius: .5rem;
 }
 
-.home .share a:hover{
+.home .share a:focus{
     box-shadow: var(--box-shadow-inset);
     color:var(--green);
 }
