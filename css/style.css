@@ -410,6 +410,7 @@ section{
     box-shadow: var(--box-shadow);
     position: relative;
     border:1rem solid transparent;
+    
 }
 
 .portfolio .box-container .box img{
@@ -490,6 +491,7 @@ section{
     margin-top: 1rem;
     border-top: var(--border);
     color:var(--black);
+    cursor: default;
 }
 
 .credits span{
