@@ -1,0 +1,324 @@
+.contact {
+    background: linear-gradient(180deg, var(--bg-secondary), var(--bg-primary));
+    padding-bottom: 40px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Journey Label */
+.journeyLabel {
+    display: inline-block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #ff00a8;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 12px;
+    padding: 8px 16px;
+    background: rgba(255, 0, 168, 0.1);
+    border: 1px solid rgba(255, 0, 168, 0.2);
+    border-radius: 20px;
+}
+
+/* Radiating Waves */
+.waveContainer {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+}
+
+.wave {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    border: 2px solid rgba(0, 245, 255, 0.2);
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* Floating Messages */
+.floatingMessages {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.floatingMessage {
+    position: absolute;
+    font-size: 1.8rem;
+    animation: floatMessage 12s ease-in-out infinite;
+}
+
+@keyframes floatMessage {
+
+    0%,
+    100% {
+        transform: translateY(0) rotate(0deg);
+    }
+
+    25% {
+        transform: translateY(-20px) rotate(10deg);
+    }
+
+    50% {
+        transform: translateY(-35px) rotate(-5deg);
+    }
+
+    75% {
+        transform: translateY(-15px) rotate(8deg);
+    }
+}
+
+/* Gradient Orbs */
+.gradientOrb1 {
+    position: absolute;
+    width: 350px;
+    height: 350px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 0, 168, 0.12) 0%, transparent 70%);
+    top: 10%;
+    right: -5%;
+    filter: blur(50px);
+    pointer-events: none;
+}
+
+.gradientOrb2 {
+    position: absolute;
+    width: 280px;
+    height: 280px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0, 245, 255, 0.1) 0%, transparent 70%);
+    bottom: 20%;
+    left: -8%;
+    filter: blur(45px);
+    pointer-events: none;
+}
+
+.content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: start;
+    position: relative;
+    z-index: 1;
+}
+
+.contactInfo {
+    padding-right: 20px;
+}
+
+.infoTitle {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: #ffffff;
+}
+
+.titleIcon {
+    color: #00f5ff;
+}
+
+.infoDescription {
+    font-size: 1.05rem;
+    color: #a0a0b0;
+    line-height: 1.7;
+    margin-bottom: 32px;
+}
+
+.infoList {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.infoItem {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.infoIcon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 245, 255, 0.1);
+    border: 1px solid rgba(0, 245, 255, 0.2);
+    border-radius: 12px;
+    color: #00f5ff;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+    transition: all 0.3s ease;
+}
+
+.infoContent {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.infoLabel {
+    font-size: 0.85rem;
+    color: #6b6b80;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.infoValue {
+    font-size: 1rem;
+    color: #ffffff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a.infoValue:hover {
+    color: #00f5ff;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Form Glow Effect */
+.formGlow {
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: conic-gradient(from 0deg, transparent, rgba(0, 245, 255, 0.1), transparent, rgba(191, 0, 255, 0.1), transparent);
+    animation: rotateGlow 10s linear infinite;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.form:hover .formGlow {
+    opacity: 1;
+}
+
+@keyframes rotateGlow {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.formGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    position: relative;
+    z-index: 1;
+}
+
+.label {
+    font-size: 0.9rem;
+    color: #a0a0b0;
+    font-weight: 500;
+}
+
+.input,
+.textarea {
+    padding: 14px 18px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    color: #ffffff;
+    font-size: 1rem;
+    font-family: inherit;
+    transition: all 0.3s ease;
+}
+
+.input:focus,
+.textarea:focus {
+    outline: none;
+    border-color: #00f5ff;
+    box-shadow: 0 0 30px rgba(0, 245, 255, 0.15);
+    background: rgba(0, 245, 255, 0.03);
+}
+
+.input::placeholder,
+.textarea::placeholder {
+    color: #6b6b80;
+}
+
+.textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.submitBtn {
+    width: 100%;
+    justify-content: center;
+    padding: 16px 32px;
+    font-size: 1.05rem;
+    position: relative;
+    z-index: 1;
+}
+
+.submitBtn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.footer {
+    margin-top: 80px;
+    padding-top: 32px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    text-align: center;
+    color: #6b6b80;
+    font-size: 0.9rem;
+    position: relative;
+    z-index: 1;
+}
+
+.footer p {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.heart {
+    color: #ff4d6d;
+    display: inline-flex;
+    align-items: center;
+}
+
+@media (max-width: 768px) {
+    .content {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+
+    .contactInfo {
+        padding-right: 0;
+    }
+
+    .wave {
+        width: 300px;
+        height: 300px;
+    }
+
+    .floatingMessage {
+        display: none;
+    }
+}

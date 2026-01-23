@@ -1,0 +1,25 @@
+.magneticWrapper {
+    display: inline-block;
+    position: relative;
+}
+
+.magneticButton {
+    position: relative;
+    overflow: hidden;
+}
+
+.magneticButton::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+            rgba(0, 245, 255, 0.15),
+            transparent 60%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.magneticButton:hover::before {
+    opacity: 1;
+}

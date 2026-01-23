@@ -1,0 +1,354 @@
+.experience {
+    background: var(--bg-secondary);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Journey Label */
+.journeyLabel {
+    display: inline-block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #bf00ff;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 12px;
+    padding: 8px 16px;
+    background: rgba(191, 0, 255, 0.1);
+    border: 1px solid rgba(191, 0, 255, 0.2);
+    border-radius: 20px;
+}
+
+/* Floating Shapes */
+.floatingShapes {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.floatingShape {
+    position: absolute;
+    opacity: 0.1;
+    animation: floatShape 12s ease-in-out infinite;
+}
+
+.circle {
+    border-radius: 50%;
+    background: linear-gradient(135deg, #00f5ff, #bf00ff);
+}
+
+.square {
+    border-radius: 4px;
+    background: linear-gradient(135deg, #bf00ff, #4d7cff);
+    transform: rotate(45deg);
+}
+
+.triangle {
+    width: 0 !important;
+    height: 0 !important;
+    border-left: 25px solid transparent;
+    border-right: 25px solid transparent;
+    border-bottom: 40px solid rgba(0, 245, 255, 0.3);
+    background: none !important;
+}
+
+@keyframes floatShape {
+
+    0%,
+    100% {
+        transform: translateY(0) rotate(0deg);
+    }
+
+    25% {
+        transform: translateY(-30px) rotate(90deg);
+    }
+
+    50% {
+        transform: translateY(-15px) rotate(180deg);
+    }
+
+    75% {
+        transform: translateY(-40px) rotate(270deg);
+    }
+}
+
+/* Gradient Orbs */
+.gradientOrb {
+    position: absolute;
+    width: 350px;
+    height: 350px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(191, 0, 255, 0.12) 0%, transparent 70%);
+    top: 20%;
+    right: -5%;
+    filter: blur(50px);
+    pointer-events: none;
+}
+
+.gradientOrb2 {
+    position: absolute;
+    width: 280px;
+    height: 280px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0, 245, 255, 0.1) 0%, transparent 70%);
+    bottom: 15%;
+    left: -8%;
+    filter: blur(45px);
+    pointer-events: none;
+}
+
+.timeline {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    padding-left: 40px;
+}
+
+/* Animated Path SVG */
+.pathSvg {
+    position: absolute;
+    left: 8px;
+    top: 0;
+    width: 4px;
+    height: 100%;
+    z-index: 0;
+}
+
+/* Traveling Dot */
+.travelingDot {
+    position: absolute;
+    left: 4px;
+    width: 12px;
+    height: 12px;
+    background: #00f5ff;
+    border-radius: 50%;
+    box-shadow: 0 0 30px rgba(0, 245, 255, 0.8), 0 0 60px rgba(0, 245, 255, 0.4);
+    z-index: 2;
+    transform: translateX(-4px);
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        box-shadow: 0 0 30px rgba(0, 245, 255, 0.8), 0 0 60px rgba(0, 245, 255, 0.4);
+    }
+
+    50% {
+        box-shadow: 0 0 50px rgba(0, 245, 255, 1), 0 0 100px rgba(0, 245, 255, 0.6);
+    }
+}
+
+.timelineItem {
+    display: flex;
+    gap: 30px;
+    position: relative;
+    z-index: 1;
+}
+
+.timelineMarker {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 32px;
+    position: absolute;
+    left: -40px;
+}
+
+.markerDot {
+    width: 16px;
+    height: 16px;
+    background: linear-gradient(135deg, #00f5ff, #bf00ff);
+    border-radius: 50%;
+    box-shadow: 0 0 20px rgba(0, 245, 255, 0.5);
+    flex-shrink: 0;
+    position: relative;
+    z-index: 3;
+}
+
+.markerDot::before {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border: 2px solid rgba(0, 245, 255, 0.3);
+    border-radius: 50%;
+    animation: ringPulse 2s ease-in-out infinite;
+}
+
+@keyframes ringPulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.5);
+        opacity: 0;
+    }
+}
+
+.markerLine {
+    width: 2px;
+    flex: 1;
+    background: linear-gradient(180deg, rgba(0, 245, 255, 0.3), transparent);
+    margin-top: 8px;
+    display: none;
+}
+
+.companyCard {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+}
+
+.companyCard::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 3px;
+    height: 100%;
+    background: linear-gradient(180deg, #00f5ff, #bf00ff, #4d7cff);
+    border-radius: 3px 0 0 3px;
+}
+
+.companyHeader {
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.companyInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.companyName {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.companyLocation {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.95rem;
+    color: #6b6b80;
+}
+
+.icon {
+    color: #00f5ff;
+    font-size: 1rem;
+}
+
+.roles {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+}
+
+.role {
+    position: relative;
+}
+
+.role:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    bottom: -14px;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.roleHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.roleTitle {
+    font-size: 1.2rem;
+    font-weight: 600;
+    background: linear-gradient(135deg, #ffffff, #00f5ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.rolePeriod {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.9rem;
+    color: #a0a0b0;
+    background: rgba(0, 245, 255, 0.1);
+    padding: 6px 14px;
+    border-radius: 20px;
+}
+
+.roleDescription {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.roleDescription li {
+    position: relative;
+    padding-left: 24px;
+    color: #a0a0b0;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.roleDescription li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 8px;
+    height: 8px;
+    background: linear-gradient(135deg, #00f5ff, #bf00ff);
+    border-radius: 50%;
+}
+
+@media (max-width: 768px) {
+    .timeline {
+        padding-left: 0;
+    }
+
+    .timelineItem {
+        gap: 20px;
+    }
+
+    .timelineMarker {
+        display: none;
+    }
+
+    .pathSvg,
+    .travelingDot {
+        display: none;
+    }
+
+    .roleHeader {
+        flex-direction: column;
+    }
+
+    .floatingShape {
+        display: none;
+    }
+}

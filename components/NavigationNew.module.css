@@ -1,0 +1,188 @@
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    padding: 24px 0;
+    transition: all 0.3s ease;
+}
+
+.header.scrolled {
+    padding: 16px 0;
+    background: rgba(10, 10, 15, 0.8);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    text-decoration: none;
+}
+
+.logoText {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: -0.02em;
+}
+
+.logoDot {
+    width: 8px;
+    height: 8px;
+    background: #00f5ff;
+    border-radius: 50%;
+    margin-bottom: -4px;
+}
+
+.menuButton {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 12px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    z-index: 101;
+}
+
+.menuLine {
+    display: block;
+    width: 28px;
+    height: 2px;
+    background: #ffffff;
+    transition: all 0.3s ease;
+    transform-origin: center;
+}
+
+.menuButton.open .menuLine:first-child {
+    transform: translateY(4px) rotate(45deg);
+}
+
+.menuButton.open .menuLine:last-child {
+    transform: translateY(-4px) rotate(-45deg);
+}
+
+/* Overlay */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 99;
+    display: flex;
+    align-items: center;
+    padding: 120px 40px 60px;
+}
+
+.overlayBg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #0a0a0f;
+    transform-origin: top;
+    z-index: -1;
+}
+
+.nav {
+    flex: 1;
+}
+
+.navList {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.navItem {
+    margin-bottom: 8px;
+}
+
+.navLink {
+    display: flex;
+    align-items: baseline;
+    gap: 20px;
+    padding: 12px 0;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.3s ease;
+}
+
+.navNumber {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.3);
+    font-family: monospace;
+}
+
+.navText {
+    font-size: clamp(2rem, 6vw, 4rem);
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: -0.02em;
+    transition: all 0.3s ease;
+}
+
+.navLink:hover .navText {
+    color: #00f5ff;
+    transform: translateX(20px);
+}
+
+.navLink:hover .navNumber {
+    color: #00f5ff;
+}
+
+.overlayFooter {
+    position: absolute;
+    bottom: 40px;
+    left: 40px;
+    right: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.overlayFooter a {
+    color: rgba(255, 255, 255, 0.5);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.3s ease;
+}
+
+.overlayFooter a:hover {
+    color: #00f5ff;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 0 20px;
+    }
+
+    .overlay {
+        padding: 100px 20px 40px;
+    }
+
+    .overlayFooter {
+        left: 20px;
+        right: 20px;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
