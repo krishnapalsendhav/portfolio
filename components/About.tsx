@@ -86,11 +86,11 @@ export default function About() {
                         animate={isInView ? { opacity: 1, x: 0 } : {}}
                         transition={{ delay: 0.2 }}
                     >
-                        Chapter 01
+                        About Me
                     </motion.span>
-                    <h2 className="section-title">The Beginning</h2>
+                    <h2 className="section-title">Flutter Developer</h2>
                     <p className="section-subtitle">
-                        Where my passion for crafting AI-powered experiences started
+                        Building production-ready mobile apps with 2+ years of experience
                     </p>
                 </motion.div>
 
@@ -102,24 +102,28 @@ export default function About() {
                         transition={{ duration: 0.6, delay: 0.2 }}
                     >
                         <p className={styles.bio}>
-                            I&apos;m a <span className={styles.highlight}>Senior Flutter Developer</span> at
-                            Classio Labs Pvt Ltd, where I&apos;ve built and scaled mobile applications from
-                            the ground up. My journey in software development has been driven by a passion
-                            for creating seamless, AI-powered user experiences.
+                            I&apos;m a Flutter developer with <span className={styles.highlight}>2+ years of experience</span> building
+                            production-ready mobile apps for students and institutions. I focus on clean architecture,
+                            performance, and long-term maintainability.
                         </p>
-                        <p className={styles.bio}>
-                            At ClassIO, I&apos;ve developed the Student App and
-                            <span className={styles.highlight}> Management App</span> serving
-                            <span className={styles.highlight}> 50,000+ users</span>. I specialize in
-                            implementing <span className={styles.highlight}>on-device AI</span> for privacy
-                            and security, including AI-powered doubt portals and video-to-quiz generation pipelines.
-                        </p>
-                        <p className={styles.bio}>
-                            Currently, I&apos;m working on an
-                            <span className={styles.highlight}> AI-powered agentic chatbot</span> with
-                            autonomous task execution capabilities. I also built an innovative App Builder
-                            that allows institutes to customize their app layouts in real-time.
-                        </p>
+                        <div className={styles.achievementsList}>
+                            <div className={styles.achievementItem}>
+                                <span className={styles.achievementDot} />
+                                Large-scale student apps (<span className={styles.highlight}>50K+ users</span>)
+                            </div>
+                            <div className={styles.achievementItem}>
+                                <span className={styles.achievementDot} />
+                                Real-time systems (chat, polls, live classes)
+                            </div>
+                            <div className={styles.achievementItem}>
+                                <span className={styles.achievementDot} />
+                                Custom DRM and secure content delivery
+                            </div>
+                            <div className={styles.achievementItem}>
+                                <span className={styles.achievementDot} />
+                                AI-powered features and automation
+                            </div>
+                        </div>
                     </motion.div>
 
                     <div className={styles.highlights}>

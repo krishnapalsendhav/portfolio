@@ -14,22 +14,16 @@ const contactInfo = [
         href: 'mailto:krishnapalsendhav591@gmail.com',
     },
     {
-        icon: FiPhone,
-        label: 'Phone',
-        value: '+91 8959562779',
-        href: 'tel:+918959562779',
+        icon: FiLinkedin,
+        label: 'LinkedIn',
+        value: 'linkedin.com/in/krishnapal-sendhav',
+        href: 'https://www.linkedin.com/in/krishnapal-sendhav/',
     },
     {
         icon: FiMapPin,
         label: 'Location',
         value: 'Indore, Madhya Pradesh, India',
         href: null,
-    },
-    {
-        icon: FiLinkedin,
-        label: 'LinkedIn',
-        value: 'linkedin.com/in/krishnapal-sendhav',
-        href: 'https://www.linkedin.com/in/krishnapal-sendhav/',
     },
 ];
 
@@ -123,11 +117,11 @@ export default function Contact() {
                         animate={isInView ? { opacity: 1, x: 0 } : {}}
                         transition={{ delay: 0.2 }}
                     >
-                        The Destination
+                        Get In Touch
                     </motion.span>
-                    <h2 className="section-title">Let&apos;s Connect</h2>
+                    <h2 className="section-title">Interested in working together?</h2>
                     <p className="section-subtitle">
-                        Ready to start your journey? Let&apos;s create something amazing together.
+                        Let&apos;s create something amazing together.
                     </p>
                 </motion.div>
 
@@ -140,12 +134,13 @@ export default function Contact() {
                     >
                         <h3 className={styles.infoTitle}>
                             <FiMessageSquare className={styles.titleIcon} />
-                            Get In Touch
+                            I&apos;m open to
                         </h3>
-                        <p className={styles.infoDescription}>
-                            I&apos;m always open to discussing new projects, creative ideas, or
-                            opportunities to be part of your vision.
-                        </p>
+                        <div className={styles.availabilityList}>
+                            <span className={styles.availabilityItem}>Flutter Developer roles</span>
+                            <span className={styles.availabilityItem}>Contract / Freelance projects</span>
+                            <span className={styles.availabilityItem}>Startup collaborations</span>
+                        </div>
 
                         <div className={styles.infoList}>
                             {contactInfo.map((info, index) => (

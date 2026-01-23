@@ -9,56 +9,73 @@ import styles from './Projects.module.css';
 
 const projects = [
     {
-        title: 'Video to Quiz AI Pipeline',
-        description: 'Built an end-to-end AI pipeline that automatically generates quizzes from video content. Leverages AI to analyze video lectures and create relevant questions for student assessment.',
-        tags: ['AI/ML', 'Pipeline', 'Flutter', 'On-Device AI'],
-        icon: FiCpu,
-        stats: 'AI-Powered',
-        highlights: [
-            'Automated quiz generation from video content',
-            'On-device AI for privacy and security',
-            'Intelligent question extraction pipeline',
-        ],
-    },
-    {
-        title: 'Student Learning App',
-        description: 'A comprehensive mobile application featuring AI-powered learning assistance, course content, live classes, and progress tracking. Scaled to serve 50,000+ active users with on-device AI for privacy.',
-        tags: ['Flutter', 'On-Device AI', 'Firebase', 'DRM'],
+        title: 'Student Learning Platform',
+        oneLiner: 'A large-scale Flutter app used by 50K+ students for learning, live classes, and AI-powered doubt resolution.',
+        tags: ['Flutter', 'GetX', 'Firebase', 'WebSockets', 'AI'],
         icon: FiUsers,
         stats: '50K+ Users',
         highlights: [
-            'On-device AI running locally for security',
-            'Custom DRM implementation for content protection',
-            'Real-time progress tracking and analytics',
+            '50K+ active users across institutions',
+            'Real-time chat, polls, and live classes',
+            'Custom DRM for secure content delivery',
+            'AI-powered doubt resolution portal',
         ],
     },
     {
         title: 'ClassIO Management App',
-        description: 'A powerful management tool for educational institutes with AI-powered doubt portal. AI assists teachers in generating and improving replies to student queries.',
+        oneLiner: 'A powerful management tool for educational institutes with AI-powered features for streamlined operations.',
         tags: ['Flutter', 'AI Assistant', 'REST API', 'PostgreSQL'],
         icon: FiSmartphone,
         stats: 'AI-Enhanced',
         highlights: [
             'AI-powered doubt portal for smart replies',
-            'AI-generated reply suggestions',
-            'Analytics dashboard for institutes',
+            'Automated reply suggestions for teachers',
+            'Real-time analytics dashboard',
+            'Multi-institute support',
+        ],
+    },
+    {
+        title: 'Live Classes Platform',
+        oneLiner: 'Real-time live class features with interactive components for enhanced student engagement.',
+        tags: ['WebRTC', 'WebSockets', 'Real-time', 'Flutter'],
+        icon: FiVideo,
+        stats: 'Real-time',
+        highlights: [
+            'Low-latency video streaming',
+            'Interactive polls and Q&A',
+            'Real-time chat and file sharing',
+            'Screen sharing capability',
+        ],
+    },
+    {
+        title: 'Video to Quiz AI Pipeline',
+        oneLiner: 'End-to-end AI pipeline that automatically generates quizzes from video content for student assessment.',
+        tags: ['AI/ML', 'Pipeline', 'Flutter', 'On-Device AI'],
+        icon: FiCpu,
+        stats: 'AI-Powered',
+        highlights: [
+            'Automated quiz generation from videos',
+            'On-device AI for privacy',
+            'Intelligent question extraction',
+            'Multiple question formats',
         ],
     },
     {
         title: 'AI Agentic Chatbot',
-        description: 'Currently developing an AI-powered agentic chatbot capable of autonomous task execution and intelligent conversation handling for enhanced user support.',
+        oneLiner: 'AI-powered agentic chatbot capable of autonomous task execution and intelligent conversation handling.',
         tags: ['AI/ML', 'LLM', 'Agents', 'Flutter'],
         icon: FiMessageCircle,
         stats: 'In Progress',
         highlights: [
-            'Autonomous task execution capabilities',
-            'Context-aware conversation handling',
-            'Integration with existing ClassIO ecosystem',
+            'Autonomous task execution',
+            'Context-aware conversations',
+            'ClassIO ecosystem integration',
+            'Multi-modal interactions',
         ],
     },
     {
         title: 'App Builder Feature',
-        description: 'An innovative feature allowing institutes to customize their app layouts directly from the management interface. Enables real-time branding and UI customization.',
+        oneLiner: 'Innovative feature allowing institutes to customize app layouts directly from management interface.',
         tags: ['Flutter', 'Dynamic UI', 'JSON Config'],
         icon: FiLayout,
         stats: 'Innovative',
@@ -66,18 +83,7 @@ const projects = [
             'Drag-and-drop layout customization',
             'Real-time preview of changes',
             'Theme and branding controls',
-        ],
-    },
-    {
-        title: 'Live Classes Platform',
-        description: 'Real-time live class features with interactive components including chat, polls, Q&A, and file sharing for enhanced student engagement.',
-        tags: ['WebRTC', 'Socket.io', 'Real-time'],
-        icon: FiVideo,
-        stats: 'Real-time',
-        highlights: [
-            'Low-latency video streaming',
-            'Interactive polls and Q&A',
-            'Real-time chat and file sharing',
+            'No-code app configuration',
         ],
     },
 ];
@@ -180,7 +186,7 @@ export default function Projects() {
                                 </div>
 
                                 <h3 className={styles.projectTitle}>{project.title}</h3>
-                                <p className={styles.projectDescription}>{project.description}</p>
+                                <p className={styles.projectDescription}>{project.oneLiner}</p>
 
                                 <div className={styles.projectHighlights}>
                                     {project.highlights.map((highlight, i) => (

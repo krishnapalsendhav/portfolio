@@ -6,9 +6,9 @@ import styles from './NavigationNew.module.css';
 
 const navItems = [
     { name: 'Home', href: '#home' },
-    { name: 'About', href: '#about' },
-    { name: 'Journey', href: '#experience' },
     { name: 'Projects', href: '#projects' },
+    { name: 'Skills', href: '#skills' },
+    { name: 'About', href: '#about' },
     { name: 'Contact', href: '#contact' },
 ];
 

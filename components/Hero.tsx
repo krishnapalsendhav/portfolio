@@ -115,7 +115,7 @@ export default function Hero() {
                     </MagneticButton>
                     <MagneticButton
                         as="a"
-                        href="/resume.pdf"
+                        href="/Krishnapal-Sendhav-Resume.pdf"
                         className="btn-secondary"
                         target="_blank"
                         rel="noopener noreferrer"

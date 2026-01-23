@@ -106,43 +106,29 @@
 
 .subtitle {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    font-size: clamp(1.2rem, 3vw, 1.8rem);
+    gap: 12px;
+    font-size: clamp(1.1rem, 2.5vw, 1.5rem);
     margin-bottom: 24px;
+    flex-wrap: wrap;
 }
 
-@media (min-width: 768px) {
-    .subtitle {
-        flex-direction: row;
-        gap: 12px;
-    }
-}
-
-.rolePrefix {
-    color: rgba(255, 255, 255, 0.5);
-}
-
-.roleContainer {
-    position: relative;
-    height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 280px;
-}
-
-.role {
-    position: absolute;
-    white-space: nowrap;
+.tagline {
     color: #00f5ff;
-    font-weight: 600;
-    left: 50%;
-    /* transform handled by Framer Motion to preserve centering */
-    width: 100%;
-    text-align: center;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.taglineDivider {
+    color: rgba(255, 255, 255, 0.3);
+    font-weight: 300;
+}
+
+.taglineSecondary {
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 500;
 }
 
 .description {
@@ -182,35 +168,29 @@
     box-shadow: 0 10px 40px rgba(0, 245, 255, 0.4);
 }
 
-.ctaLink {
-    color: rgba(255, 255, 255, 0.7);
+.ctaSecondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 16px 32px;
+    background: transparent;
+    color: rgba(255, 255, 255, 0.8);
     font-weight: 500;
+    font-size: 0.95rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50px;
     text-decoration: none;
-    position: relative;
-    padding: 8px 0;
-    transition: color 0.3s ease;
+    transition: all 0.3s ease;
 }
 
-.ctaLink::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 1px;
-    background: linear-gradient(90deg, #00f5ff, #bf00ff);
-    transform: scaleX(0);
-    transform-origin: right;
-    transition: transform 0.3s ease;
+.ctaSecondary:hover {
+    border-color: #00f5ff;
+    color: #00f5ff;
+    background: rgba(0, 245, 255, 0.05);
 }
 
-.ctaLink:hover {
-    color: #ffffff;
-}
-
-.ctaLink:hover::after {
-    transform: scaleX(1);
-    transform-origin: left;
+.ctaSecondary svg {
+    font-size: 1rem;
 }
 
 .scrollIndicator {
@@ -245,17 +225,20 @@
 
     .subtitle {
         flex-direction: column;
-        gap: 8px;
+        gap: 6px;
     }
 
-    .roleContainer {
-        position: relative;
-        height: 30px;
+    .taglineDivider {
+        display: none;
     }
 
     .cta {
         flex-direction: column;
-        gap: 20px;
+        gap: 16px;
+    }
+
+    .ctaSecondary {
+        padding: 14px 28px;
     }
 
     .scrollIndicator {

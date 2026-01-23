@@ -133,6 +133,24 @@
     margin-bottom: 32px;
 }
 
+/* Availability List */
+.availabilityList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 32px;
+}
+
+.availabilityItem {
+    padding: 8px 16px;
+    background: rgba(0, 245, 255, 0.08);
+    border: 1px solid rgba(0, 245, 255, 0.2);
+    border-radius: 20px;
+    font-size: 0.9rem;
+    color: #00f5ff;
+    font-weight: 500;
+}
+
 .infoList {
     display: flex;
     flex-direction: column;

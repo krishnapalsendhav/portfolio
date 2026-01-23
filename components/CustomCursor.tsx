@@ -13,7 +13,8 @@ export default function CustomCursor() {
     const cursorX = useMotionValue(0);
     const cursorY = useMotionValue(0);
 
-    const springConfig = { damping: 25, stiffness: 400 };
+    // Faster spring config for less lag
+    const springConfig = { damping: 35, stiffness: 800 };
     const cursorXSpring = useSpring(cursorX, springConfig);
     const cursorYSpring = useSpring(cursorY, springConfig);
 

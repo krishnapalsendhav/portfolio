@@ -3,7 +3,7 @@
 import { useRef, useEffect } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import dynamic from 'next/dynamic';
-import { FiArrowDown } from 'react-icons/fi';
+import { FiArrowDown, FiDownload } from 'react-icons/fi';
 import gsap from 'gsap';
 import styles from './HeroNew.module.css';
 
@@ -12,14 +12,6 @@ const Scene3D = dynamic(() => import('./Scene3D'), {
     ssr: false,
     loading: () => <div className={styles.sceneLoader} />,
 });
-
-const roles = [
-    'High-Performance Mobile Apps',
-    'Intelligent AI Systems',
-    'Scalable Web Architecture',
-    'Agentic AI Workflows',
-    'Cross-Platform Solutions'
-];
 
 export default function HeroNew() {
     const containerRef = useRef<HTMLElement>(null);
@@ -100,43 +92,14 @@ export default function HeroNew() {
                 </motion.div>
 
                 <h1 ref={titleRef} className={styles.title}>
-                    <span className={styles.firstName}>Krishnapal</span>
+                    <span className={styles.firstName}>Krishna Pal</span>
                     <span className={styles.lastName}>Sendhav</span>
                 </h1>
 
                 <div ref={subtitleRef} className={styles.subtitle}>
-                    <span className={styles.rolePrefix}>I build</span>
-                    <div className={styles.roleContainer}>
-                        {roles.map((role, index) => (
-                            <motion.span
-                                key={role}
-                                className={styles.role}
-                                initial={{ opacity: 0, y: 20, x: '-50%' }}
-                                animate={{
-                                    opacity: [0, 1, 1, 0],
-                                    y: [20, 0, 0, -20],
-                                    x: '-50%',
-                                }}
-                                transition={{
-                                    y: {
-                                        duration: 3,
-                                        delay: index * 3,
-                                        repeat: Infinity,
-                                        repeatDelay: (roles.length - 1) * 3,
-                                    },
-                                    opacity: {
-                                        duration: 3,
-                                        delay: index * 3,
-                                        repeat: Infinity,
-                                        repeatDelay: (roles.length - 1) * 3,
-                                    },
-                                    x: { duration: 0 } // Ensure x stays constant
-                                }}
-                            >
-                                {role}
-                            </motion.span>
-                        ))}
-                    </div>
+                    <span className={styles.tagline}>Flutter Developer</span>
+                    <span className={styles.taglineDivider}>|</span>
+                    <span className={styles.taglineSecondary}>Mobile & AI-driven Apps</span>
                 </div>
 
                 <motion.p
@@ -145,9 +108,9 @@ export default function HeroNew() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 1.2 }}
                 >
-                    Crafting AI-powered mobile experiences for 50,000+ users.
+                    I build scalable Flutter applications used by 50K+ users,
                     <br />
-                    Building the future of education technology.
+                    focused on performance, real-time features, and AI integration.
                 </motion.p>
 
                 <motion.div
@@ -157,10 +120,11 @@ export default function HeroNew() {
                     transition={{ duration: 0.8, delay: 1.5 }}
                 >
                     <a href="#projects" className={styles.ctaButton} data-cursor data-cursor-text="View">
-                        View My Work
+                        View Projects
                     </a>
-                    <a href="#contact" className={styles.ctaLink} data-cursor>
-                        Get in Touch
+                    <a href="/Krishnapal-Sendhav-Resume.pdf" className={styles.ctaSecondary} target="_blank" rel="noopener noreferrer" data-cursor>
+                        <FiDownload />
+                        Download Resume
                     </a>
                 </motion.div>
             </motion.div>

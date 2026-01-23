@@ -21,40 +21,50 @@ import styles from './Skills.module.css';
 
 const skillCategories = [
     {
-        title: 'Frontend & Mobile',
+        title: 'Core',
         icon: FiCode,
         skills: [
             { name: 'Flutter', icon: SiFlutter, level: 95 },
             { name: 'Dart', icon: SiDart, level: 95 },
-            { name: 'JavaScript', icon: SiJavascript, level: 85 },
-            { name: 'Java', icon: SiTypescript, level: 80 },
+            { name: 'Clean Architecture', icon: FiCode, level: 90 },
+            { name: 'REST APIs', icon: FiServer, level: 90 },
+            { name: 'WebSockets', icon: FiServer, level: 85 },
         ],
     },
     {
-        title: 'AI & Machine Learning',
+        title: 'State Management',
+        icon: FiDatabase,
+        skills: [
+            { name: 'GetX (2+ yrs)', icon: SiFlutter, level: 95 },
+        ],
+    },
+    {
+        title: 'Real-Time & Media',
         icon: FiCpu,
         skills: [
-            { name: 'On-Device AI', icon: SiOpenai, level: 85 },
-            { name: 'LLM Integration', icon: SiOpenai, level: 80 },
-            { name: 'AI Agents', icon: SiOpenai, level: 75 },
+            { name: 'Live Chat & Polls', icon: FiCpu, level: 90 },
+            { name: 'Video Streaming', icon: FiCpu, level: 85 },
+            { name: 'Custom DRM', icon: FiCpu, level: 85 },
+            { name: 'File Sharing', icon: FiCpu, level: 85 },
         ],
     },
     {
-        title: 'Backend',
+        title: 'AI & Backend',
         icon: FiServer,
         skills: [
-            { name: 'Node.js', icon: SiNodedotjs, level: 85 },
+            { name: 'On-device AI', icon: SiOpenai, level: 85 },
             { name: 'Firebase', icon: SiFirebase, level: 90 },
-            { name: 'PostgreSQL', icon: SiPostgresql, level: 75 },
+            { name: 'AI Pipelines', icon: SiOpenai, level: 80 },
+            { name: 'LLM Integration', icon: SiOpenai, level: 80 },
         ],
     },
     {
-        title: 'Tools & DevOps',
+        title: 'Tools',
         icon: FiDatabase,
         skills: [
             { name: 'Git', icon: SiGit, level: 90 },
-            { name: 'MongoDB', icon: SiMongodb, level: 80 },
-            { name: 'Docker', icon: SiDocker, level: 70 },
+            { name: 'CI/CD', icon: SiDocker, level: 75 },
+            { name: 'Figma → Flutter', icon: SiFlutter, level: 85 },
         ],
     },
 ];
