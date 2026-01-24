@@ -3,7 +3,7 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useInView } from 'framer-motion';
 import { useRef } from 'react';
-import { FiUsers, FiSmartphone, FiLayout, FiVideo, FiCpu, FiMessageCircle } from 'react-icons/fi';
+import { FiUsers, FiSmartphone, FiLayout, FiVideo, FiCpu, FiMessageCircle, FiUpload, FiUploadCloud, FiPackage } from 'react-icons/fi';
 import ParallaxCard from './ParallaxCard';
 import styles from './Projects.module.css';
 
@@ -22,19 +22,6 @@ const projects = [
         ],
     },
     {
-        title: 'ClassIO Management App',
-        oneLiner: 'A powerful management tool for educational institutes with AI-powered features for streamlined operations.',
-        tags: ['Flutter', 'AI Assistant', 'REST API', 'PostgreSQL'],
-        icon: FiSmartphone,
-        stats: 'AI-Enhanced',
-        highlights: [
-            'AI-powered doubt portal for smart replies',
-            'Automated reply suggestions for teachers',
-            'Real-time analytics dashboard',
-            'Multi-institute support',
-        ],
-    },
-    {
         title: 'Live Classes Platform',
         oneLiner: 'Real-time live class features with interactive components for enhanced student engagement.',
         tags: ['WebRTC', 'WebSockets', 'Real-time', 'Flutter'],
@@ -48,9 +35,48 @@ const projects = [
         ],
     },
     {
+        title: 'Content Upload & Processing Pipeline',
+        oneLiner: 'End-to-end video processing pipeline for multi-quality encoding, encryption, and optimized content delivery.',
+        tags: ['Video Pipeline', 'Encoding', 'Encryption', 'Cost Optimization'],
+        icon: FiUploadCloud,
+        stats: '35% Server Cost Reduction',
+        highlights: [
+            'Automated video transcoding into multiple quality variants',
+            'Encrypted media processing for secure content delivery',
+            'Optimized upload and storage workflow to reduce server load',
+            'Designed, pitched, and implemented as a cost-optimization initiative',
+        ],
+    },
+    {
+        title: 'ClassIO Management App',
+        oneLiner: 'A powerful management tool for educational institutes with AI-powered features for streamlined operations.',
+        tags: ['Flutter', 'AI Assistant', 'REST API', 'Windows'],
+        icon: FiSmartphone,
+        stats: 'AI-Enhanced',
+        highlights: [
+            'AI-powered doubt portal for smart replies',
+            'Automated reply suggestions for teachers',
+            'Real-time analytics dashboard',
+            'Multi-institute support',
+        ],
+    },
+    {
+        title: 'App Builder Feature',
+        oneLiner: 'Innovative feature allowing institutes to customize app layouts directly from management interface.',
+        tags: ['Flutter', 'Dynamic UI', 'JSON Config'],
+        icon: FiLayout,
+        stats: 'Platform Feature',
+        highlights: [
+            'Drag-and-drop layout customization',
+            'Real-time preview of changes',
+            'Theme and branding controls',
+            'No-code app configuration',
+        ],
+    },
+    {
         title: 'Video to Quiz AI Pipeline',
         oneLiner: 'End-to-end AI pipeline that automatically generates quizzes from video content for student assessment.',
-        tags: ['AI/ML', 'Pipeline', 'Flutter', 'On-Device AI'],
+        tags: ['AI/ML', 'Pipeline', 'RAG', 'On-Device AI'],
         icon: FiCpu,
         stats: 'AI-Powered',
         highlights: [
@@ -63,7 +89,7 @@ const projects = [
     {
         title: 'AI Agentic Chatbot',
         oneLiner: 'AI-powered agentic chatbot capable of autonomous task execution and intelligent conversation handling.',
-        tags: ['AI/ML', 'LLM', 'Agents', 'Flutter'],
+        tags: ['AI/ML', 'LLM', 'Agents', 'Tool Calling'],
         icon: FiMessageCircle,
         stats: 'In Progress',
         highlights: [
@@ -74,16 +100,16 @@ const projects = [
         ],
     },
     {
-        title: 'App Builder Feature',
-        oneLiner: 'Innovative feature allowing institutes to customize app layouts directly from management interface.',
-        tags: ['Flutter', 'Dynamic UI', 'JSON Config'],
-        icon: FiLayout,
-        stats: 'Innovative',
+        title: 'Flutter Package Engineering',
+        oneLiner: 'Development and extension of Flutter packages for platform-level capabilities and system integrations.',
+        tags: ['Flutter Packages', 'Platform Channels', 'Open Source', 'System Integration'],
+        icon: FiPackage,
+        stats: 'Multiple Packages',
         highlights: [
-            'Drag-and-drop layout customization',
-            'Real-time preview of changes',
-            'Theme and branding controls',
-            'No-code app configuration',
+            'Developed and maintained Flutter packages published on pub.dev and GitHub',
+            'Implemented platform-channel integrations for device and system-level access',
+            'Extended and modified open-source libraries to meet production requirements',
+            'Focused on stability, performance, and developer experience at package level',
         ],
     },
 ];

@@ -14,18 +14,18 @@ const highlights = [
     },
     {
         icon: FiCpu,
-        title: 'On-Device',
-        description: 'AI Integration',
+        title: 'AI',
+        description: 'Integration',
     },
     {
         icon: FiCode,
-        title: 'Full-Stack',
+        title: 'Cross-Platform',
         description: 'Development',
     },
     {
         icon: FiZap,
-        title: 'Real-time',
-        description: 'Features Expert',
+        title: 'Production-Ready',
+        description: 'Systems',
     },
 ];
 
@@ -88,9 +88,9 @@ export default function About() {
                     >
                         About Me
                     </motion.span>
-                    <h2 className="section-title">Flutter Developer</h2>
+                    <h2 className="section-title">Senior Software Engineer</h2>
                     <p className="section-subtitle">
-                        Building production-ready mobile apps with 2+ years of experience
+                        Building production-ready mobile systems with a focus on scale, performance and long-term maintainability
                     </p>
                 </motion.div>
 
@@ -102,14 +102,14 @@ export default function About() {
                         transition={{ duration: 0.6, delay: 0.2 }}
                     >
                         <p className={styles.bio}>
-                            I&apos;m a Flutter developer with <span className={styles.highlight}>2+ years of experience</span> building
-                            production-ready mobile apps for students and institutions. I focus on clean architecture,
-                            performance, and long-term maintainability.
+                            Designing and building production-ready <span className={styles.highlight}>cross-platform</span> applications
+                            for Android, iOS, Windows, and macOS.
+                            Focused on scale, performance, and real-time systems.
                         </p>
                         <div className={styles.achievementsList}>
                             <div className={styles.achievementItem}>
                                 <span className={styles.achievementDot} />
-                                Large-scale student apps (<span className={styles.highlight}>50K+ users</span>)
+                                Large-scale student platforms(<span className={styles.highlight}>50K+ active users</span>)
                             </div>
                             <div className={styles.achievementItem}>
                                 <span className={styles.achievementDot} />
@@ -121,7 +121,7 @@ export default function About() {
                             </div>
                             <div className={styles.achievementItem}>
                                 <span className={styles.achievementDot} />
-                                AI-powered features and automation
+                                AI-powered features and workflow automation
                             </div>
                         </div>
                     </motion.div>

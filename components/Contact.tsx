@@ -3,7 +3,7 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useInView } from 'framer-motion';
 import { useRef, useState } from 'react';
-import { FiMail, FiPhone, FiMapPin, FiLinkedin, FiSend, FiMessageSquare, FiHeart } from 'react-icons/fi';
+import { FiMail, FiPhone, FiMapPin, FiLinkedin, FiSend, FiMessageSquare, FiHeart, FiGithub } from 'react-icons/fi';
 import styles from './Contact.module.css';
 
 const contactInfo = [
@@ -14,10 +14,22 @@ const contactInfo = [
         href: 'mailto:krishnapalsendhav591@gmail.com',
     },
     {
+        icon: FiPhone,
+        label: 'Phone',
+        value: '+91 89595 62779',
+        href: 'tel:+918959562779',
+    },
+    {
         icon: FiLinkedin,
         label: 'LinkedIn',
         value: 'linkedin.com/in/krishnapal-sendhav',
         href: 'https://www.linkedin.com/in/krishnapal-sendhav/',
+    },
+    {
+        icon: FiGithub,
+        label: 'GitHub',
+        value: 'github.com/krishnapalsendhav',
+        href: 'https://github.com/krishnapalsendhav',
     },
     {
         icon: FiMapPin,
@@ -264,7 +276,7 @@ export default function Contact() {
                     animate={isInView ? { opacity: 1, y: 0 } : {}}
                     transition={{ delay: 0.8 }}
                 >
-                    © {new Date().getFullYear()} Krishnapal Sendhav. Built with
+                    © {new Date().getFullYear()} Krishna Pal Sendhav. Built with
                     <motion.span
                         className={styles.heart}
                         animate={{ scale: [1, 1.2, 1] }}
@@ -272,7 +284,7 @@ export default function Contact() {
                     >
                         <FiHeart />
                     </motion.span>
-                    using Next.js
+                    and care.
                 </motion.p>
             </footer>
         </section>

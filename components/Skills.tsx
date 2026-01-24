@@ -21,50 +21,73 @@ import styles from './Skills.module.css';
 
 const skillCategories = [
     {
-        title: 'Core',
+        title: 'Primary Expertise',
+        description: 'Core focus on high-scale production systems',
         icon: FiCode,
-        skills: [
-            { name: 'Flutter', icon: SiFlutter, level: 95 },
-            { name: 'Dart', icon: SiDart, level: 95 },
-            { name: 'Clean Architecture', icon: FiCode, level: 90 },
-            { name: 'REST APIs', icon: FiServer, level: 90 },
-            { name: 'WebSockets', icon: FiServer, level: 85 },
+        items: [
+            'Flutter (production apps at 50K+ scale)',
+            'Dart (performance-focused UI & state handling)',
+            'Mobile system architecture & modular design',
+            'Full-stack mobile product ownership'
         ],
     },
     {
-        title: 'State Management',
-        icon: FiDatabase,
-        skills: [
-            { name: 'GetX (2+ yrs)', icon: SiFlutter, level: 95 },
-        ],
-    },
-    {
-        title: 'Real-Time & Media',
+        title: 'Architecture & System Design',
+        description: 'Engineering judgment and scalability',
         icon: FiCpu,
-        skills: [
-            { name: 'Live Chat & Polls', icon: FiCpu, level: 90 },
-            { name: 'Video Streaming', icon: FiCpu, level: 85 },
-            { name: 'Custom DRM', icon: FiCpu, level: 85 },
-            { name: 'File Sharing', icon: FiCpu, level: 85 },
+        items: [
+            'Clean Architecture for long-term maintainability',
+            'Modular / feature-based design patterns',
+            'State management strategy at enterprise scale',
+            'Architected systems for high-concurrency mobile workloads',
+            'Security protocols & Custom DRM integration'
         ],
     },
     {
-        title: 'AI & Backend',
+        title: 'Backend & Data Systems',
+        description: 'Cloud infrastructure and real-time connectivity',
         icon: FiServer,
-        skills: [
-            { name: 'On-device AI', icon: SiOpenai, level: 85 },
-            { name: 'Firebase', icon: SiFirebase, level: 90 },
-            { name: 'AI Pipelines', icon: SiOpenai, level: 80 },
-            { name: 'LLM Integration', icon: SiOpenai, level: 80 },
+        items: [
+            'Production backend APIs for engagement-driven platforms',
+            'Real-time interaction infrastructure (Firebase Realtime Database)',
+            'Live session state and participant management systems',
+            'AI-driven conversational backend systems',
+            "Event-driven notification infrastructure"
         ],
     },
     {
-        title: 'Tools',
+        title: 'Applied AI Engineering',
+        description: 'Production-ready AI integration',
+        icon: SiOpenai,
+        items: [
+            'On-device AI for low-latency mobile features',
+            'LLM orchestration in production apps',
+            'Agentic workflows for automated learning & content systems',
+            'AI pipelines for automated media processing',
+            'LangChain-based RAG implementations'
+        ],
+    },
+    {
+        title: 'Programming Languages',
+        description: 'Applied proficiency across the stack',
+        icon: FiCode,
+        items: [
+            'Dart (Primary: Core production development)',
+            'TypeScript (Applied: Backend & Developer tooling)',
+            'JavaScript (Applied: Integration & Web features)',
+            'Python (Applied: AI automation & Pipelines)'
+        ],
+    },
+    {
+        title: 'Engineering Workflow & Delivery',
+        description: 'Release management and lead ownership',
         icon: FiDatabase,
-        skills: [
-            { name: 'Git', icon: SiGit, level: 90 },
-            { name: 'CI/CD', icon: SiDocker, level: 75 },
-            { name: 'Figma → Flutter', icon: SiFlutter, level: 85 },
+        items: [
+            'End-to-end App Store & Play Store delivery',
+            'Release coordination aligned with product milestones',
+            'Release governance and crash management',
+            'Post-release iteration based on user behavior and feedback',
+            'Cross-functional team collaboration & Git flows'
         ],
     },
 ];
@@ -85,9 +108,9 @@ export default function Skills() {
                     animate={isInView ? { opacity: 1, y: 0 } : {}}
                     transition={{ duration: 0.6 }}
                 >
-                    <h2 className="section-title">Skills & Technologies</h2>
+                    <h2 className="section-title">Senior Engineering & Architecture</h2>
                     <p className="section-subtitle">
-                        The futuristic stack empowering my creations
+                        Building production-grade systems with focus on scale, performance, and maintainability.
                     </p>
                 </motion.div>
 
@@ -101,28 +124,32 @@ export default function Skills() {
                             transition={{ duration: 0.5, delay: catIndex * 0.1 }}
                         >
                             <div className={styles.categoryHeader}>
-                                <category.icon className={styles.categoryIcon} />
-                                <h3 className={styles.categoryTitle}>{category.title}</h3>
+                                <div className={styles.iconWrapper}>
+                                    <category.icon className={styles.categoryIcon} />
+                                </div>
+                                <div className={styles.headerText}>
+                                    <h3 className={styles.categoryTitle}>{category.title}</h3>
+                                    <p className={styles.categoryDescription}>{category.description}</p>
+                                </div>
                             </div>
 
-                            <div className={styles.skillsGrid}>
-                                {category.skills.map((skill, skillIndex) => (
-                                    <motion.div
-                                        key={skill.name}
-                                        className={styles.skillBadge}
-                                        initial={{ opacity: 0, scale: 0.8 }}
-                                        animate={isInView ? { opacity: 1, scale: 1 } : {}}
+                            <ul className={styles.skillList}>
+                                {category.items.map((item, itemIndex) => (
+                                    <motion.li
+                                        key={itemIndex}
+                                        className={styles.skillItem}
+                                        initial={{ opacity: 0, x: -10 }}
+                                        animate={isInView ? { opacity: 1, x: 0 } : {}}
                                         transition={{
                                             duration: 0.4,
-                                            delay: catIndex * 0.1 + skillIndex * 0.05
+                                            delay: catIndex * 0.1 + itemIndex * 0.05
                                         }}
-                                        whileHover={{ scale: 1.05, y: -2 }}
                                     >
-                                        <skill.icon className={styles.skillIcon} />
-                                        <span className={styles.skillName}>{skill.name}</span>
-                                    </motion.div>
+                                        <span className={styles.bullet}></span>
+                                        {item}
+                                    </motion.li>
                                 ))}
-                            </div>
+                            </ul>
                         </motion.div>
                     ))}
                 </div>
