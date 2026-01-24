@@ -291,3 +291,37 @@
         display: none;
     }
 }
+
+/* Case Study Button */
+.caseStudyBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 14px 24px;
+    margin-top: 12px;
+    background: linear-gradient(135deg, rgba(0, 245, 255, 0.08), rgba(191, 0, 255, 0.05));
+    border: 1px solid rgba(0, 245, 255, 0.15);
+    border-radius: 12px;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: none;
+    transition: all 0.3s ease;
+}
+
+.caseStudyBtn:hover {
+    background: linear-gradient(135deg, rgba(0, 245, 255, 0.15), rgba(191, 0, 255, 0.1));
+    border-color: rgba(0, 245, 255, 0.4);
+    color: #00f5ff;
+    box-shadow: 0 0 30px rgba(0, 245, 255, 0.15);
+}
+
+.caseStudyBtn svg {
+    transition: transform 0.3s ease;
+}
+
+.caseStudyBtn:hover svg {
+    transform: translateX(4px);
+}

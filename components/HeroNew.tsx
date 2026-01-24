@@ -110,7 +110,7 @@ export default function HeroNew() {
                 >
                     I build scalable Flutter applications used by 50K+ users,
                     <br />
-                    focused on performance, real-time features, and AI integration.
+                    focused on performance, real-time features and AI integration.
                 </motion.p>
 
                 <motion.div

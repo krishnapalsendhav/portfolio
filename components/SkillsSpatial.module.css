@@ -1,0 +1,328 @@
+.spatialContainer {
+    position: relative;
+    width: 100%;
+    height: 500px;
+    border-radius: 24px;
+    background: linear-gradient(135deg, rgba(20, 20, 30, 0.6) 0%, rgba(15, 15, 25, 0.8) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    overflow: visible;
+    /* Force GPU acceleration for better performance */
+    transform: translateZ(0);
+    will-change: auto;
+    isolation: isolate;
+}
+
+.connectionsSvg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    /* Optimize SVG rendering */
+    shape-rendering: geometricPrecision;
+}
+
+/* Skill Node */
+.skillNode {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 18px;
+    background: rgba(10, 10, 20, 0.95);
+    border: 1px solid;
+    border-radius: 20px;
+    transform: translate(-50%, -50%);
+    cursor: pointer;
+    z-index: 10;
+    transition: background 0.3s ease;
+    /* Force GPU acceleration */
+    will-change: transform;
+    backface-visibility: hidden;
+    -webkit-font-smoothing: antialiased;
+    /* Ensure visibility */
+    visibility: visible;
+    opacity: 1;
+}
+
+.skillNode:hover,
+.skillNode:focus-visible {
+    background: rgba(20, 20, 40, 0.95);
+    outline: 2px solid rgba(255, 255, 255, 0.3);
+    outline-offset: 2px;
+}
+
+/* Separate glow layer for better performance */
+.nodeGlow {
+    position: absolute;
+    inset: -2px;
+    border-radius: 20px;
+    pointer-events: none;
+    z-index: -1;
+    transition: box-shadow 0.3s ease;
+    /* Optimize blur rendering */
+    transform: translateZ(0);
+}
+
+.nodeLabel {
+    font-size: 0.85rem;
+    font-weight: 500;
+    white-space: nowrap;
+    transition: color 0.2s ease;
+    position: relative;
+    z-index: 1;
+    /* Ensure text is always visible */
+    color: rgba(255, 255, 255, 0.9);
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+/* Tooltip */
+.tooltip {
+    position: absolute;
+    bottom: calc(100% + 12px);
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 8px 14px;
+    background: rgba(0, 0, 0, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.9);
+    white-space: nowrap;
+    pointer-events: none;
+    z-index: 100;
+    /* Optimize rendering */
+    will-change: opacity, transform;
+    backface-visibility: hidden;
+}
+
+.tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-top-color: rgba(0, 0, 0, 0.95);
+}
+
+/* Pulse Ring */
+.pulseRing {
+    position: absolute;
+    inset: 0;
+    border: 1px solid;
+    border-radius: 20px;
+    pointer-events: none;
+    /* Optimize animation performance */
+    will-change: transform, opacity;
+}
+
+/* Legend */
+.legend {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 20px;
+    padding: 12px 24px;
+    background: rgba(10, 10, 20, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    /* Improve backdrop-filter performance */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transform: translateX(-50%) translateZ(0);
+    z-index: 20;
+}
+
+/* Fallback for browsers with poor backdrop-filter performance */
+@supports not (backdrop-filter: blur(10px)) {
+    .legend {
+        background: rgba(10, 10, 20, 0.95);
+    }
+}
+
+.legendItem {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.legendDot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.legendLabel {
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.7);
+    text-transform: capitalize;
+}
+
+/* Category-specific backgrounds for better visibility */
+.skillNode[data-category='primary'] {
+    background: rgba(0, 245, 255, 0.12);
+}
+
+.skillNode[data-category='architecture'] {
+    background: rgba(191, 0, 255, 0.12);
+}
+
+.skillNode[data-category='backend'] {
+    background: rgba(77, 124, 255, 0.12);
+}
+
+.skillNode[data-category='ai'] {
+    background: rgba(255, 0, 168, 0.12);
+}
+
+.skillNode[data-category='languages'] {
+    background: rgba(0, 255, 159, 0.12);
+}
+
+.skillNode[data-category='workflow'] {
+    background: rgba(255, 170, 0, 0.12);
+}
+
+/* Enhanced hover states per category */
+.skillNode[data-category='primary']:hover,
+.skillNode[data-category='primary']:focus-visible {
+    background: rgba(0, 245, 255, 0.2);
+}
+
+.skillNode[data-category='architecture']:hover,
+.skillNode[data-category='architecture']:focus-visible {
+    background: rgba(191, 0, 255, 0.2);
+}
+
+.skillNode[data-category='backend']:hover,
+.skillNode[data-category='backend']:focus-visible {
+    background: rgba(77, 124, 255, 0.2);
+}
+
+.skillNode[data-category='ai']:hover,
+.skillNode[data-category='ai']:focus-visible {
+    background: rgba(255, 0, 168, 0.2);
+}
+
+.skillNode[data-category='languages']:hover,
+.skillNode[data-category='languages']:focus-visible {
+    background: rgba(0, 255, 159, 0.2);
+}
+
+.skillNode[data-category='workflow']:hover,
+.skillNode[data-category='workflow']:focus-visible {
+    background: rgba(255, 170, 0, 0.2);
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+    .skillNode,
+    .tooltip,
+    .pulseRing,
+    .nodeGlow {
+        transition: none;
+        animation: none;
+    }
+
+    .spatialContainer {
+        will-change: auto;
+    }
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .spatialContainer {
+        height: 450px;
+    }
+
+    .legend {
+        gap: 12px;
+        padding: 10px 16px;
+    }
+
+    .legendLabel {
+        font-size: 0.65rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .spatialContainer {
+        height: 400px;
+        border-radius: 16px;
+    }
+
+    .skillNode {
+        padding: 8px 14px;
+    }
+
+    .nodeLabel {
+        font-size: 0.75rem;
+    }
+
+    .legend {
+        gap: 8px;
+        padding: 8px 12px;
+        flex-wrap: wrap;
+        max-width: 90%;
+    }
+
+    .legendLabel {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .spatialContainer {
+        height: 350px;
+    }
+
+    .skillNode {
+        padding: 6px 10px;
+    }
+
+    .nodeLabel {
+        font-size: 0.65rem;
+    }
+
+    .tooltip {
+        font-size: 0.7rem;
+        padding: 6px 10px;
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .skillNode {
+        border-width: 2px;
+    }
+
+    .tooltip {
+        border-width: 2px;
+    }
+}
+
+/* Print styles */
+@media print {
+    .spatialContainer {
+        background: white;
+        border: 1px solid black;
+    }
+
+    .skillNode {
+        background: white;
+        border: 2px solid black;
+    }
+
+    .nodeLabel {
+        color: black;
+    }
+
+    .pulseRing,
+    .nodeGlow {
+        display: none;
+    }
+}

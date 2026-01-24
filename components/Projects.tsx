@@ -2,9 +2,10 @@
 
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useInView } from 'framer-motion';
-import { useRef } from 'react';
-import { FiUsers, FiSmartphone, FiLayout, FiVideo, FiCpu, FiMessageCircle, FiUpload, FiUploadCloud, FiPackage } from 'react-icons/fi';
+import { useRef, useState } from 'react';
+import { FiUsers, FiSmartphone, FiLayout, FiVideo, FiCpu, FiMessageCircle, FiUpload, FiUploadCloud, FiPackage, FiArrowRight } from 'react-icons/fi';
 import ParallaxCard from './ParallaxCard';
+import ProjectDetails, { ProjectData } from './ProjectDetails';
 import styles from './Projects.module.css';
 
 const projects = [
@@ -122,6 +123,18 @@ export default function Projects() {
     const containerRef = useRef(null);
     const isInView = useInView(ref, { once: true, margin: '-100px' });
 
+    // State for project details modal
+    const [selectedProject, setSelectedProject] = useState<ProjectData | null>(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const openProjectDetails = (project: typeof projects[0]) => {
+        setSelectedProject({
+            ...project,
+            icon: undefined  // Remove icon as it's not serializable for the modal
+        } as ProjectData);
+        setIsModalOpen(true);
+    };
+
     const { scrollYProgress } = useScroll({
         target: containerRef,
         offset: ['start end', 'end start'],
@@ -236,11 +249,31 @@ export default function Projects() {
                                         </span>
                                     ))}
                                 </div>
+
+                                {/* Case Study Button */}
+                                <motion.button
+                                    className={styles.caseStudyBtn}
+                                    onClick={() => openProjectDetails(project)}
+                                    whileHover={{ scale: 1.02, x: 5 }}
+                                    whileTap={{ scale: 0.98 }}
+                                    data-cursor
+                                    data-cursor-text="View"
+                                >
+                                    View Case Study
+                                    <FiArrowRight />
+                                </motion.button>
                             </motion.div>
                         </ParallaxCard>
                     ))}
                 </div>
             </div>
+
+            {/* Project Details Modal */}
+            <ProjectDetails
+                project={selectedProject}
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+            />
         </section>
     );
 }

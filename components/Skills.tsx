@@ -73,7 +73,7 @@ const skillCategories = [
         icon: FiCode,
         items: [
             'Dart (Primary: Core production development)',
-            'TypeScript (Applied: Backend & Developer tooling)',
+            'Java (Applied: Backend & Developer tooling)',
             'JavaScript (Applied: Integration & Web features)',
             'Python (Applied: AI automation & Pipelines)'
         ],
@@ -93,6 +93,7 @@ const skillCategories = [
 ];
 
 import NeuralBackground from './NeuralBackground';
+import SkillsSpatial from './SkillsSpatial';
 
 export default function Skills() {
     const ref = useRef(null);
@@ -108,11 +109,31 @@ export default function Skills() {
                     animate={isInView ? { opacity: 1, y: 0 } : {}}
                     transition={{ duration: 0.6 }}
                 >
-                    <h2 className="section-title">Senior Engineering & Architecture</h2>
+                    <h2 className="section-title">Engineering & Architecture</h2>
                     <p className="section-subtitle">
                         Building production-grade systems with focus on scale, performance, and maintainability.
                     </p>
                 </motion.div>
+
+                {/* Spatial Skills Visualization */}
+                <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={isInView ? { opacity: 1, y: 0 } : {}}
+                    transition={{ duration: 0.6, delay: 0.2 }}
+                    style={{ marginBottom: '60px' }}
+                >
+                    <SkillsSpatial />
+                </motion.div>
+
+                <motion.h3
+                    className="section-subtitle"
+                    style={{ marginBottom: '30px', marginTop: '20px', color: 'rgba(255,255,255,0.5)', fontSize: '0.9rem' }}
+                    initial={{ opacity: 0 }}
+                    animate={isInView ? { opacity: 1 } : {}}
+                    transition={{ delay: 0.4 }}
+                >
+                    Detailed Breakdown
+                </motion.h3>
 
                 <div className={styles.categories}>
                     {skillCategories.map((category, catIndex) => (
