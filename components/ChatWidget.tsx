@@ -11,7 +11,7 @@ import styles from './ChatWidget.module.css';
 
 interface Message {
     id: string;
-    role: 'user' | 'bot' | 'error';
+    role: 'user' | 'model' | 'error';
     content: string;
 }
 
@@ -137,7 +137,10 @@ export default function ChatWidget() {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ query: query.trim() }),
+                body: JSON.stringify({
+                    query: query.trim(),
+                    messages: messages,
+                }),
             });
 
             const data = await response.json();
@@ -145,7 +148,7 @@ export default function ChatWidget() {
             if (data.success && data.response) {
                 const botMessage: Message = {
                     id: generateId(),
-                    role: 'bot',
+                    role: 'model',
                     content: data.response,
                 };
                 setMessages((prev) => [...prev, botMessage]);
@@ -189,8 +192,8 @@ export default function ChatWidget() {
                 <div className={styles.chatHeader}>
                     <div className={styles.chatAvatar}>KS</div>
                     <div className={styles.chatHeaderInfo}>
-                        <h3>Portfolio Assistant</h3>
-                        <p>Ask me about Krishnapal&apos;s work</p>
+                        <h3>Krishnapal Sendhav</h3>
+                        <p>Senior Software Engineer</p>
                     </div>
                 </div>
 
@@ -200,7 +203,7 @@ export default function ChatWidget() {
                         <div className={styles.welcomeMessage}>
                             <h4>👋 Hi there!</h4>
                             <p>
-                                I&apos;m an AI assistant that can answer questions about Krishnapal&apos;s
+                                I&apos;m Krishnapal Sendhav, a Senior Software Engineer. I&apos;m an AI assistant that can answer questions about my
                                 skills, experience, and projects. What would you like to know?
                             </p>
                             <div className={styles.suggestedQuestions}>
@@ -221,7 +224,7 @@ export default function ChatWidget() {
                                 key={msg.id}
                                 className={`${styles.message} ${styles[msg.role]}`}
                             >
-                                {msg.role === 'bot' ? (
+                                {msg.role === 'model' ? (
                                     <ReactMarkdown
                                         remarkPlugins={[remarkGfm]}
                                         components={markdownComponents}

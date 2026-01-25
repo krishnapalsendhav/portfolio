@@ -93,12 +93,12 @@
 
 .firstName {
     display: block;
-    color: #ffffff;
+    color: var(--text-primary);
 }
 
 .lastName {
     display: block;
-    background: linear-gradient(135deg, #00f5ff 0%, #bf00ff 50%, #ff00a8 100%);
+    background: var(--gradient-primary);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -116,7 +116,7 @@
 }
 
 .tagline {
-    color: #00f5ff;
+    color: var(--accent-cyan);
     font-weight: 700;
     letter-spacing: 0.5px;
 }

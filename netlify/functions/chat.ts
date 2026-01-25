@@ -38,6 +38,7 @@ interface EmbeddingsData {
 
 interface ChatRequest {
     query: string;
+    messages: any[];
 }
 
 interface ChatResponse {
@@ -126,7 +127,7 @@ function findTopKChunks(
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const EMBEDDING_MODEL = "gemini-embedding-001";
-const GENERATION_MODEL = "gemini-2.5-flash";
+const GENERATION_MODEL = process.env.GENERATION_MODEL;
 
 async function embedQuery(query: string): Promise<number[]> {
     if (!GEMINI_API_KEY) {
@@ -162,6 +163,7 @@ async function embedQuery(query: string): Promise<number[]> {
 
 async function generateResponse(
     query: string,
+    messages: any[],
     contextChunks: ScoredChunk[]
 ): Promise<string> {
     if (!GEMINI_API_KEY) {
@@ -177,22 +179,35 @@ async function generateResponse(
         .join("\n\n");
 
     // Construct strict RAG prompt
-    const systemPrompt = `You are a portfolio assistant for Krishnapal Sendhav, a Senior Software Engineer.
+    const systemPrompt = `You are Krishnapal Sendhav responding naturally to portfolio questions.
 
-STRICT RULES:
-1. You must ONLY answer questions using the provided context below.
-2. Do NOT use any external knowledge or make assumptions.
-3. If the answer is not present in the context, respond EXACTLY with: "I don't have that information."
-4. Be conversational, helpful, and professional.
-5. Keep responses concise but informative.
-6. When discussing skills, experience, or projects, reference specific details from the context.
+CONVERSATION STYLE:
+- First person (I, my, me)
+- Reference previous messages when relevant ("As I mentioned...", "Building on that...")
+- Concise: 2-3 sentences maximum (under 80 tokens)
+- Authentic and engaging
 
-CONTEXT:
-${context}
+CONSTRAINTS:
+- ONLY use the portfolio context below
+- Unknown info → "I haven't added that to my portfolio yet."
+- Each response must suggest 1 natural follow-up question
+- NO greetings or salutations (no "Hi!", "Hello!", etc.)
 
-USER QUESTION: ${query}
+PORTFOLIO:
+${context}`;
 
-Remember: Only use information from the context above. If the question cannot be answered from the context, say "I don't have that information."`;
+    let contents = [
+        ...messages.map((message) => message.role === "error" ?
+            null
+            : ({
+                role: message.role, // 'user' or 'model'
+                parts: [{ text: message.content }]
+            })).filter((message) => message !== null),
+        {
+            role: "user",
+            parts: [{ text: systemPrompt }]
+        },
+    ];
 
     const response = await fetch(
         `https://generativelanguage.googleapis.com/v1beta/models/${GENERATION_MODEL}:generateContent?key=${GEMINI_API_KEY}`,
@@ -202,11 +217,7 @@ Remember: Only use information from the context above. If the question cannot be
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                contents: [
-                    {
-                        parts: [{ text: systemPrompt }],
-                    },
-                ],
+                contents: contents,
                 generationConfig: {
                     temperature: 0.3,
                     topP: 0.8,
@@ -241,19 +252,24 @@ Remember: Only use information from the context above. If the question cannot be
         throw new Error(`Generation API error: ${response.status}`);
     }
 
-    const data = await response.json();
+    try {
+        const data = await response.json();
 
-    // Extract text from response
-    if (
-        data.candidates &&
-        data.candidates[0] &&
-        data.candidates[0].content &&
-        data.candidates[0].content.parts &&
-        data.candidates[0].content.parts[0]
-    ) {
-        return data.candidates[0].content.parts[0].text;
+        // Extract text from response
+        if (
+            data.candidates &&
+            data.candidates[0] &&
+            data.candidates[0].content &&
+            data.candidates[0].content.parts &&
+            data.candidates[0].content.parts[0]
+        ) {
+            return data.candidates[0].content.parts[0].text;
+        }
+        console.log("Unexpected response format from Gemini API\ndata:", data);
+    } catch (error) {
+        console.log("Unexpected response format from Gemini API\nerror:", error);
     }
-
+    console.log("Unexpected response format from Gemini API");
     throw new Error("Unexpected response format from Gemini API");
 }
 
@@ -308,7 +324,7 @@ const handler: Handler = async (
         }
 
         const requestBody: ChatRequest = JSON.parse(event.body);
-        const { query } = requestBody;
+        const { query, messages } = requestBody;
 
         // Validate query
         if (!query || typeof query !== "string" || query.trim().length === 0) {
@@ -344,7 +360,7 @@ const handler: Handler = async (
         const topChunks = findTopKChunks(queryVector, embeddings.chunks, 4);
 
         // Generate response
-        const response = await generateResponse(query.trim(), topChunks);
+        const response = await generateResponse(query.trim(), messages, topChunks);
 
         return {
             statusCode: 200,

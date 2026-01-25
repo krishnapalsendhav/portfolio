@@ -6,12 +6,12 @@
 
   /* Neon Accent Colors */
   --accent-cyan: #00f5ff;
-  --accent-purple: #bf00ff;
+  --accent-purple: #ff9100;
   --accent-blue: #4d7cff;
   --accent-pink: #ff00a8;
 
   /* Gradient Combinations */
-  --gradient-primary: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+  --gradient-primary: linear-gradient(135deg, var(--accent-pink), var(--accent-cyan));
   --gradient-secondary: linear-gradient(135deg, var(--accent-blue), var(--accent-pink));
 
   /* Text Colors */
@@ -141,7 +141,7 @@ a {
   align-items: center;
   gap: 8px;
   padding: 16px 36px;
-  background: var(--gradient-primary);
+  background: #fff;
   color: var(--bg-primary);
   font-weight: 600;
   font-size: 0.95rem;

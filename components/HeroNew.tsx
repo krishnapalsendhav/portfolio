@@ -92,7 +92,7 @@ export default function HeroNew() {
                 </motion.div>
 
                 <h1 ref={titleRef} className={styles.title}>
-                    <span className={styles.firstName}>Krishna Pal</span>
+                    <span className={styles.firstName}>Krishnapal</span>
                     <span className={styles.lastName}>Sendhav</span>
                 </h1>
 
