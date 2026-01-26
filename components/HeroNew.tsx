@@ -97,9 +97,9 @@ export default function HeroNew() {
                 </h1>
 
                 <div ref={subtitleRef} className={styles.subtitle}>
-                    <span className={styles.tagline}>Flutter Developer</span>
+                    <span className={styles.tagline}>AI Engineer & Flutter Developer</span>
                     <span className={styles.taglineDivider}>|</span>
-                    <span className={styles.taglineSecondary}>Mobile & AI-driven Apps</span>
+                    <span className={styles.taglineSecondary}>AI-driven Apps</span>
                 </div>
 
                 <motion.p
@@ -108,9 +108,7 @@ export default function HeroNew() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 1.2 }}
                 >
-                    I build scalable Flutter applications used by 50K+ users,
-                    <br />
-                    focused on performance, real-time features and AI integration.
+                    I build scalable Flutter apps used by 50K+ users, focused on performance, privacy-first and secure AI systems.
                 </motion.p>
 
                 <motion.div

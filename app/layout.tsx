@@ -15,23 +15,32 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  title: 'Krishnapal Sendhav | Senior Flutter Developer',
-  description: 'Senior Flutter Developer at ClassIO, building innovative mobile experiences serving 50,000+ users. Expert in Flutter, JavaScript, Node.js, and real-time application development.',
-  keywords: ['Flutter Developer', 'Mobile App Developer', 'Senior Software Developer', 'React Native', 'Node.js', 'Krishnapal Sendhav'],
-  authors: [{ name: 'Krishnapal Sendhav' }],
+  title: 'Krishnapal Sendhav | Senior Software Engineer',
+  description: 'AI Engineer & Senior Software Engineer at ClassIO, building scalable, privacy-first AI systems and cross-platform applications for 50,000+ users.',
+  keywords: [
+    'AI Engineer',
+    'Flutter Developer',
+    'Full-Stack Developer',
+    'Cross-Platform Applications',
+    'Privacy-First AI',
+    'Production AI Systems',
+    'Backend Engineering',
+    'Krishnapal Sendhav'
+  ],
+  authors: [{ name: 'Krishnapal Sendhav', url: 'https://krishnapalsendhav.netlify.app/' }],
   creator: 'Krishnapal Sendhav',
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://krishnapal.dev',
-    siteName: 'Krishnapal Sendhav Portfolio',
-    title: 'Krishnapal Sendhav | Senior Flutter Developer',
-    description: 'Senior Flutter Developer building innovative mobile experiences serving 50,000+ users.',
+    url: 'https://krishnapalsendhav.netlify.app/',
+    siteName: 'Krishnapal Sendhav',
+    title: 'Krishnapal Sendhav | Senior Software Engineer',
+    description: 'AI Engineer & Senior Software Engineer at ClassIO, building scalable, privacy-first AI systems and cross-platform applications for 50,000+ users.',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Krishnapal Sendhav | Senior Flutter Developer',
-    description: 'Senior Flutter Developer building innovative mobile experiences serving 50,000+ users.',
+    title: 'Krishnapal Sendhav | Senior Software Engineer',
+    description: 'AI Engineer & Senior Software Engineer at ClassIO, building scalable, privacy-first AI systems and cross-platform applications for 50,000+ users.',
   },
   robots: {
     index: true,

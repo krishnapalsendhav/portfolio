@@ -12,7 +12,7 @@ const experiences = [
         location: 'Indore, India',
         roles: [
             {
-                title: 'Senior Software Developer',
+                title: 'Senior Software Engineer',
                 period: 'Jun 2025 – Present',
                 description: [
                     'Leading mobile app architecture and development initiatives',

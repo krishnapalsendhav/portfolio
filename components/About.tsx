@@ -3,7 +3,7 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useInView } from 'framer-motion';
 import { useRef } from 'react';
-import { FiCode, FiUsers, FiCpu, FiZap } from 'react-icons/fi';
+import { FiCode, FiUsers, FiCpu, FiLock } from 'react-icons/fi';
 import styles from './About.module.css';
 
 const highlights = [
@@ -23,9 +23,9 @@ const highlights = [
         description: 'Development',
     },
     {
-        icon: FiZap,
-        title: 'Production-Ready',
-        description: 'Systems',
+        icon: FiLock,
+        title: 'Secure Content',
+        description: 'DRM',
     },
 ];
 
@@ -90,7 +90,7 @@ export default function About() {
                     </motion.span>
                     <h2 className="section-title">Senior Software Engineer</h2>
                     <p className="section-subtitle">
-                        Building production-ready mobile systems with a focus on scale, performance and long-term maintainability
+                        Building production-ready systems focused on scale, performance, and long-term maintainability
                     </p>
                 </motion.div>
 
@@ -102,9 +102,7 @@ export default function About() {
                         transition={{ duration: 0.6, delay: 0.2 }}
                     >
                         <p className={styles.bio}>
-                            Designing and building production-ready <span className={styles.highlight}>cross-platform</span> applications
-                            for Android, iOS, Windows, and macOS.
-                            Focused on scale, performance, and real-time systems.
+                            Designing and building production-ready, <span className={styles.highlight}>AI-powered cross-platform</span> applications for Android, iOS, Windows, and macOS, focused on scale and performance.
                         </p>
                         <div className={styles.achievementsList}>
                             <div className={styles.achievementItem}>
