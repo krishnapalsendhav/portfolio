@@ -1,0 +1,134 @@
+PROFESSIONAL SUMMARY
+
+I am a Senior Software Engineer with more than 3 years of professional experience. My professional journey includes an initial 8-month part-time role in Ujjain, followed by continuous full-time employment at ClassIO Labs Pvt. Ltd. starting from April 1, 2023 and continuing to the present (January 25, 2026). Flutter has been my core and primary technology from the very beginning of my career, and I specialize in building production-ready, cross-platform applications for Android, iOS, Windows, and macOS.
+
+I have worked extensively on large-scale educational platforms serving more than 50,000 active users. My engineering focus lies in system architecture, real-time systems, scalability, performance optimization, security, infrastructure cost reduction, and long-term maintainability. I naturally gravitate toward Tech Lead and Architect-style responsibilities and enjoy research, system-level problem solving, and pitching new technical ideas.
+
+
+EDUCATION & EARLY JOURNEY
+
+I completed my Bachelor of Technology (B.Tech) from Mahakal Institute of Technology with First Division.
+
+My interest in software development began early. At the age of 17, I built my first website, which marked the starting point of my journey into system building and application development. From the beginning, I was drawn more toward understanding how systems work end-to-end and how they behave at scale rather than focusing only on surface-level features.
+
+I am currently 23 years old and continue to deepen my skills through hands-on production work, debugging complex issues, and continuous experimentation.
+
+
+PROFESSIONAL EXPERIENCE – CLASSIO LABS PVT. LTD.
+
+I currently work as a Senior Software Engineer at ClassIO Labs Pvt. Ltd., where I contribute to core product development across multiple platforms. My responsibilities include cross-platform Flutter development, real-time system design, backend integration, performance optimization, security updates, cost reduction initiatives, mentoring junior developers, and owning features and systems end-to-end.
+
+I am directly involved in building, maintaining, and scaling systems that are used daily by tens of thousands of students and educators.
+
+
+STUDENT LEARNING PLATFORM (50,000+ ACTIVE USERS)
+
+I have worked extensively on a large-scale Student Learning Platform that supports video-based learning, structured content consumption, real-time chat, live classes, polls, quizzes, file sharing, and AI-powered doubt resolution.
+
+My contributions include designing and developing Flutter-based applications, implementing real-time data synchronization using Firebase Realtime Database, and ensuring stable performance under high concurrency. I have also worked on secure content delivery using custom DRM-oriented mechanisms to protect premium educational content from unauthorized access and piracy.
+
+
+VIDEO PLAYER & LIVE CLASS EXPERIENCE IMPROVEMENTS
+
+I recently led major improvements to the video player experience across both student learning and live class platforms. These improvements focused on reducing video startup time, enabling smooth quality switching without playback interruption, minimizing buffering, and ensuring stable playback under fluctuating network conditions.
+
+I also improved the live class experience for both students and faculty by addressing synchronization issues, playback reliability, and session stability. These improvements had a direct and visible impact on user experience in production.
+
+
+CONTENT UPLOAD & PROCESSING PIPELINE
+
+I proposed, designed, and implemented a complete content upload and processing pipeline for educational videos. This system converts uploaded videos into multiple quality formats, encrypts media content for secure delivery, and uploads content to the server in an optimized manner.
+
+Before this pipeline, institutes had to wait several hours after uploading lectures before they became available to students. After implementation, lectures became available instantly. This change also resulted in more than a 35 percent reduction in server and processing costs.
+
+
+LIVE CLASS CHAT & REAL-TIME SYSTEMS
+
+I implemented live class chat and real-time session management using Firebase Realtime Database. Prior to this, the platform relied on a server-hosted WebSocket solution that cost approximately 25,000 to 30,000 INR per month.
+
+After migrating to Firebase Realtime Database, latency was reduced, scalability improved, and monthly infrastructure costs dropped to approximately 2,000 to 2,500 INR. This migration also simplified maintenance and improved overall system reliability.
+
+
+BACKEND & INFRASTRUCTURE ENGINEERING
+
+On the backend, I have designed and implemented production-ready APIs using Node.js. These APIs support content consumption tracking, engagement metrics, backend workflows, and system integrations required by learning platforms.
+
+I have deep experience with Firebase backend infrastructure, including Firebase Realtime Database for live interactions, session and participant state management, and Firebase Cloud Messaging for event-driven notifications and alerts.
+
+I have also handled high Firebase billing issues caused by missing indexes and inefficient data access patterns, and optimized database structures and queries to control cost.
+
+
+SECURITY, CONTENT PRIVACY & PRODUCTION INCIDENTS
+
+Content privacy is a critical concern in educational platforms. I regularly deal with challenges related to screen recording tools, piracy software, and content leakage.
+
+There have been multiple situations where new recording software appeared and required immediate response. In such cases, I had only a single night to analyze the issue, debug the system, implement security fixes, test changes, and push production updates before the next day. These incidents required fast decision-making and deep system understanding.
+
+
+MONITORING, DEBUGGING & RELIABILITY
+
+I use Sentry extensively for logging, crash tracking, and production monitoring. I have also implemented custom, code-based error tracking systems to capture and analyze issues early.
+
+A significant portion of my work involves debugging complex production problems, performing root-cause analysis, and making long-term improvements to system stability and reliability.
+
+
+MENTORSHIP, LEADERSHIP & TEAM CONTRIBUTION
+
+I actively mentor and guide junior developers by explaining system architecture, reviewing solutions, providing hands-on training, and helping them understand best practices. I remain available for ongoing support, especially during onboarding and when new batches of developers join.
+
+I enjoy taking ownership of systems and naturally align with Tech Lead and Architect roles, where I can influence system design and technical direction.
+
+
+APPLIED AI EXPERIENCE
+
+I work on applied AI systems that are actively used in production environments. My experience includes AI-powered doubt resolution systems, video-to-quiz automation pipelines, agentic chatbot workflows, and AI-assisted content processing.
+
+My focus is on practical AI integration, workflow automation, and building systems that are reliable, controlled, and useful in real-world products rather than experimental research projects.
+
+
+AI POWERED CHATBOT – PORTFOLIO PROJECT
+
+I am currently building an AI-powered chatbot as part of my personal portfolio. This project is based on a Retrieval-Augmented Generation (RAG) architecture and is designed to demonstrate real-world AI system design.
+
+The chatbot focuses on structured knowledge ingestion, semantic retrieval, context-aware responses, clear system boundaries, and predictable behavior. The goal is to showcase how AI systems can be integrated responsibly and effectively into production-style software systems.
+
+
+FLUTTER & STATE MANAGEMENT
+
+Flutter has been my primary framework since the start of my career. I have widely used GetX in production applications for state management and architecture. I have also used Provider in personal and experimental projects.
+
+I emphasize clean separation between UI, state, and business logic to ensure scalability and maintainability.
+
+
+OPEN SOURCE & PACKAGE ENGINEERING
+
+I have published three Flutter packages on pub.dev: developer_mode, external_screen, and udid_new.
+
+I also maintain a customized PDF rendering library called custom-pdfrx, which extends an open-source PDF rendering solution to support production requirements.
+Repository: https://github.com/krishnapalsendhav/custom-pdfrx
+
+My open-source work involves platform channels, device-level access, external screen handling, and extending existing tools to meet real-world production needs.
+
+
+PERSONAL PROJECTS
+
+I built a Servlet-based self-hosted file server using Java Servlets. This system allows files to be hosted locally and accessed via an IP address. It was used to stream movies from a mobile device to a TV within the same local network with minimal quality loss.
+
+I also built DailyPal, a personal productivity and social platform that supports posts, multi-user interactions, real-time chat, to-do management, and note-taking. DailyPal integrates Google Gemini for AI-assisted features and serves as an experimental platform for real-time systems and applied AI workflows.
+
+
+HOBBIES & INTERESTS
+
+I enjoy console gaming and regularly play on a PlayStation 5. I actively explore new technologies, frameworks, and platforms. I spend significant time on research and development activities, debugging complex issues, analyzing system behavior, and understanding root causes to improve software reliability and design.
+
+
+CURRENT ROLE & AVAILABILITY
+
+I currently work at ClassIO Labs Pvt. Ltd., contributing to core product development, system architecture, and feature ownership across multiple platforms.
+
+I am open to Tech Lead or Architect roles, cross-platform application opportunities, freelance or contract projects, and startup collaborations.
+
+Location: Indore, Madhya Pradesh, India
+GitHub: https://github.com/krishnapalsendhav
+LinkedIn: https://www.linkedin.com/in/krishnapal-sendhav/
+Email: krishnapalsendhav591@gmail.com

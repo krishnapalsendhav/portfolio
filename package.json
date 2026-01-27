@@ -20,7 +20,8 @@
     "react-icons": "^5.5.0",
     "react-markdown": "^10.1.0",
     "remark-gfm": "^4.0.1",
-    "three": "^0.182.0"
+    "three": "^0.182.0",
+    "node-fetch": "^3.3.2"
   },
   "devDependencies": {
     "@netlify/functions": "^5.1.2",
