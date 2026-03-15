@@ -2,118 +2,13 @@
 
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useInView } from 'framer-motion';
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import { FiUsers, FiSmartphone, FiLayout, FiVideo, FiCpu, FiMessageCircle, FiUpload, FiUploadCloud, FiPackage, FiArrowRight } from 'react-icons/fi';
+import { useRouter } from 'next/navigation';
 import ParallaxCard from './ParallaxCard';
-import ProjectDetails, { ProjectData } from './ProjectDetails';
 import styles from './Projects.module.css';
 
-const projects = [
-    {
-        title: 'Student Learning Platform',
-        oneLiner: 'A large-scale Flutter app used by 50K+ students for learning, live classes, and AI-powered doubt resolution.',
-        tags: ['Flutter', 'GetX', 'Firebase', 'WebSockets', 'AI'],
-        icon: FiUsers,
-        stats: '50K+ Users',
-        highlights: [
-            '50K+ active users across institutions',
-            'Real-time chat, polls, and live classes',
-            'Custom DRM for secure content delivery',
-            'AI-powered doubt resolution portal',
-        ],
-    },
-    {
-        title: 'Live Classes Platform',
-        oneLiner: 'Real-time live class features with interactive components for enhanced student engagement.',
-        tags: ['WebRTC', 'WebSockets', 'Real-time', 'Flutter'],
-        icon: FiVideo,
-        stats: 'Real-time',
-        highlights: [
-            'Low-latency video streaming',
-            'Interactive polls and Q&A',
-            'Real-time chat and file sharing',
-            'Screen sharing capability',
-        ],
-    },
-    {
-        title: 'Content Upload & Processing Pipeline',
-        oneLiner: 'End-to-end video processing pipeline for multi-quality encoding, encryption, and optimized content delivery.',
-        tags: ['Video Pipeline', 'Encoding', 'Encryption', 'Cost Optimization'],
-        icon: FiUploadCloud,
-        stats: '35% Server Cost Reduction',
-        highlights: [
-            'Automated video transcoding into multiple quality variants',
-            'Encrypted media processing for secure content delivery',
-            'Optimized upload and storage workflow to reduce server load',
-            'Designed, pitched, and implemented as a cost-optimization initiative',
-        ],
-    },
-    {
-        title: 'ClassIO Management App',
-        oneLiner: 'A powerful management tool for educational institutes with AI-powered features for streamlined operations.',
-        tags: ['Flutter', 'AI Assistant', 'REST API', 'Windows'],
-        icon: FiSmartphone,
-        stats: 'AI-Enhanced',
-        highlights: [
-            'AI-powered doubt portal for smart replies',
-            'Automated reply suggestions for teachers',
-            'Real-time analytics dashboard',
-            'Multi-institute support',
-        ],
-    },
-    {
-        title: 'App Builder Feature',
-        oneLiner: 'Innovative feature allowing institutes to customize app layouts directly from management interface.',
-        tags: ['Flutter', 'Dynamic UI', 'JSON Config'],
-        icon: FiLayout,
-        stats: 'Platform Feature',
-        highlights: [
-            'Drag-and-drop layout customization',
-            'Real-time preview of changes',
-            'Theme and branding controls',
-            'No-code app configuration',
-        ],
-    },
-    {
-        title: 'Video to Quiz AI Pipeline',
-        oneLiner: 'End-to-end AI pipeline that automatically generates quizzes from video content for student assessment.',
-        tags: ['AI/ML', 'Pipeline', 'RAG', 'On-Device AI'],
-        icon: FiCpu,
-        stats: 'AI-Powered',
-        highlights: [
-            'Automated quiz generation from videos',
-            'On-device AI for privacy',
-            'Intelligent question extraction',
-            'Multiple question formats',
-        ],
-    },
-    {
-        title: 'AI Agentic Chatbot',
-        oneLiner: 'AI-powered agentic chatbot capable of autonomous task execution and intelligent conversation handling.',
-        tags: ['AI/ML', 'LLM', 'Agents', 'Tool Calling'],
-        icon: FiMessageCircle,
-        stats: 'In Progress',
-        highlights: [
-            'Autonomous task execution',
-            'Context-aware conversations',
-            'ClassIO ecosystem integration',
-            'Multi-modal interactions',
-        ],
-    },
-    {
-        title: 'Flutter Package Engineering',
-        oneLiner: 'Development and extension of Flutter packages for platform-level capabilities and system integrations.',
-        tags: ['Flutter Packages', 'Platform Channels', 'Open Source', 'System Integration'],
-        icon: FiPackage,
-        stats: 'Multiple Packages',
-        highlights: [
-            'Developed and maintained Flutter packages published on pub.dev and GitHub',
-            'Implemented platform-channel integrations for device and system-level access',
-            'Extended and modified open-source libraries to meet production requirements',
-            'Focused on stability, performance, and developer experience at package level',
-        ],
-    },
-];
+import { projects } from '@/lib/data/projects';
 
 // Tech icons for floating effect
 const floatingIcons = ['⚛️', '🚀', '💡', '⚡', '🔮', '✨', '🎯', '💫'];
@@ -123,17 +18,7 @@ export default function Projects() {
     const containerRef = useRef(null);
     const isInView = useInView(ref, { once: true, margin: '-100px' });
 
-    // State for project details modal
-    const [selectedProject, setSelectedProject] = useState<ProjectData | null>(null);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-
-    const openProjectDetails = (project: typeof projects[0]) => {
-        setSelectedProject({
-            ...project,
-            icon: undefined  // Remove icon as it's not serializable for the modal
-        } as ProjectData);
-        setIsModalOpen(true);
-    };
+    const router = useRouter();
 
     const { scrollYProgress } = useScroll({
         target: containerRef,
@@ -250,10 +135,9 @@ export default function Projects() {
                                     ))}
                                 </div>
 
-                                {/* Case Study Button */}
                                 <motion.button
                                     className={styles.caseStudyBtn}
-                                    onClick={() => openProjectDetails(project)}
+                                    onClick={() => router.push(`/projects/${project.id}`)}
                                     whileHover={{ scale: 1.02, x: 5 }}
                                     whileTap={{ scale: 0.98 }}
                                     data-cursor
@@ -268,12 +152,6 @@ export default function Projects() {
                 </div>
             </div>
 
-            {/* Project Details Modal */}
-            <ProjectDetails
-                project={selectedProject}
-                isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
-            />
         </section>
     );
 }

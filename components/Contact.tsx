@@ -60,11 +60,32 @@ export default function Contact() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsSubmitting(true);
-        // Simulate form submission
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        setIsSubmitting(false);
-        setFormData({ name: '', email: '', message: '' });
-        alert('Thank you for your message! I will get back to you soon.');
+        
+        try {
+            // Encode the form data for Netlify
+            const encode = (data: Record<string, string>) => {
+                return Object.keys(data)
+                    .map(key => encodeURIComponent(key) + "=" + encodeURIComponent(data[key]))
+                    .join("&");
+            }
+
+            await fetch("/", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: encode({
+                    "form-name": "contact",
+                    ...formData
+                })
+            });
+
+            alert('Thank you for your message! I will get back to you soon.');
+            setFormData({ name: '', email: '', message: '' });
+        } catch (error) {
+            console.error("Form submission error", error);
+            alert('Oops! Something went wrong submitting the form.');
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -196,10 +217,16 @@ export default function Contact() {
                     <motion.form
                         className={`glass-card ${styles.form}`}
                         onSubmit={handleSubmit}
+                        name="contact"
+                        data-netlify="true"
+                        // data-netlify-honeypot is recommended for spam filtering but optional
                         initial={{ opacity: 0, x: 50 }}
                         animate={isInView ? { opacity: 1, x: 0 } : {}}
                         transition={{ duration: 0.6, delay: 0.3 }}
                     >
+                        {/* Hidden input required by Netlify for static site generators */}
+                        <input type="hidden" name="form-name" value="contact" />
+                        
                         {/* Form glow effect */}
                         <div className={styles.formGlow} />
 

@@ -15,10 +15,7 @@ const CustomCursor = dynamic(() => import('@/components/CustomCursor'), {
   ssr: false,
 });
 
-// Dynamic import for chat widget to avoid SSR issues
-const ChatWidget = dynamic(() => import('@/components/ChatWidget'), {
-  ssr: false,
-});
+
 
 export default function Home() {
   return (
@@ -33,7 +30,6 @@ export default function Home() {
         <Projects />
         <Skills />
         <Contact />
-        <ChatWidget />
       </main>
     </LenisProvider>
   );

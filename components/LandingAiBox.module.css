@@ -1,0 +1,108 @@
+.container {
+    width: 100%;
+    max-width: 800px;
+    padding: 0 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 3rem;
+}
+
+.inputWrapper {
+    width: 100%;
+    display: flex;
+    align-items: flex-end;
+    background: rgba(32, 33, 35, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 24px;
+    padding: 0.5rem;
+    padding-left: 0.75rem;
+    backdrop-filter: blur(16px);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+}
+
+.inputWrapper:focus-within {
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 0 0 2px rgba(255, 255, 255, 0.05);
+}
+
+.attachButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.4);
+    cursor: not-allowed;
+    flex-shrink: 0;
+    margin-bottom: 4px;
+}
+
+.input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-family: var(--font-body), sans-serif;
+    font-size: 1rem;
+    padding: 0.7rem 0.5rem;
+    resize: none;
+    outline: none;
+    line-height: 1.5;
+    max-height: 200px;
+    min-height: 44px;
+    overflow-y: auto;
+}
+
+.input::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.sendButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: rgba(255, 255, 255, 0.3);
+    cursor: not-allowed;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+    margin-bottom: 4px;
+}
+
+.sendButton.active {
+    background: #fff;
+    color: #000;
+    cursor: pointer;
+}
+
+.sendButton.active:hover {
+    transform: scale(1.05);
+}
+
+.hint {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.4);
+    margin: 0;
+    text-align: center;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 0 0.5rem;
+        bottom: 1rem;
+    }
+    
+    .inputWrapper {
+        border-radius: 20px;
+    }
+}

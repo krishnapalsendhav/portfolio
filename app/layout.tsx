@@ -36,11 +36,20 @@ export const metadata: Metadata = {
     siteName: 'Krishnapal Sendhav',
     title: 'Krishnapal Sendhav | Senior Software Engineer',
     description: 'AI Engineer & Senior Software Engineer at ClassIO, building scalable, privacy-first AI systems and cross-platform applications for 50,000+ users.',
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'Krishnapal Sendhav Portfolio',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Krishnapal Sendhav | Senior Software Engineer',
     description: 'AI Engineer & Senior Software Engineer at ClassIO, building scalable, privacy-first AI systems and cross-platform applications for 50,000+ users.',
+    images: ['/og-image.png'],
   },
   robots: {
     index: true,

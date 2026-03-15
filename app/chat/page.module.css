@@ -1,0 +1,422 @@
+/* =========================================
+   Chat Page — Soft Dark Mode
+   ========================================= */
+
+.main {
+    min-height: 100vh;
+    /* Slightly warm, deep dark background — less cold than pure black */
+    background: linear-gradient(160deg, #0d1117 0%, #111820 50%, #0d1117 100%);
+    color: rgba(225, 228, 235, 0.88);
+    font-family: var(--font-body), sans-serif;
+    display: flex;
+    flex-direction: column;
+}
+
+.loadingWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    font-size: 1.1rem;
+    color: rgba(200, 210, 225, 0.5);
+    letter-spacing: 0.04em;
+}
+
+/* =========================================
+   Layout
+   ========================================= */
+
+.chatContainer {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    max-width: 860px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+/* =========================================
+   Header
+   ========================================= */
+
+.header {
+    display: flex;
+    align-items: center;
+    padding: 0.9rem 1.5rem;
+    /* Very subtle separator — no harsh lines */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    position: sticky;
+    top: 0;
+    background: rgba(13, 17, 23, 0.85);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    z-index: 10;
+}
+
+.backButton {
+    background: transparent;
+    border: none;
+    color: rgba(200, 210, 225, 0.55);
+    cursor: none;
+    padding: 0.4rem;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s, background-color 0.2s;
+}
+
+.backButton:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: rgba(200, 210, 225, 0.9);
+}
+
+.headerTitle {
+    margin-left: 0.85rem;
+}
+
+.headerTitle h2 {
+    font-size: 1rem;
+    margin: 0;
+    font-weight: 500;
+    color: rgba(210, 220, 235, 0.8);
+    letter-spacing: 0.01em;
+}
+
+/* =========================================
+   Messages Area
+   ========================================= */
+
+.messagesArea {
+    flex: 1;
+    overflow-y: auto;
+    padding: 2rem 1.5rem;
+    /* Custom scrollbar */
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.07) transparent;
+}
+
+.messagesArea::-webkit-scrollbar {
+    width: 5px;
+}
+
+.messagesArea::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.messagesArea::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+}
+
+/* =========================================
+   Empty State
+   ========================================= */
+
+.emptyState {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    text-align: center;
+    color: rgba(180, 195, 215, 0.5);
+    gap: 0.5rem;
+}
+
+.avatarLarge {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    /* Soft, dim gradient — not blazing bright */
+    background: linear-gradient(135deg, rgba(60, 100, 150, 0.6) 0%, rgba(80, 60, 130, 0.6) 100%);
+    color: rgba(220, 230, 245, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 1.3rem;
+    margin-bottom: 0.75rem;
+    box-shadow: 0 0 30px rgba(80, 100, 180, 0.15);
+}
+
+.emptyState h3 {
+    color: rgba(210, 220, 235, 0.75);
+    font-size: 1.3rem;
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+}
+
+.emptyState p {
+    font-size: 0.9rem;
+    color: rgba(180, 195, 215, 0.4);
+    max-width: 280px;
+    line-height: 1.5;
+}
+
+/* =========================================
+   Messages
+   ========================================= */
+
+.messageList {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+.messageWrapper {
+    display: flex;
+    width: 100%;
+    align-items: flex-end;
+    gap: 0.6rem;
+}
+
+.messageWrapper.user {
+    justify-content: flex-end;
+}
+
+.messageWrapper.model,
+.messageWrapper.error {
+    justify-content: flex-start;
+}
+
+/* Base bubble — shared card-like shell */
+.messageContent {
+    max-width: 78%;
+    padding: 0.85rem 1.15rem;
+    border-radius: 18px;
+    line-height: 1.65;
+    font-size: 0.96rem;
+    color: rgba(215, 225, 240, 0.88);
+}
+
+/* USER bubble — tinted indigo glass card */
+.messageWrapper.user .messageContent {
+    background: rgba(55, 75, 120, 0.28);
+    border: 1px solid rgba(100, 130, 200, 0.18);
+    backdrop-filter: blur(8px);
+    border-bottom-right-radius: 5px;
+    color: rgba(220, 230, 248, 0.9);
+}
+
+.userText {
+    margin: 0;
+    white-space: pre-wrap;
+}
+
+/* MODEL bubble — softer tinted glass card */
+.messageWrapper.model .messageContent {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(8px);
+    border-bottom-left-radius: 5px;
+    color: rgba(210, 220, 235, 0.82);
+}
+
+/* ERROR bubble */
+.messageWrapper.error .messageContent {
+    background: rgba(200, 60, 60, 0.08);
+    color: rgba(240, 130, 130, 0.9);
+    border: 1px solid rgba(200, 60, 60, 0.15);
+    border-radius: 12px;
+}
+
+/* =========================================
+   Markdown Styles
+   ========================================= */
+
+.inlineCode {
+    background: rgba(255, 255, 255, 0.07);
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    font-size: 0.87em;
+    color: rgba(180, 215, 255, 0.8);
+}
+
+.codeBlock {
+    display: block;
+    background: rgba(10, 14, 20, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    padding: 1rem 1.1rem;
+    border-radius: 10px;
+    overflow-x: auto;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    font-size: 0.88em;
+    margin: 0.8rem 0;
+    color: rgba(200, 218, 240, 0.82);
+    line-height: 1.55;
+}
+
+.markdownLink {
+    color: rgba(100, 160, 230, 0.85);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(100, 160, 230, 0.25);
+    transition: color 0.2s, border-color 0.2s;
+}
+
+.markdownLink:hover {
+    color: rgba(130, 185, 255, 1);
+    border-color: rgba(130, 185, 255, 0.4);
+}
+
+.markdownList {
+    margin: 0.5rem 0;
+    padding-left: 1.4rem;
+    color: rgba(205, 218, 235, 0.8);
+}
+
+.markdownList li {
+    margin-bottom: 0.3rem;
+}
+
+.markdownBlockquote {
+    border-left: 2px solid rgba(100, 140, 200, 0.3);
+    margin: 0.8rem 0;
+    padding-left: 1rem;
+    color: rgba(185, 200, 225, 0.65);
+    font-style: italic;
+}
+
+/* =========================================
+   Loading Pulse
+   ========================================= */
+
+.loadingPulse {
+    display: flex;
+    gap: 0.35rem;
+    padding: 0.6rem 0;
+    align-items: center;
+}
+
+.loadingPulse span {
+    width: 6px;
+    height: 6px;
+    background: rgba(130, 165, 220, 0.4);
+    border-radius: 50%;
+    animation: pulse 1.2s ease-in-out infinite;
+}
+
+.loadingPulse span:nth-child(2) { animation-delay: 0.2s; }
+.loadingPulse span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes pulse {
+    0%, 100% { opacity: 0.2; transform: scale(0.75); }
+    50% { opacity: 0.85; transform: scale(1.15); }
+}
+
+/* =========================================
+   Input Area
+   ========================================= */
+
+.inputArea {
+    padding: 1rem 1.5rem;
+    padding-bottom: 1.75rem;
+    background: transparent;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.inputContainer {
+    width: 100%;
+    max-width: 760px;
+    display: flex;
+    align-items: flex-end;
+    /* Warm dark glass — not flat black, not harsh */
+    background: rgba(18, 24, 32, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 20px;
+    padding: 0.45rem 0.45rem 0.45rem 1rem;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.inputContainer:focus-within {
+    border-color: rgba(100, 140, 220, 0.25);
+    box-shadow: 0 0 0 3px rgba(80, 120, 200, 0.06), 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.textarea {
+    flex: 1;
+    background: transparent;
+    border: none;
+    /* Comfortable, slightly warm white */
+    color: rgba(215, 225, 240, 0.88);
+    font-family: inherit;
+    font-size: 0.97rem;
+    padding: 0.65rem 0.5rem;
+    resize: none;
+    outline: none;
+    line-height: 1.55;
+    max-height: 180px;
+    overflow-y: auto;
+    scrollbar-width: none;
+}
+
+.textarea::placeholder {
+    color: rgba(160, 175, 200, 0.3);
+}
+
+.textarea::-webkit-scrollbar { display: none; }
+
+.sendButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.04);
+    border: none;
+    color: rgba(160, 175, 200, 0.3);
+    cursor: none;
+    flex-shrink: 0;
+    transition: background 0.25s ease, color 0.25s ease, transform 0.2s ease;
+    margin-bottom: 3px;
+    margin-right: 3px;
+}
+
+.sendButton.active {
+    /* Subtle indigo-tinted send button, not harsh white */
+    background: rgba(90, 130, 210, 0.7);
+    color: rgba(230, 238, 255, 0.95);
+    cursor: none;
+}
+
+.sendButton.active:hover {
+    background: rgba(100, 145, 225, 0.85);
+    transform: scale(1.06);
+    box-shadow: 0 0 16px rgba(90, 130, 210, 0.3);
+}
+
+.branding {
+    margin-top: 0.6rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.02em;
+    color: rgba(160, 175, 200, 0.28);
+}
+
+/* =========================================
+   Responsive
+   ========================================= */
+
+@media (max-width: 768px) {
+    .messagesArea {
+        padding: 1.5rem 1rem;
+    }
+
+    .messageContent {
+        max-width: 90%;
+        font-size: 0.94rem;
+    }
+
+    .inputArea {
+        padding: 0.75rem 0.75rem 1.25rem;
+    }
+
+    .headerTitle h2 {
+        font-size: 0.95rem;
+    }
+}

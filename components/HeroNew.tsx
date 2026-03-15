@@ -13,6 +13,11 @@ const Scene3D = dynamic(() => import('./Scene3D'), {
     loading: () => <div className={styles.sceneLoader} />,
 });
 
+// Dynamic import for AI input box to avoid SSR issues
+const LandingAiBox = dynamic(() => import('@/components/LandingAiBox'), {
+  ssr: false,
+});
+
 export default function HeroNew() {
     const containerRef = useRef<HTMLElement>(null);
     const titleRef = useRef<HTMLHeadingElement>(null);
@@ -124,6 +129,15 @@ export default function HeroNew() {
                         <FiDownload />
                         Download Resume
                     </a>
+                </motion.div>
+
+                <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8, delay: 1.8 }}
+                    style={{ width: '100%', display: 'flex', justifyContent: 'center' }}
+                >
+                    <LandingAiBox />
                 </motion.div>
             </motion.div>
 
