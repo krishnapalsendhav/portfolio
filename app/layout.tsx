@@ -15,6 +15,7 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://krishnapalsendhav.netlify.app/'),
   title: 'Krishnapal Sendhav | Senior Software Engineer',
   description: 'AI Engineer & Senior Software Engineer at ClassIO, building scalable, privacy-first AI systems and cross-platform applications for 50,000+ users.',
   keywords: [
