@@ -218,8 +218,7 @@ export default function Contact() {
                         className={`glass-card ${styles.form}`}
                         onSubmit={handleSubmit}
                         name="contact"
-                        data-netlify="true"
-                        // data-netlify-honeypot is recommended for spam filtering but optional
+                        // data-netlify="true" removed for Next.js Runtime v5 compatibility (using /public/__forms.html instead)
                         initial={{ opacity: 0, x: 50 }}
                         animate={isInView ? { opacity: 1, x: 0 } : {}}
                         transition={{ duration: 0.6, delay: 0.3 }}
