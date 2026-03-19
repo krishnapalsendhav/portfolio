@@ -186,3 +186,35 @@
         align-items: flex-start;
     }
 }
+
+/* Groups chat button + menu button together on the right */
+.headerActions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+/* Chat / Ask AI button */
+.chatButton {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.45rem 0.9rem;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 245, 225, 0.1);
+    background: rgba(31, 29, 27, 0.85);
+    color: rgba(215, 204, 188, 0.78);
+    font-family: inherit;
+    font-size: 0.82rem;
+    letter-spacing: 0.02em;
+    cursor: none;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+}
+
+.chatButton:hover {
+    background: rgba(45, 38, 30, 0.95);
+    border-color: rgba(210, 150, 90, 0.2);
+    color: rgba(235, 222, 205, 0.95);
+}

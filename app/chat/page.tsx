@@ -1,8 +1,8 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import { useState, useRef, useEffect, FormEvent, KeyboardEvent, Suspense } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useState, useRef, useEffect, FormEvent, KeyboardEvent } from 'react';
+import { useRouter } from 'next/navigation';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { FiArrowLeft, FiArrowUp, FiTrash2 } from 'react-icons/fi';
@@ -27,7 +27,8 @@ interface Message {
 // =============================================================================
 
 const STORAGE_KEY = 'krishnapal_chat_history';
-const MAX_STORED_MSG = 50; // Keep last 50 messages in storage
+const PENDING_QUERY_KEY = 'chat_pending_query';
+const MAX_STORED_MSG = 50;
 
 // =============================================================================
 // Markdown Components
@@ -72,50 +73,81 @@ function loadChatHistory(): Message[] {
 
 function saveChatHistory(messages: Message[]): void {
     try {
-        // Keep only last MAX_STORED_MSG messages to avoid storage overflow
         const trimmed = messages.slice(-MAX_STORED_MSG);
         localStorage.setItem(STORAGE_KEY, JSON.stringify(trimmed));
     } catch {
-        // Storage might be full — fail silently
+        // Storage full — fail silently
     }
 }
 
 function clearChatHistory(): void {
     try {
         localStorage.removeItem(STORAGE_KEY);
+    } catch { }
+}
+
+// =============================================================================
+// SessionStorage Helper — reads and immediately clears (consume-once pattern)
+// =============================================================================
+
+function consumePendingQuery(): string | null {
+    try {
+        const query = sessionStorage.getItem(PENDING_QUERY_KEY);
+        if (query) sessionStorage.removeItem(PENDING_QUERY_KEY);
+        return query;
     } catch {
-        // fail silently
+        return null;
     }
 }
 
 // =============================================================================
-// Main Chat Component
+// Chat Page
+// — No useSearchParams, no Suspense wrapper needed
+// — Fix 1: historyLoaded flag prevents race condition between localStorage + initial query
+// — Fix 2: messagesRef always holds the latest messages (no stale closures)
 // =============================================================================
 
-function ChatContent() {
-    const searchParams = useSearchParams();
+export default function ChatPage() {
     const router = useRouter();
-    const initialQuery = searchParams.get('q');
 
     const [messages, setMessages] = useState<Message[]>([]);
     const [inputValue, setInputValue] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-    const [streamingText, setStreamingText] = useState(''); // ✅ Live streaming buffer
+    const [streamingText, setStreamingText] = useState('');
+    const [historyLoaded, setHistoryLoaded] = useState(false); // ✅ Fix 1
 
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLTextAreaElement>(null);
     const initializedRef = useRef(false);
-    const abortControllerRef = useRef<AbortController | null>(null); // ✅ For cancelling stream
+    const abortControllerRef = useRef<AbortController | null>(null);
+    const messagesRef = useRef<Message[]>([]); // ✅ Fix 2
 
     // -------------------------------------------------------------------------
-    // Load chat history from localStorage on mount
+    // Step 1: Load localStorage history → signal ready
     // -------------------------------------------------------------------------
     useEffect(() => {
         const history = loadChatHistory();
         if (history.length > 0) {
             setMessages(history);
+            messagesRef.current = history; // ✅ sync ref immediately
         }
+        setHistoryLoaded(true); // ✅ triggers Step 2 effect
     }, []);
+
+    // -------------------------------------------------------------------------
+    // Step 2: Fire pending query ONLY after history is committed
+    // This guarantees handleSubmit sees correct messages in messagesRef
+    // -------------------------------------------------------------------------
+    useEffect(() => {
+        if (!historyLoaded || initializedRef.current) return;
+        initializedRef.current = true;
+
+        const pendingQuery = consumePendingQuery();
+        if (pendingQuery) {
+            handleSubmit(pendingQuery);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [historyLoaded]);
 
     // -------------------------------------------------------------------------
     // Auto-scroll on new messages or streaming updates
@@ -125,10 +157,10 @@ function ChatContent() {
     }, [messages, streamingText]);
 
     // -------------------------------------------------------------------------
-    // Focus input after loading
+    // Re-focus input after response completes
     // -------------------------------------------------------------------------
     useEffect(() => {
-        if (initializedRef.current && inputRef.current) {
+        if (!isLoading && inputRef.current) {
             inputRef.current.focus();
         }
     }, [isLoading]);
@@ -136,12 +168,15 @@ function ChatContent() {
     // -------------------------------------------------------------------------
     // Helpers
     // -------------------------------------------------------------------------
-    const generateId = () => `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+    const generateId = () =>
+        `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
 
+    // Wraps setMessages — keeps messagesRef in sync + persists to localStorage
     const updateMessages = (updater: (prev: Message[]) => Message[]) => {
         setMessages((prev) => {
             const next = updater(prev);
-            saveChatHistory(next); // ✅ Persist on every update
+            messagesRef.current = next; // ✅ always fresh
+            saveChatHistory(next);
             return next;
         });
     };
@@ -150,8 +185,8 @@ function ChatContent() {
     // Clear chat
     // -------------------------------------------------------------------------
     const handleClearChat = () => {
-        // Cancel any ongoing stream
         abortControllerRef.current?.abort();
+        messagesRef.current = [];
         setMessages([]);
         setStreamingText('');
         setIsLoading(false);
@@ -171,26 +206,24 @@ function ChatContent() {
             timestamp: Date.now(),
         };
 
-        // Capture current messages before state update for API call
-        const currentMessages = [...messages];
+        // ✅ Uses ref — never stale, captures correct history even on initial load
+        const currentMessages = [...messagesRef.current];
 
         updateMessages((prev) => [...prev, userMessage]);
         setInputValue('');
         setIsLoading(true);
-        setStreamingText(''); // Clear streaming buffer
+        setStreamingText('');
 
-        // Create abort controller for this request
         const abortController = new AbortController();
         abortControllerRef.current = abortController;
 
         try {
-            // ✅ Call streaming endpoint
             const response = await fetch('/api/chat/stream', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     query: query.trim(),
-                    messages: currentMessages, // Send history (without new user msg)
+                    messages: currentMessages, // ✅ correct history sent to API
                 }),
                 signal: abortController.signal,
             });
@@ -200,7 +233,6 @@ function ChatContent() {
                 throw new Error(errorData.error || 'Failed to get response');
             }
 
-            // ✅ Read SSE stream token by token
             const reader = response.body!.getReader();
             const decoder = new TextDecoder();
             let fullText = '';
@@ -220,7 +252,7 @@ function ChatContent() {
                         const { token } = JSON.parse(payload);
                         if (token) {
                             fullText += token;
-                            setStreamingText(fullText); // ✅ Show tokens live
+                            setStreamingText(fullText);
                         }
                     } catch {
                         // Skip malformed chunks
@@ -228,7 +260,6 @@ function ChatContent() {
                 }
             }
 
-            // ✅ Stream complete — commit full message to history
             const botMessage: Message = {
                 id: generateId(),
                 role: 'model',
@@ -239,35 +270,23 @@ function ChatContent() {
             updateMessages((prev) => [...prev, botMessage]);
 
         } catch (error: any) {
-            if (error?.name === 'AbortError') return; // User cancelled — no error message
+            if (error?.name === 'AbortError') return;
 
             console.error('Stream error:', error);
-            const errorMessage: Message = {
-                id: generateId(),
-                role: 'error',
-                content: 'Sorry, something went wrong. Please try again.',
-                timestamp: Date.now(),
-            };
-            updateMessages((prev) => [...prev, errorMessage]);
-
+            updateMessages((prev) => [
+                ...prev,
+                {
+                    id: generateId(),
+                    role: 'error',
+                    content: 'Sorry, something went wrong. Please try again.',
+                    timestamp: Date.now(),
+                },
+            ]);
         } finally {
             setIsLoading(false);
-            setStreamingText(''); // ✅ Clear buffer after committing
+            setStreamingText('');
         }
     };
-
-    // -------------------------------------------------------------------------
-    // Initial query from URL param
-    // -------------------------------------------------------------------------
-    useEffect(() => {
-        if (!initializedRef.current && initialQuery) {
-            initializedRef.current = true;
-            handleSubmit(initialQuery);
-        } else if (!initializedRef.current) {
-            initializedRef.current = true;
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [initialQuery]);
 
     const handleFormSubmit = (e: FormEvent) => {
         e.preventDefault();
@@ -282,135 +301,149 @@ function ChatContent() {
     };
 
     // -------------------------------------------------------------------------
-    // Render
+    // Render — no Suspense needed since useSearchParams is gone
     // -------------------------------------------------------------------------
-    return (
-        <div className={styles.chatContainer}>
-
-            {/* Header */}
-            <header className={styles.header}>
-                <button
-                    onClick={() => router.push('/')}
-                    className={styles.backButton}
-                    aria-label="Back to home"
-                    data-cursor
-                >
-                    <FiArrowLeft size={24} />
-                </button>
-                <div className={styles.headerTitle}>
-                    <h2>Krishnapal Sendhav</h2>
-                </div>
-                {/* ✅ Clear chat button — only shown when there are messages */}
-                {messages.length > 0 && (
-                    <button
-                        onClick={handleClearChat}
-                        className={styles.clearButton}
-                        aria-label="Clear chat history"
-                        data-cursor
-                        title="Clear chat"
-                    >
-                        <FiTrash2 size={18} />
-                    </button>
-                )}
-            </header>
-
-            {/* Messages */}
-            <div className={styles.messagesArea} data-lenis-prevent>
-                {messages.length === 0 && !isLoading && !initialQuery && (
-                    <div className={styles.emptyState}>
-                        <div className={styles.avatarLarge}>KS</div>
-                        <h3>How can I help you?</h3>
-                        <p>Ask me about my experience, skills, or projects.</p>
-                    </div>
-                )}
-
-                <div className={styles.messageList}>
-                    {messages.map((msg) => (
-                        <div key={msg.id} className={`${styles.messageWrapper} ${styles[msg.role]}`}>
-                            <div className={styles.messageContent}>
-                                {msg.role === 'model' || msg.role === 'error' ? (
-                                    <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
-                                        {msg.content}
-                                    </ReactMarkdown>
-                                ) : (
-                                    <p className={styles.userText}>{msg.content}</p>
-                                )}
-                            </div>
-                        </div>
-                    ))}
-
-                    {/* ✅ Live streaming message — shown while tokens arrive */}
-                    {isLoading && streamingText && (
-                        <div className={`${styles.messageWrapper} ${styles.model}`}>
-                            <div className={styles.messageContent}>
-                                <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
-                                    {streamingText}
-                                </ReactMarkdown>
-                                <span className={styles.streamingCursor} /> {/* Blinking cursor */}
-                            </div>
-                        </div>
-                    )}
-
-                    {/* Loading dots — only shown while waiting for first token */}
-                    {isLoading && !streamingText && (
-                        <div className={`${styles.messageWrapper} ${styles.model}`}>
-                            <div className={styles.messageContent}>
-                                <div className={styles.loadingPulse}>
-                                    <span /><span /><span />
-                                </div>
-                            </div>
-                        </div>
-                    )}
-
-                    <div ref={messagesEndRef} />
-                </div>
-            </div>
-
-            {/* Input */}
-            <div className={styles.inputArea}>
-                <div className={styles.inputContainer}>
-                    <textarea
-                        ref={inputRef}
-                        className={styles.textarea}
-                        value={inputValue}
-                        onChange={(e) => setInputValue(e.target.value)}
-                        onKeyDown={handleKeyDown}
-                        placeholder="Type your message..."
-                        rows={1}
-                        disabled={isLoading}
-                    />
-                    <button
-                        className={`${styles.sendButton} ${inputValue.trim() ? styles.active : ''}`}
-                        onClick={handleFormSubmit}
-                        disabled={!inputValue.trim() || isLoading}
-                        aria-label="Send message"
-                        data-cursor
-                    >
-                        <FiArrowUp size={20} />
-                    </button>
-                </div>
-                <div className={styles.branding}>
-                    AI Assistant for Krishnapal Sendhav
-                </div>
-            </div>
-
-        </div>
-    );
-}
-
-// =============================================================================
-// Page Export
-// =============================================================================
-
-export default function ChatPage() {
     return (
         <LenisProvider>
             <main className={styles.main}>
                 <CustomCursor />
                 <div className="noise-overlay" />
-                <Suspense fallback={<div className={styles.loadingWrapper}>Loading chat...</div>}>
-                    <ChatContent />
-                </Suspense>
+
+                <div className={styles.chatContainer}>
+
+                    {/* Header */}
+                    <header className={styles.header}>
+                        <button
+                            onClick={() => router.push('/')}
+                            className={styles.backButton}
+                            aria-label="Back to home"
+                            data-cursor
+                        >
+                            <FiArrowLeft size={24} />
+                        </button>
+                        <div className={styles.headerTitle}>
+                            <h2>Krishnapal Sendhav</h2>
+                        </div>
+                        {messages.length > 0 && (
+                            <button
+                                onClick={handleClearChat}
+                                className={styles.clearButton}
+                                aria-label="Clear chat history"
+                                data-cursor
+                                title="Clear chat"
+                            >
+                                <FiTrash2 size={18} />
+                            </button>
+                        )}
+                    </header>
+
+                    {/* Messages */}
+                    <div className={styles.messagesArea} data-lenis-prevent>
+                        {messages.length === 0 && !isLoading && (
+                            <div className={styles.emptyState}>
+                                <div className={styles.avatarLarge}>KS</div>
+                                <h3>How can I help you?</h3>
+                                {/* ✅ Suggested questions */}
+                                <div className={styles.suggestions}>
+                                    {[
+                                        "What projects have you built?",
+                                        "What tech stack do you work with?",
+                                        "Are you open to new opportunities?",
+                                    ].map((q) => (
+                                        <button
+                                            key={q}
+                                            className={styles.suggestionChip}
+                                            onClick={() => handleSubmit(q)}
+                                            data-cursor
+                                        >
+                                            {q}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+
+                        <div className={styles.messageList}>
+                            {messages.map((msg) => (
+                                <div
+                                    key={msg.id}
+                                    className={`${styles.messageWrapper} ${styles[msg.role]}`}
+                                >
+                                    <div className={styles.messageContent}>
+                                        {msg.role === 'model' || msg.role === 'error' ? (
+                                            <ReactMarkdown
+                                                remarkPlugins={[remarkGfm]}
+                                                components={markdownComponents}
+                                            >
+                                                {msg.content}
+                                            </ReactMarkdown>
+                                        ) : (
+                                            <p className={styles.userText}>{msg.content}</p>
+                                        )}
+                                    </div>
+                                </div>
+                            ))}
+
+                            {/* Live streaming — shown while tokens arrive */}
+                            {isLoading && streamingText && (
+                                <div className={`${styles.messageWrapper} ${styles.model}`}>
+                                    <div className={styles.messageContent}>
+                                        <ReactMarkdown
+                                            remarkPlugins={[remarkGfm]}
+                                            components={markdownComponents}
+                                        >
+                                            {streamingText}
+                                        </ReactMarkdown>
+                                        <span className={styles.streamingCursor} />
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Loading dots — waiting for first token */}
+                            {isLoading && !streamingText && (
+                                <div className={`${styles.messageWrapper} ${styles.model}`}>
+                                    <div className={styles.messageContent}>
+                                        <div className={styles.loadingPulse}>
+                                            <span /><span /><span />
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
+                            <div ref={messagesEndRef} />
+                        </div>
+                    </div>
+
+                    {/* Input */}
+                    <div className={styles.inputArea}>
+                        <div className={styles.inputContainer}>
+                            <textarea
+                                ref={inputRef}
+                                className={styles.textarea}
+                                value={inputValue}
+                                onChange={(e) => setInputValue(e.target.value)}
+                                onKeyDown={handleKeyDown}
+                                placeholder={messages.length > 0 ? "Ask a follow-up..." : "Ask about my experience, skills, or projects."}
+                                rows={1}
+                                disabled={isLoading}
+                            />
+                            <button
+                                className={`${styles.sendButton} ${inputValue.trim() ? styles.active : ''}`}
+                                onClick={handleFormSubmit}
+                                disabled={!inputValue.trim() || isLoading}
+                                aria-label="Send message"
+                                data-cursor
+                            >
+                                <FiArrowUp size={20} />
+                            </button>
+                        </div>
+                        <div className={styles.branding}>
+                            AI Assistant for Krishnapal Sendhav
+                        </div>
+                    </div>
+
+                </div>
             </main>
         </LenisProvider>
     );

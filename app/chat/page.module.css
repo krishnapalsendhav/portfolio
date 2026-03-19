@@ -1,12 +1,12 @@
 /* =========================================
-   Chat Page — Soft Dark Mode
+   Chat Page — Warm Dark Mode (Eye Friendly)
+   bg: #181614 | box: #1f1d1b
    ========================================= */
 
 .main {
     min-height: 100vh;
-    /* Slightly warm, deep dark background — less cold than pure black */
-    background: linear-gradient(160deg, #0d1117 0%, #111820 50%, #0d1117 100%);
-    color: rgba(225, 228, 235, 0.88);
+    background: linear-gradient(160deg, #14161A 0%, #14161A 50%, #14161A 100%);
+    color: rgba(228, 220, 210, 0.88);
     font-family: var(--font-body), sans-serif;
     display: flex;
     flex-direction: column;
@@ -18,7 +18,7 @@
     justify-content: center;
     height: 100vh;
     font-size: 1.1rem;
-    color: rgba(200, 210, 225, 0.5);
+    color: rgba(200, 190, 175, 0.45);
     letter-spacing: 0.04em;
 }
 
@@ -43,11 +43,10 @@
     display: flex;
     align-items: center;
     padding: 0.9rem 1.5rem;
-    /* Very subtle separator — no harsh lines */
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid rgba(255, 245, 230, 0.045);
     position: sticky;
     top: 0;
-    background: rgba(13, 17, 23, 0.85);
+    background: #1A1A1A;
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
     z-index: 10;
@@ -56,7 +55,7 @@
 .backButton {
     background: transparent;
     border: none;
-    color: rgba(200, 210, 225, 0.55);
+    color: rgba(205, 195, 180, 0.5);
     cursor: none;
     padding: 0.4rem;
     border-radius: 8px;
@@ -67,8 +66,8 @@
 }
 
 .backButton:hover {
-    background: rgba(255, 255, 255, 0.05);
-    color: rgba(200, 210, 225, 0.9);
+    background: rgba(255, 245, 230, 0.05);
+    color: rgba(228, 218, 205, 0.88);
 }
 
 .headerTitle {
@@ -79,7 +78,7 @@
     font-size: 1rem;
     margin: 0;
     font-weight: 500;
-    color: rgba(210, 220, 235, 0.8);
+    color: rgba(225, 215, 200, 0.78);
     letter-spacing: 0.01em;
 }
 
@@ -91,9 +90,8 @@
     flex: 1;
     overflow-y: auto;
     padding: 2rem 1.5rem;
-    /* Custom scrollbar */
     scrollbar-width: thin;
-    scrollbar-color: rgba(255, 255, 255, 0.07) transparent;
+    scrollbar-color: rgba(255, 245, 230, 0.06) transparent;
 }
 
 .messagesArea::-webkit-scrollbar {
@@ -105,7 +103,7 @@
 }
 
 .messagesArea::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(255, 245, 230, 0.07);
     border-radius: 10px;
 }
 
@@ -120,7 +118,6 @@
     justify-content: center;
     height: 100%;
     text-align: center;
-    color: rgba(180, 195, 215, 0.5);
     gap: 0.5rem;
 }
 
@@ -128,20 +125,21 @@
     width: 60px;
     height: 60px;
     border-radius: 50%;
-    /* Soft, dim gradient — not blazing bright */
-    background: linear-gradient(135deg, rgba(60, 100, 150, 0.6) 0%, rgba(80, 60, 130, 0.6) 100%);
-    color: rgba(220, 230, 245, 0.85);
+    background: linear-gradient(135deg,
+            rgba(140, 100, 180, 0.45) 0%,
+            rgba(190, 130, 80, 0.35) 100%);
+    color: rgba(232, 218, 200, 0.88);
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: 600;
     font-size: 1.3rem;
     margin-bottom: 0.75rem;
-    box-shadow: 0 0 30px rgba(80, 100, 180, 0.15);
+    box-shadow: 0 0 36px rgba(160, 110, 80, 0.1);
 }
 
 .emptyState h3 {
-    color: rgba(210, 220, 235, 0.75);
+    color: rgba(225, 215, 198, 0.72);
     font-size: 1.3rem;
     font-weight: 500;
     margin-bottom: 0.25rem;
@@ -149,9 +147,9 @@
 
 .emptyState p {
     font-size: 0.9rem;
-    color: rgba(180, 195, 215, 0.4);
+    color: rgba(195, 183, 165, 0.42);
     max-width: 280px;
-    line-height: 1.5;
+    line-height: 1.6;
 }
 
 /* =========================================
@@ -161,7 +159,7 @@
 .messageList {
     display: flex;
     flex-direction: column;
-    gap: 1.2rem;
+    gap: 1.25rem;
 }
 
 .messageWrapper {
@@ -180,23 +178,21 @@
     justify-content: flex-start;
 }
 
-/* Base bubble — shared card-like shell */
 .messageContent {
     max-width: 78%;
-    padding: 0.85rem 1.15rem;
+    padding: 0.88rem 1.15rem;
     border-radius: 18px;
-    line-height: 1.65;
+    line-height: 1.7;
     font-size: 0.96rem;
-    color: rgba(215, 225, 240, 0.88);
 }
 
-/* USER bubble — tinted indigo glass card */
+/* USER bubble — warm amber-tinted, lifted above bg */
 .messageWrapper.user .messageContent {
-    background: rgba(55, 75, 120, 0.28);
-    border: 1px solid rgba(100, 130, 200, 0.18);
+    background: #1A1A1A;
+    border: 1px solid rgba(210, 150, 90, 0.12);
     backdrop-filter: blur(8px);
     border-bottom-right-radius: 5px;
-    color: rgba(220, 230, 248, 0.9);
+    color: rgba(235, 222, 205, 0.9);
 }
 
 .userText {
@@ -204,20 +200,19 @@
     white-space: pre-wrap;
 }
 
-/* MODEL bubble — softer tinted glass card */
+/* MODEL bubble — box color */
 .messageWrapper.model .messageContent {
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(8px);
+    background: #1A1A1A;
+    border: 1px solid rgba(255, 245, 225, 0.055);
     border-bottom-left-radius: 5px;
-    color: rgba(210, 220, 235, 0.82);
+    color: rgba(220, 210, 196, 0.84);
 }
 
 /* ERROR bubble */
 .messageWrapper.error .messageContent {
-    background: rgba(200, 60, 60, 0.08);
-    color: rgba(240, 130, 130, 0.9);
-    border: 1px solid rgba(200, 60, 60, 0.15);
+    background: rgba(45, 18, 15, 0.85);
+    color: rgba(240, 130, 120, 0.88);
+    border: 1px solid rgba(180, 60, 50, 0.14);
     border-radius: 12px;
 }
 
@@ -226,55 +221,55 @@
    ========================================= */
 
 .inlineCode {
-    background: rgba(255, 255, 255, 0.07);
-    padding: 0.15rem 0.4rem;
+    background: rgba(255, 245, 225, 0.065);
+    padding: 0.15rem 0.42rem;
     border-radius: 4px;
     font-family: 'JetBrains Mono', 'Fira Code', monospace;
     font-size: 0.87em;
-    color: rgba(180, 215, 255, 0.8);
+    color: rgba(215, 185, 135, 0.88);
 }
 
 .codeBlock {
     display: block;
-    background: rgba(10, 14, 20, 0.7);
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: #141210;
+    border: 1px solid rgba(255, 245, 225, 0.05);
     padding: 1rem 1.1rem;
     border-radius: 10px;
     overflow-x: auto;
     font-family: 'JetBrains Mono', 'Fira Code', monospace;
     font-size: 0.88em;
-    margin: 0.8rem 0;
-    color: rgba(200, 218, 240, 0.82);
-    line-height: 1.55;
+    margin: 0.85rem 0;
+    color: rgba(215, 205, 188, 0.84);
+    line-height: 1.6;
 }
 
 .markdownLink {
-    color: rgba(100, 160, 230, 0.85);
+    color: rgba(165, 145, 220, 0.85);
     text-decoration: none;
-    border-bottom: 1px solid rgba(100, 160, 230, 0.25);
+    border-bottom: 1px solid rgba(165, 145, 220, 0.22);
     transition: color 0.2s, border-color 0.2s;
 }
 
 .markdownLink:hover {
-    color: rgba(130, 185, 255, 1);
-    border-color: rgba(130, 185, 255, 0.4);
+    color: rgba(190, 170, 240, 0.95);
+    border-color: rgba(190, 170, 240, 0.38);
 }
 
 .markdownList {
     margin: 0.5rem 0;
     padding-left: 1.4rem;
-    color: rgba(205, 218, 235, 0.8);
+    color: rgba(215, 204, 188, 0.82);
 }
 
 .markdownList li {
-    margin-bottom: 0.3rem;
+    margin-bottom: 0.35rem;
 }
 
 .markdownBlockquote {
-    border-left: 2px solid rgba(100, 140, 200, 0.3);
-    margin: 0.8rem 0;
+    border-left: 2px solid rgba(180, 145, 100, 0.28);
+    margin: 0.85rem 0;
     padding-left: 1rem;
-    color: rgba(185, 200, 225, 0.65);
+    color: rgba(190, 178, 160, 0.62);
     font-style: italic;
 }
 
@@ -284,7 +279,7 @@
 
 .loadingPulse {
     display: flex;
-    gap: 0.35rem;
+    gap: 0.38rem;
     padding: 0.6rem 0;
     align-items: center;
 }
@@ -292,9 +287,9 @@
 .loadingPulse span {
     width: 6px;
     height: 6px;
-    background: rgba(130, 165, 220, 0.4);
+    background: rgba(200, 165, 110, 0.38);
     border-radius: 50%;
-    animation: pulse 1.2s ease-in-out infinite;
+    animation: pulse 1.3s ease-in-out infinite;
 }
 
 .loadingPulse span:nth-child(2) {
@@ -314,7 +309,7 @@
     }
 
     50% {
-        opacity: 0.85;
+        opacity: 0.82;
         transform: scale(1.15);
     }
 }
@@ -337,9 +332,8 @@
     max-width: 760px;
     display: flex;
     align-items: flex-end;
-    /* Warm dark glass — not flat black, not harsh */
-    background: rgba(18, 24, 32, 0.75);
-    border: 1px solid rgba(255, 255, 255, 0.07);
+    background: #121212;
+    border: 1px solid #121212;
     border-radius: 20px;
     padding: 0.45rem 0.45rem 0.45rem 1rem;
     backdrop-filter: blur(20px);
@@ -348,29 +342,30 @@
 }
 
 .inputContainer:focus-within {
-    border-color: rgba(100, 140, 220, 0.25);
-    box-shadow: 0 0 0 3px rgba(80, 120, 200, 0.06), 0 8px 32px rgba(0, 0, 0, 0.2);
+    border-color: rgba(160, 130, 200, 0.22);
+    box-shadow:
+        0 0 0 3px rgba(150, 115, 185, 0.06),
+        0 8px 32px rgba(0, 0, 0, 0.22);
 }
 
 .textarea {
     flex: 1;
     background: transparent;
     border: none;
-    /* Comfortable, slightly warm white */
-    color: rgba(215, 225, 240, 0.88);
+    color: rgba(228, 218, 204, 0.88);
     font-family: inherit;
     font-size: 0.97rem;
     padding: 0.65rem 0.5rem;
     resize: none;
     outline: none;
-    line-height: 1.55;
+    line-height: 1.6;
     max-height: 180px;
     overflow-y: auto;
     scrollbar-width: none;
 }
 
 .textarea::placeholder {
-    color: rgba(160, 175, 200, 0.3);
+    color: rgba(180, 168, 150, 0.28);
 }
 
 .textarea::-webkit-scrollbar {
@@ -384,9 +379,9 @@
     width: 34px;
     height: 34px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.04);
+    background: rgba(255, 245, 225, 0.04);
     border: none;
-    color: rgba(160, 175, 200, 0.3);
+    color: rgba(175, 162, 142, 0.28);
     cursor: none;
     flex-shrink: 0;
     transition: background 0.25s ease, color 0.25s ease, transform 0.2s ease;
@@ -395,34 +390,37 @@
 }
 
 .sendButton.active {
-    /* Subtle indigo-tinted send button, not harsh white */
-    background: rgba(90, 130, 210, 0.7);
-    color: rgba(230, 238, 255, 0.95);
+    background: rgba(145, 105, 185, 0.62);
+    color: rgba(240, 232, 220, 0.95);
     cursor: none;
 }
 
 .sendButton.active:hover {
-    background: rgba(100, 145, 225, 0.85);
+    background: rgba(158, 118, 200, 0.78);
     transform: scale(1.06);
-    box-shadow: 0 0 16px rgba(90, 130, 210, 0.3);
+    box-shadow: 0 0 18px rgba(145, 105, 185, 0.28);
 }
 
 .branding {
     margin-top: 0.6rem;
     font-size: 0.72rem;
     letter-spacing: 0.02em;
-    color: rgba(160, 175, 200, 0.28);
+    color: rgba(175, 162, 145, 0.24);
 }
 
-/* Blinking cursor during streaming */
+/* =========================================
+   Streaming Cursor
+   ========================================= */
+
 .streamingCursor {
     display: inline-block;
-    width: 8px;
-    height: 16px;
-    background: currentColor;
+    width: 7px;
+    height: 15px;
+    background: rgba(210, 175, 120, 0.65);
+    border-radius: 1px;
     margin-left: 2px;
     vertical-align: middle;
-    animation: blink 0.8s step-end infinite;
+    animation: blink 0.85s step-end infinite;
 }
 
 @keyframes blink {
@@ -431,22 +429,72 @@
     }
 }
 
-/* Clear button */
+/* =========================================
+   Clear Button
+   ========================================= */
+
 .clearButton {
     background: none;
     border: none;
     cursor: pointer;
-    color: var(--text-secondary);
+    color: rgba(190, 178, 160, 0.38);
     padding: 8px;
     border-radius: 8px;
     display: flex;
     align-items: center;
-    transition: color 0.2s;
+    transition: color 0.2s, background 0.2s;
+    margin-left: auto;
 }
 
 .clearButton:hover {
-    color: var(--text-primary);
+    color: rgba(230, 100, 90, 0.75);
+    background: rgba(200, 60, 50, 0.07);
 }
+
+/* =========================================
+   Suggested Questions
+   ========================================= */
+
+.suggestions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    margin-top: 1.75rem;
+    width: 100%;
+    max-width: 380px;
+    align-items: center;
+}
+
+.suggestionChip {
+    width: 100%;
+    background: #1f1d1b;
+    border: 1px solid rgba(255, 245, 225, 0.07);
+    border-radius: 12px;
+    padding: 0.75rem 1.1rem;
+    color: rgba(215, 204, 188, 0.72);
+    font-family: inherit;
+    font-size: 0.9rem;
+    text-align: left;
+    cursor: none;
+    line-height: 1.45;
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease,
+        transform 0.15s ease;
+}
+
+.suggestionChip:hover {
+    background: rgba(45, 38, 30, 0.9);
+    border-color: rgba(210, 150, 90, 0.18);
+    color: rgba(235, 222, 205, 0.92);
+    transform: translateY(-1px);
+}
+
+.suggestionChip:active {
+    transform: translateY(0px);
+}
+
 
 /* =========================================
    Responsive

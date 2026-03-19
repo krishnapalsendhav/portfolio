@@ -1,7 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
+import { FiMessageSquare } from 'react-icons/fi';
 import styles from './NavigationNew.module.css';
 
 const navItems = [
@@ -15,6 +17,7 @@ const navItems = [
 export default function NavigationNew() {
     const [isOpen, setIsOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
+    const router = useRouter();
 
     useEffect(() => {
         const handleScroll = () => {
@@ -34,6 +37,25 @@ export default function NavigationNew() {
             }
         }, 300);
     };
+
+    const handleChatClick = () => {
+        try {
+            const stored = localStorage.getItem('krishnapal_chat_history');
+            const hasHistory = stored && JSON.parse(stored).length > 0;
+
+            if (!hasHistory) {
+                sessionStorage.setItem(
+                    'chat_pending_query',
+                    'Tell me your Experience, skills and projects'
+                );
+            }
+        } catch {
+            // storage unavailable — navigate anyway
+        }
+
+        router.push('/chat');
+    };
+
 
     return (
         <>
@@ -55,16 +77,35 @@ export default function NavigationNew() {
                         <span className={styles.logoDot} />
                     </motion.a>
 
-                    <button
-                        className={`${styles.menuButton} ${isOpen ? styles.open : ''}`}
-                        onClick={() => setIsOpen(!isOpen)}
-                        data-cursor
-                        data-cursor-text={isOpen ? 'Close' : 'Menu'}
-                        aria-label="Toggle menu"
-                    >
-                        <span className={styles.menuLine} />
-                        <span className={styles.menuLine} />
-                    </button>
+                    <div className={styles.headerActions}>
+
+                        {/* ✅ Chat button — before menu icon */}
+                        <motion.button
+                            className={styles.chatButton}
+                            onClick={handleChatClick}
+                            data-cursor
+                            data-cursor-text="Chat"
+                            aria-label="Open AI chat"
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                        >
+                            <FiMessageSquare size={16} />
+                            <span>Ask AI</span>
+                        </motion.button>
+
+                        {/* Menu button */}
+                        <button
+                            className={`${styles.menuButton} ${isOpen ? styles.open : ''}`}
+                            onClick={() => setIsOpen(!isOpen)}
+                            data-cursor
+                            data-cursor-text={isOpen ? 'Close' : 'Menu'}
+                            aria-label="Toggle menu"
+                        >
+                            <span className={styles.menuLine} />
+                            <span className={styles.menuLine} />
+                        </button>
+
+                    </div>
                 </div>
             </motion.header>
 

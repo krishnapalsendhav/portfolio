@@ -12,9 +12,10 @@ export default function LandingAiBox() {
     const handleSubmit = () => {
         if (!inputValue.trim()) return;
 
-        // Navigate to the full chat page with the query as a URL parameter
-        router.push(`/chat?q=${encodeURIComponent(inputValue.trim())}`);
+        sessionStorage.setItem('chat_pending_query', inputValue.trim());
+        router.push('/chat');
     };
+
 
     const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
         if (e.key === 'Enter' && !e.shiftKey) {
