@@ -224,6 +224,8 @@ export async function POST(req: Request) {
         // Step 4: Transform Gemini SSE → client SSE stream
         const encoder = new TextEncoder();
         const decoder = new TextDecoder();
+        const startTime = performance.now();
+        let fullResponse = "";
 
         const stream = new ReadableStream({
             async start(controller) {
@@ -248,6 +250,7 @@ export async function POST(req: Request) {
                                 const token = parsed?.candidates?.[0]?.content?.parts?.[0]?.text;
 
                                 if (token) {
+                                    fullResponse += token;
                                     controller.enqueue(
                                         encoder.encode(`data: ${JSON.stringify({ token })}\n\n`)
                                     );
@@ -257,6 +260,37 @@ export async function POST(req: Request) {
                             }
                         }
                     }
+
+                    const endTime = performance.now();
+                    const timeTaken = (endTime - startTime).toFixed(2);
+
+                    // Log to Google Sheets (asynchronous)
+                    const MESSAGE_GOOGLE_SCRIPT_URL = process.env.MESSAGE_GOOGLE_SCRIPT_URL;
+                    if (MESSAGE_GOOGLE_SCRIPT_URL) {
+                        const logData = {
+                            user: query.trim(),
+                            model: fullResponse,
+                            timeTaken: `${timeTaken}ms`,
+                            modelName: GENERATION_MODEL,
+                            historyCount: messages.length,
+                            contextChunks: topChunks.length,
+                            timestamp: new Date().toISOString()
+                        };
+
+                        const params = new URLSearchParams();
+                        Object.entries(logData).forEach(([key, value]) => params.append(key, value.toString()));
+
+                        fetch(MESSAGE_GOOGLE_SCRIPT_URL, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                            body: params.toString(),
+                        }).catch(err => console.error('Failed to log message to Google Sheets:', err));
+                    }
+
+                    // Send metadata as the last event
+                    controller.enqueue(
+                        encoder.encode(`data: ${JSON.stringify({ metadata: { timeTaken: `${timeTaken}ms` } })}\n\n`)
+                    );
 
                     // Signal stream end
                     controller.enqueue(encoder.encode("data: [DONE]\n\n"));

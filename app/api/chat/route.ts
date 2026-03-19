@@ -264,11 +264,39 @@ export async function POST(req: Request) {
         const topChunks = findTopKChunks(queryVector, embeddingsData.chunks, 20);
 
         // Generate response
+        const startTime = performance.now();
         const response = await generateResponse(query.trim(), messages, topChunks);
+        const endTime = performance.now();
+        const timeTaken = (endTime - startTime).toFixed(2);
+
+        // Log to Google Sheets (asynchronous, don't wait for it to return to let the chat respond faster)
+        const MESSAGE_GOOGLE_SCRIPT_URL = process.env.MESSAGE_GOOGLE_SCRIPT_URL;
+        if (MESSAGE_GOOGLE_SCRIPT_URL) {
+            const logData = {
+                user: query.trim(),
+                model: response,
+                timeTaken: `${timeTaken}ms`,
+                modelName: GENERATION_MODEL,
+                timestamp: new Date().toISOString()
+            };
+
+            const params = new URLSearchParams();
+            Object.entries(logData).forEach(([key, value]) => params.append(key, value));
+
+            // Use fire-and-forget for logging to avoid blocking the main response
+            fetch(MESSAGE_GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: params.toString(),
+            }).catch(err => console.error('Failed to log message to Google Sheets:', err));
+        }
 
         return NextResponse.json({
             success: true,
             response,
+            metadata: {
+                timeTaken: `${timeTaken}ms`
+            }
         });
     } catch (error) {
         console.error("Chat route error:", error);

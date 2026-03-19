@@ -20,6 +20,9 @@ interface Message {
     role: 'user' | 'model' | 'error';
     content: string;
     timestamp: number;
+    metadata?: {
+        timeTaken?: string;
+    };
 }
 
 // =============================================================================
@@ -236,6 +239,7 @@ export default function ChatPage() {
             const reader = response.body!.getReader();
             const decoder = new TextDecoder();
             let fullText = '';
+            let metadata: any = null;
 
             while (true) {
                 const { done, value } = await reader.read();
@@ -249,10 +253,12 @@ export default function ChatPage() {
                     if (!payload || payload === '[DONE]') continue;
 
                     try {
-                        const { token } = JSON.parse(payload);
-                        if (token) {
-                            fullText += token;
+                        const parsed = JSON.parse(payload);
+                        if (parsed.token) {
+                            fullText += parsed.token;
                             setStreamingText(fullText);
+                        } else if (parsed.metadata) {
+                            metadata = parsed.metadata;
                         }
                     } catch {
                         // Skip malformed chunks
@@ -265,7 +271,8 @@ export default function ChatPage() {
                 role: 'model',
                 content: fullText || 'No response received.',
                 timestamp: Date.now(),
-            };
+                metadata, // Store metadata if needed for UI later
+            } as any;
 
             updateMessages((prev) => [...prev, botMessage]);
 
@@ -380,6 +387,11 @@ export default function ChatPage() {
                                             </ReactMarkdown>
                                         ) : (
                                             <p className={styles.userText}>{msg.content}</p>
+                                        )}
+                                        {msg.metadata?.timeTaken && (
+                                            <div className={styles.messageMetadata}>
+                                                Response in {msg.metadata.timeTaken}
+                                            </div>
                                         )}
                                     </div>
                                 </div>

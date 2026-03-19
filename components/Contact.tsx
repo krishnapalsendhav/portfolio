@@ -62,27 +62,25 @@ export default function Contact() {
         setIsSubmitting(true);
         
         try {
-            // Encode the form data for Netlify
-            const encode = (data: Record<string, string>) => {
-                return Object.keys(data)
-                    .map(key => encodeURIComponent(key) + "=" + encodeURIComponent(data[key]))
-                    .join("&");
-            }
-
-            await fetch("/", {
-                method: "POST",
-                headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                body: encode({
-                    "form-name": "contact",
-                    ...formData
-                })
+            const response = await fetch('/api/contact', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
             });
 
-            alert('Thank you for your message! I will get back to you soon.');
-            setFormData({ name: '', email: '', message: '' });
-        } catch (error) {
+            const data = await response.json();
+
+            if (data.success) {
+                alert('Thank you for your message! I will get back to you soon.');
+                setFormData({ name: '', email: '', message: '' });
+            } else {
+                throw new Error(data.error || 'Failed to send message');
+            }
+        } catch (error: any) {
             console.error("Form submission error", error);
-            alert('Oops! Something went wrong submitting the form.');
+            alert(`Oops! Something went wrong: ${error.message || 'Error submitting the form.'}`);
         } finally {
             setIsSubmitting(false);
         }
