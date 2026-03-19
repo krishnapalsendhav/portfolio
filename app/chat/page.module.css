@@ -297,12 +297,26 @@
     animation: pulse 1.2s ease-in-out infinite;
 }
 
-.loadingPulse span:nth-child(2) { animation-delay: 0.2s; }
-.loadingPulse span:nth-child(3) { animation-delay: 0.4s; }
+.loadingPulse span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.loadingPulse span:nth-child(3) {
+    animation-delay: 0.4s;
+}
 
 @keyframes pulse {
-    0%, 100% { opacity: 0.2; transform: scale(0.75); }
-    50% { opacity: 0.85; transform: scale(1.15); }
+
+    0%,
+    100% {
+        opacity: 0.2;
+        transform: scale(0.75);
+    }
+
+    50% {
+        opacity: 0.85;
+        transform: scale(1.15);
+    }
 }
 
 /* =========================================
@@ -359,7 +373,9 @@
     color: rgba(160, 175, 200, 0.3);
 }
 
-.textarea::-webkit-scrollbar { display: none; }
+.textarea::-webkit-scrollbar {
+    display: none;
+}
 
 .sendButton {
     display: flex;
@@ -396,6 +412,40 @@
     font-size: 0.72rem;
     letter-spacing: 0.02em;
     color: rgba(160, 175, 200, 0.28);
+}
+
+/* Blinking cursor during streaming */
+.streamingCursor {
+    display: inline-block;
+    width: 8px;
+    height: 16px;
+    background: currentColor;
+    margin-left: 2px;
+    vertical-align: middle;
+    animation: blink 0.8s step-end infinite;
+}
+
+@keyframes blink {
+    50% {
+        opacity: 0;
+    }
+}
+
+/* Clear button */
+.clearButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-secondary);
+    padding: 8px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    transition: color 0.2s;
+}
+
+.clearButton:hover {
+    color: var(--text-primary);
 }
 
 /* =========================================

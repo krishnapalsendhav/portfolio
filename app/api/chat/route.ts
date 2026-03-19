@@ -46,7 +46,7 @@ interface ScoredChunk {
 }
 
 // Cast imported JSON to our type
-const embeddingsData = embeddingsDataRaw as EmbeddingsData;
+const embeddingsData = embeddingsDataRaw as unknown as EmbeddingsData;
 
 // =============================================================================
 // Vector Operations
@@ -92,8 +92,8 @@ function findTopKChunks(
 // =============================================================================
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-const EMBEDDING_MODEL = "gemini-embedding-001";
-const GENERATION_MODEL = process.env.GENERATION_MODEL || "gemini-2.5-flash";
+const EMBEDDING_MODEL = "gemini-embedding-2-preview";
+const GENERATION_MODEL = process.env.GENERATION_MODEL || "gemini-3.1-flash-lite-preview";
 
 async function embedQuery(query: string): Promise<number[]> {
     if (!GEMINI_API_KEY) {
@@ -112,10 +112,12 @@ async function embedQuery(query: string): Promise<number[]> {
                 content: {
                     parts: [{ text: query }],
                 },
-                outputDimensionality: 768,
+                taskType: "RETRIEVAL_QUERY",
+                outputDimensionality: 1536,
             }),
         }
     );
+
 
     if (!response.ok) {
         const errorText = await response.text();
@@ -259,7 +261,7 @@ export async function POST(req: Request) {
         const queryVector = await embedQuery(query.trim());
 
         // Find top-4 relevant chunks
-        const topChunks = findTopKChunks(queryVector, embeddingsData.chunks, 4);
+        const topChunks = findTopKChunks(queryVector, embeddingsData.chunks, 20);
 
         // Generate response
         const response = await generateResponse(query.trim(), messages, topChunks);

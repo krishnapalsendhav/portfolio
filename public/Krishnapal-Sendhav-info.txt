@@ -1,6 +1,8 @@
 PROFESSIONAL SUMMARY
 
-I am a Senior Software Engineer with more than 3 years of professional experience. My professional journey includes an initial 8-month part-time role in Ujjain, followed by continuous full-time employment at ClassIO Labs Pvt. Ltd. starting from April 1, 2023 and continuing to the present (January 25, 2026). Flutter has been my core and primary technology from the very beginning of my career, and I specialize in building production-ready, cross-platform applications for Android, iOS, Windows, and macOS.
+I am a Senior Software Engineer with more than 3 years of professional experience. My professional journey includes an initial 8-month part-time role in Ujjain, followed by continuous full-time employment at ClassIO Labs Pvt. Ltd. starting from April 1, 2023 and continuing to the present.
+
+Flutter has been my core and primary technology from the very beginning of my career, and I specialize in building production-ready, cross-platform applications for Android, iOS, Windows, and macOS.
 
 I have worked extensively on large-scale educational platforms serving more than 50,000 active users. My engineering focus lies in system architecture, real-time systems, scalability, performance optimization, security, infrastructure cost reduction, and long-term maintainability. I naturally gravitate toward Tech Lead and Architect-style responsibilities and enjoy research, system-level problem solving, and pitching new technical ideas.
 
@@ -19,6 +21,18 @@ PROFESSIONAL EXPERIENCE – CLASSIO LABS PVT. LTD.
 I currently work as a Senior Software Engineer at ClassIO Labs Pvt. Ltd., where I contribute to core product development across multiple platforms. My responsibilities include cross-platform Flutter development, real-time system design, backend integration, performance optimization, security updates, cost reduction initiatives, mentoring junior developers, and owning features and systems end-to-end.
 
 I am directly involved in building, maintaining, and scaling systems that are used daily by tens of thousands of students and educators.
+
+
+TEAM LEADERSHIP & PROJECT MANAGEMENT
+
+At ClassIO Labs, I lead a team of Flutter developers and also guide other development teams, acting in a Project Manager capacity. I am responsible for technical direction, architectural decisions, code reviews, mentoring, sprint planning, and end-to-end feature ownership across platforms.
+
+
+CLASSIO PLATFORM – B2B EDTECH PRODUCT
+
+ClassIO is a B2B EdTech platform serving more than 25 active institutional clients across India, with continuous enrollment of new institutes. Current clients are spread across major cities including Pune, Delhi, Mumbai, Jaipur, Chennai, and Indore.
+
+The platform runs natively on Android, iOS, Windows, and macOS. Web platform is intentionally excluded for content security and DRM reasons to prevent piracy of premium educational content.
 
 
 STUDENT LEARNING PLATFORM (50,000+ ACTIVE USERS)
@@ -47,6 +61,27 @@ LIVE CLASS CHAT & REAL-TIME SYSTEMS
 I implemented live class chat and real-time session management using Firebase Realtime Database. Prior to this, the platform relied on a server-hosted WebSocket solution that cost approximately 25,000 to 30,000 INR per month.
 
 After migrating to Firebase Realtime Database, latency was reduced, scalability improved, and monthly infrastructure costs dropped to approximately 2,000 to 2,500 INR. This migration also simplified maintenance and improved overall system reliability.
+
+
+WEBRTC VIDEO ROOM – LIVE SESSION MODULE
+
+I recently developed a WebRTC-based video room functionality inside the Live Session module of the ClassIO student app. This feature enables real-time video communication for live interactions between students and educators.
+
+The implementation uses a Star Topology (serverless architecture) with Firebase as the signaling mechanism, reducing infrastructure cost and latency significantly. Built entirely in Flutter, handling WebRTC peer connection management, media stream handling, signaling, and full session lifecycle.
+
+Currently live in production with real users, supporting 10–15 participants simultaneously, with ongoing in-house testing to scale further.
+
+Impact: Previously students were restricted to text chat only. Now, if faculty allows, students can interact via direct video for doubts and discussions. This transformed the platform from one-way broadcasting to two-way interactive conversations, helping faculty focus on students who need extra attention and significantly improving trust and engagement between students and educators.
+
+
+AI DOUBT RESOLUTION SYSTEM
+
+I built an end-to-end AI-powered doubt resolution system from scratch for ClassIO. The system runs the AI model on-device to eliminate cloud API costs. On the management side, it generates intelligent reply suggestions for faculty, allowing them to respond to student doubts faster and more effectively. The entire pipeline — from doubt submission to AI-assisted reply — was designed and built by me independently.
+
+
+VIDEO-TO-QUIZ AUTOMATION PIPELINE
+
+The Video-to-Quiz pipeline is a live production feature integrated into the ClassIO Management app. Faculty can automatically generate quizzes from lecture videos using AI, reducing quiz creation time by approximately 90%. This feature is actively used by faculty across client institutes and has significantly reduced manual effort in assessment creation.
 
 
 BACKEND & INFRASTRUCTURE ENGINEERING
@@ -83,14 +118,14 @@ APPLIED AI EXPERIENCE
 
 I work on applied AI systems that are actively used in production environments. My experience includes AI-powered doubt resolution systems, video-to-quiz automation pipelines, agentic chatbot workflows, and AI-assisted content processing.
 
-My focus is on practical AI integration, workflow automation, and building systems that are reliable, controlled, and useful in real-world products rather than experimental research projects.
+I have worked with Gemini API in personal projects and integrated various open-source models for on-device inference in production systems. My focus is on practical AI integration, workflow automation, and building systems that are reliable, controlled, and useful in real-world products rather than experimental research projects.
 
 
 AI POWERED CHATBOT – PORTFOLIO PROJECT
 
-I am currently building an AI-powered chatbot as part of my personal portfolio. This project is based on a Retrieval-Augmented Generation (RAG) architecture and is designed to demonstrate real-world AI system design.
+I built an AI-powered chatbot as part of my personal portfolio using a Retrieval-Augmented Generation (RAG) architecture. The chatbot is powered by Gemini 3.1 Flash Lite for generation and uses semantic search over a structured knowledge base for accurate, context-aware responses.
 
-The chatbot focuses on structured knowledge ingestion, semantic retrieval, context-aware responses, clear system boundaries, and predictable behavior. The goal is to showcase how AI systems can be integrated responsibly and effectively into production-style software systems.
+This project demonstrates real-world AI system design including structured knowledge ingestion, semantic retrieval, streaming responses, and clear system boundaries — integrated directly into my portfolio website.
 
 
 FLUTTER & STATE MANAGEMENT
@@ -117,18 +152,79 @@ I built a Servlet-based self-hosted file server using Java Servlets. This system
 I also built DailyPal, a personal productivity and social platform that supports posts, multi-user interactions, real-time chat, to-do management, and note-taking. DailyPal integrates Google Gemini for AI-assisted features and serves as an experimental platform for real-time systems and applied AI workflows.
 
 
+STARTUP – PARIKSHA AI (CO-FOUNDER)
+
+I am co-founding Pariksha AI (https://pariksha-ai.in/) alongside my full-time role at ClassIO Labs. My role is Co-founder, Flutter Developer, and AI Engineer.
+
+What it is: Pariksha AI is an AI-powered exam preparation platform built for UPSC, PCS, CA, and CS aspirants across India. The mission is to make quality exam preparation accessible to every student — whether from Delhi or a small town in Madhya Pradesh.
+
+The Problem it Solves:
+- Coaching costs 1–2 lakh INR annually, unaffordable for Tier 2/3 city students
+- Students spend 3–5 years preparing, with families bearing financial burden
+- Resources are scattered across 10+ apps wasting hours daily
+
+Key Features Being Built:
+- AI Study Planner: Personalized daily/weekly plans based on exam, date, and weak areas
+- Daily AI Digest: Current affairs summary every morning mapped to the syllabus
+- Community Q&A: Peer answers + AI auto-responds if unanswered within 24 hours
+- Saturday Quiz: Weekly live quiz with real cash prizes for top performers
+- Live Job Alerts: Auto-scraped government vacancies from UPSC, SSC, and all PSCs
+- Anonymous Study Rooms: Group video study with zero identity stored
+
+Tech Stack:
+- Frontend: Flutter (cross-platform)
+- Backend: Java with Microservices architecture, containerized with Docker
+
+Stage: Currently in development, building waitlist, promoting via social media.
+Goal: Reach 10 lakh active aspirants across India.
+
+Vision: "Every aspirant in India deserves the same quality of preparation. Intelligent. Always available."
+
+
+KEY ACHIEVEMENTS & PROUD MOMENTS
+
+- Built live class chat system using Firebase Realtime Database, replacing a WebSocket server and reducing company infrastructure costs by 20–25% monthly
+- Designed and implemented a content upload and processing pipeline that made lecture videos instantly available (previously delayed by hours) and reduced server costs by 35%
+- Built the ClassIO App Builder in the early days of joining with less than 1 year of experience — a system that has sustained in production and continues to run today
+- Built a full content consumption tracking system with Node.js backend
+- Developed AI doubt resolution system with on-device model inference, eliminating cloud API costs entirely
+- Developed WebRTC-based video room for live sessions, enabling two-way faculty-student interaction in production
+
+
+WORKING STYLE & APPROACH
+
+I adapt naturally to different working environments — collaborative within the ClassIO team, fully independent on personal projects, fast-paced when responding to production incidents (including overnight security fixes), and detail-oriented during new feature development with thorough R&D before execution.
+
+When stuck on a hard problem, my approach is: research and find solutions online first, experiment with each candidate solution, then discuss with the team, apply their inputs, and debug every step methodically until the root cause is identified.
+
+
+AVAILABILITY & OPPORTUNITIES
+
+I am currently open to new opportunities with a notice period of approximately 1 month, subject to discussion based on ongoing responsibilities at my current organization.
+
+I do not hold formal certifications, as I believe strongly in practical, hands-on work over certificates. My skills are demonstrated through real production systems, open-source contributions, and measurable impact in live products.
+
+My primary interest for the next role is AI — building intelligent systems, AI-integrated applications, and automation pipelines. I am also very comfortable in EdTech, given my deep experience with ClassIO, and I am open to Flutter Tech Lead or Architect-level positions.
+
+Preferred tech stack for next role: AI/ML integration, Flutter, system design, and engineering leadership.
+
+
 HOBBIES & INTERESTS
 
 I enjoy console gaming and regularly play on a PlayStation 5. I actively explore new technologies, frameworks, and platforms. I spend significant time on research and development activities, debugging complex issues, analyzing system behavior, and understanding root causes to improve software reliability and design.
 
 
-CURRENT ROLE & AVAILABILITY
+FUTURE GOALS & CAREER DIRECTION
 
-I currently work at ClassIO Labs Pvt. Ltd., contributing to core product development, system architecture, and feature ownership across multiple platforms.
+In the next 2–3 years, my goal is to grow into an AI Engineer or Tech Lead/Architect role. I am actively building toward this through my AI work at ClassIO, personal AI projects, and co-founding Pariksha AI.
 
-I am open to Tech Lead or Architect roles, cross-platform application opportunities, freelance or contract projects, and startup collaborations.
+I am open to: AI-focused engineering roles, Tech Lead positions, management-level opportunities, and startup collaborations.
+
+
+CONTACT & LINKS
 
 Location: Indore, Madhya Pradesh, India
 GitHub: https://github.com/krishnapalsendhav
 LinkedIn: https://www.linkedin.com/in/krishnapal-sendhav/
 Email: krishnapalsendhav591@gmail.com
+Pariksha AI: https://pariksha-ai.in/

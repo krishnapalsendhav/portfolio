@@ -15,7 +15,7 @@ const Scene3D = dynamic(() => import('./Scene3D'), {
 
 // Dynamic import for AI input box to avoid SSR issues
 const LandingAiBox = dynamic(() => import('@/components/LandingAiBox'), {
-  ssr: false,
+    ssr: false,
 });
 
 export default function HeroNew() {
