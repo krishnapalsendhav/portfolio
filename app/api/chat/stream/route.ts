@@ -187,15 +187,17 @@ export async function POST(req: Request) {
         const cookieStore = await cookies();
         const supabase = createClient(cookieStore);
 
-        // Extract metadata from headers
+        // Extract metadata from headers (Supports Vercel and Netlify)
         const userAgent = req.headers.get("user-agent") || "unknown";
         
-        // In production (Vercel), x-forwarded-for is often a comma-separated list
-        const forwardFor = req.headers.get("x-forwarded-for");
-        const ip = (forwardFor ? forwardFor.split(',')[0].trim() : req.headers.get("x-real-ip")) || "unknown";
+        // IP Extraction: First check Netlify, then falling back to Vercel/Standard
+        const ip = req.headers.get("x-nf-client-connection-ip") || 
+                   req.headers.get("x-forwarded-for")?.split(',')[0].trim() || 
+                   req.headers.get("x-real-ip") || 
+                   "unknown";
         
-        const country = req.headers.get("x-vercel-ip-country") || "unknown";
-        const city = req.headers.get("x-vercel-ip-city") || "unknown";
+        const country = req.headers.get("x-country") || req.headers.get("x-vercel-ip-country") || "unknown";
+        const city = req.headers.get("x-city") || req.headers.get("x-vercel-ip-city") || "unknown";
 
         // Validate
         if (!query || typeof query !== "string" || query.trim().length === 0) {
