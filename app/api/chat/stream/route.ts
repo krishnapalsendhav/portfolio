@@ -1,4 +1,9 @@
 import embeddingsDataRaw from "@/lib/data/krishnapal_embeddings.json";
+import { createClient } from "@/utils/supabase/server";
+import { cookies } from "next/headers";
+import { UAParser } from 'ua-parser-js';
+
+
 
 
 // =============================================================================
@@ -179,6 +184,14 @@ async function embedQuery(query: string): Promise<number[]> {
 export async function POST(req: Request) {
     try {
         const { query, messages }: StreamChatRequest = await req.json();
+        const cookieStore = await cookies();
+        const supabase = createClient(cookieStore);
+
+        // Extract metadata from headers
+        const userAgent = req.headers.get("user-agent") || "unknown";
+        const ip = req.headers.get("x-forwarded-for") || req.headers.get("x-real-ip") || "unknown";
+        const country = req.headers.get("x-vercel-ip-country") || "unknown";
+        const city = req.headers.get("x-vercel-ip-city") || "unknown";
 
         // Validate
         if (!query || typeof query !== "string" || query.trim().length === 0) {
@@ -264,28 +277,125 @@ export async function POST(req: Request) {
                     const endTime = performance.now();
                     const timeTaken = (endTime - startTime).toFixed(2);
 
-                    // Log to Google Sheets (asynchronous)
-                    const MESSAGE_GOOGLE_SCRIPT_URL = process.env.MESSAGE_GOOGLE_SCRIPT_URL;
-                    if (MESSAGE_GOOGLE_SCRIPT_URL) {
-                        const logData = {
-                            user: query.trim(),
-                            model: fullResponse,
-                            timeTaken: `${timeTaken}ms`,
-                            modelName: GENERATION_MODEL,
-                            historyCount: messages.length,
-                            contextChunks: topChunks.length,
-                            timestamp: new Date().toISOString()
-                        };
+                    // Async IIFE to handle sequential database operations
+                    (async () => {
+                        try {
+                            let deviceId = null;
+                            let locationId = null;
 
-                        const params = new URLSearchParams();
-                        Object.entries(logData).forEach(([key, value]) => params.append(key, value.toString()));
+                            // 1. Look up existing device or insert new one
+                            const { data: existingDevice } = await supabase
+                                .from('devices')
+                                .select('id')
+                                .eq('user_agent', userAgent)
+                                .maybeSingle();
 
-                        fetch(MESSAGE_GOOGLE_SCRIPT_URL, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                            body: params.toString(),
-                        }).catch(err => console.error('Failed to log message to Google Sheets:', err));
-                    }
+                            if (existingDevice) {
+                                deviceId = existingDevice.id;
+                            } else {
+                                const parser = new UAParser(userAgent);
+                                const uaResult = parser.getResult();
+
+                                const deviceData = {
+                                    vendor: uaResult.device.vendor || null,
+                                    model: uaResult.device.model || null,
+                                    os_name: uaResult.os.name || null,
+                                    browser_name: uaResult.browser.name || null,
+                                    user_agent: userAgent
+                                };
+
+                                const { data: newDevice, error: devErr } = await supabase
+                                    .from('devices')
+                                    .insert([deviceData])
+                                    .select('id')
+                                    .single();
+
+                                if (devErr) console.error("Device Insert Error:", devErr);
+                                else if (newDevice) deviceId = newDevice.id;
+                            }
+
+                            // 2. Look up existing location or insert new one
+                            const effectiveIp = ip && ip !== "unknown" ? ip : "hidden";
+
+                            const { data: existingLoc } = await supabase
+                                .from('locations')
+                                .select('id')
+                                .eq('ip', effectiveIp)
+                                .maybeSingle();
+
+                            if (existingLoc) {
+                                locationId = existingLoc.id;
+                            } else {
+                                const insertLocation = async (locParams: any) => {
+                                    const { data, error } = await supabase
+                                        .from('locations')
+                                        .insert([locParams])
+                                        .select('id')
+                                        .single();
+
+                                    if (error) console.error("Location Insert Error:", error);
+                                    return data?.id || null;
+                                };
+
+                                try {
+                                    const locationRes = await fetch(`https://ipapi.co/json/`);
+                                    const loc = await locationRes.json();
+
+                                    if (loc.error) {
+                                        console.error('IPAPI error:', loc.reason || loc.error);
+                                        locationId = await insertLocation({
+                                            ip: effectiveIp,
+                                            city: city !== "unknown" ? city : null,
+                                            country_name: country !== "unknown" ? country : null,
+                                            timestamp: new Date().toISOString()
+                                        });
+                                    } else {
+                                        locationId = await insertLocation({
+                                            ip: loc.ip || effectiveIp,
+                                            city: loc.city || city || null,
+                                            region: loc.region || null,
+                                            country_name: loc.country_name || country || null,
+                                            latitude: loc.latitude || null,
+                                            longitude: loc.longitude || null,
+                                            postal: loc.postal || null,
+                                            org: loc.org || null,
+                                            timestamp: new Date().toISOString()
+                                        });
+                                    }
+                                } catch (err) {
+                                    console.error('Failed to fetch location:', err);
+                                    locationId = await insertLocation({
+                                        ip: effectiveIp,
+                                        city: city === "unknown" ? null : city,
+                                        country_name: country === "unknown" ? null : country,
+                                        timestamp: new Date().toISOString()
+                                    });
+                                }
+                            }
+
+                            // 3. Insert message linking to device and location
+                            const messageId = crypto.randomUUID();
+                            const logData = {
+                                id: messageId,
+                                user_query: query.trim(),
+                                model_response: fullResponse,
+                                model_name: GENERATION_MODEL,
+                                time_taken_ms: Math.round(Number(timeTaken)),
+                                history_count: messages.length,
+                                context_chunks: topChunks.length,
+                                device_id: deviceId,
+                                location_id: locationId
+                            };
+
+                            const { error: msgErr } = await supabase.from('messages').insert([logData]);
+                            if (msgErr) {
+                                console.error('Failed to log message to Supabase:', msgErr);
+                            }
+
+                        } catch (err) {
+                            console.error("Tracking async sequence error:", err);
+                        }
+                    })();
 
                     // Send metadata as the last event
                     controller.enqueue(
