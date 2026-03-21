@@ -399,6 +399,8 @@ export async function POST(req: Request) {
                             const { error: msgErr } = await supabase.from('messages').insert([logData]);
                             if (msgErr) {
                                 console.error('Failed to log message to Supabase:', msgErr);
+                            } else {
+                                console.log(`[Tracking] Successfully logged message ${messageId} (IP: ${ip})`);
                             }
 
                         } catch (err) {
