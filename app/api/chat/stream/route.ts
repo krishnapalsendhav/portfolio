@@ -189,7 +189,11 @@ export async function POST(req: Request) {
 
         // Extract metadata from headers
         const userAgent = req.headers.get("user-agent") || "unknown";
-        const ip = req.headers.get("x-forwarded-for") || req.headers.get("x-real-ip") || "unknown";
+        
+        // In production (Vercel), x-forwarded-for is often a comma-separated list
+        const forwardFor = req.headers.get("x-forwarded-for");
+        const ip = (forwardFor ? forwardFor.split(',')[0].trim() : req.headers.get("x-real-ip")) || "unknown";
+        
         const country = req.headers.get("x-vercel-ip-country") || "unknown";
         const city = req.headers.get("x-vercel-ip-city") || "unknown";
 
@@ -315,13 +319,15 @@ export async function POST(req: Request) {
                             }
 
                             // 2. Look up existing location or insert new one
-                            const effectiveIp = ip && ip !== "unknown" ? ip : "hidden";
-
-                            const { data: existingLoc } = await supabase
+                            const effectiveIp = ip && ip !== "unknown" && ip !== "::1" && ip !== "127.0.0.1" ? ip : "hidden";
+                            
+                            const { data: existingLoc, error: locLookupErr } = await supabase
                                 .from('locations')
                                 .select('id')
                                 .eq('ip', effectiveIp)
                                 .maybeSingle();
+
+                            if (locLookupErr) console.error("Location Lookup Error:", locLookupErr);
 
                             if (existingLoc) {
                                 locationId = existingLoc.id;
@@ -332,13 +338,14 @@ export async function POST(req: Request) {
                                         .insert([locParams])
                                         .select('id')
                                         .single();
-
+                                    
                                     if (error) console.error("Location Insert Error:", error);
                                     return data?.id || null;
                                 };
 
+                                const ipQuery = effectiveIp !== "hidden" ? `${effectiveIp}/` : "";
                                 try {
-                                    const locationRes = await fetch(`https://ipapi.co/json/`);
+                                    const locationRes = await fetch(`https://ipapi.co/${ipQuery}json/`);
                                     const loc = await locationRes.json();
 
                                     if (loc.error) {
@@ -363,11 +370,11 @@ export async function POST(req: Request) {
                                         });
                                     }
                                 } catch (err) {
-                                    console.error('Failed to fetch location:', err);
+                                    console.error('Failed to fetch location from IPAPI:', err);
                                     locationId = await insertLocation({
                                         ip: effectiveIp,
-                                        city: city === "unknown" ? null : city,
-                                        country_name: country === "unknown" ? null : country,
+                                        city: city !== "unknown" ? city : null,
+                                        country_name: country !== "unknown" ? country : null,
                                         timestamp: new Date().toISOString()
                                     });
                                 }
