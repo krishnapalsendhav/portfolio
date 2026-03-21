@@ -284,7 +284,7 @@ export async function POST(req: Request) {
                     const timeTaken = (endTime - startTime).toFixed(2);
 
                     // Async IIFE to handle sequential database operations
-                    (async () => {
+                    await (async () => {
                         try {
                             let deviceId = null;
                             let locationId = null;
