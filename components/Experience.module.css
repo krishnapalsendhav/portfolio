@@ -1,354 +1,285 @@
+/* ─── Experience — Crystal Arrays ───────────────────────────────────── */
+
 .experience {
-    background: var(--bg-secondary);
-    position: relative;
-    overflow: hidden;
+  background: var(--color-surface);
+  position: relative;
 }
 
-/* Journey Label */
-.journeyLabel {
-    display: inline-block;
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: #bf00ff;
-    text-transform: uppercase;
-    letter-spacing: 3px;
-    margin-bottom: 12px;
-    padding: 8px 16px;
-    background: rgba(191, 0, 255, 0.1);
-    border: 1px solid rgba(191, 0, 255, 0.2);
-    border-radius: 20px;
+/* Subtle dot-grid texture to separate from the plain About bg */
+.experience::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(137, 233, 0, 0.25) 1px, transparent 1px);
+  background-size: 28px 28px;
+  opacity: 0.08;
+  pointer-events: none;
 }
 
-/* Floating Shapes */
-.floatingShapes {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    overflow: hidden;
+/* Radial fade so the dots are concentrated in the corners, not center */
+.experience::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 70% 60% at 50% 50%,
+      var(--color-surface) 30%, transparent 100%);
+  pointer-events: none;
 }
 
-.floatingShape {
-    position: absolute;
-    opacity: 0.1;
-    animation: floatShape 12s ease-in-out infinite;
+/* ─── Header ─────────────────────────────────────────────────────────── */
+.header {
+  margin-bottom: var(--space-10);
+  position: relative;
+  z-index: 1;
 }
 
-.circle {
-    border-radius: 50%;
-    background: linear-gradient(135deg, #00f5ff, #bf00ff);
-}
-
-.square {
-    border-radius: 4px;
-    background: linear-gradient(135deg, #bf00ff, #4d7cff);
-    transform: rotate(45deg);
-}
-
-.triangle {
-    width: 0 !important;
-    height: 0 !important;
-    border-left: 25px solid transparent;
-    border-right: 25px solid transparent;
-    border-bottom: 40px solid rgba(0, 245, 255, 0.3);
-    background: none !important;
-}
-
-@keyframes floatShape {
-
-    0%,
-    100% {
-        transform: translateY(0) rotate(0deg);
-    }
-
-    25% {
-        transform: translateY(-30px) rotate(90deg);
-    }
-
-    50% {
-        transform: translateY(-15px) rotate(180deg);
-    }
-
-    75% {
-        transform: translateY(-40px) rotate(270deg);
-    }
-}
-
-/* Gradient Orbs */
-.gradientOrb {
-    position: absolute;
-    width: 350px;
-    height: 350px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(191, 0, 255, 0.12) 0%, transparent 70%);
-    top: 20%;
-    right: -5%;
-    filter: blur(50px);
-    pointer-events: none;
-}
-
-.gradientOrb2 {
-    position: absolute;
-    width: 280px;
-    height: 280px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(0, 245, 255, 0.1) 0%, transparent 70%);
-    bottom: 15%;
-    left: -8%;
-    filter: blur(45px);
-    pointer-events: none;
-}
-
+/* ─── Timeline Layout ────────────────────────────────────────────────── */
 .timeline {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    gap: 40px;
-    padding-left: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  position: relative;
+  z-index: 1;
 }
 
-/* Animated Path SVG */
-.pathSvg {
-    position: absolute;
-    left: 8px;
-    top: 0;
-    width: 4px;
-    height: 100%;
-    z-index: 0;
+/* Vertical line */
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: linear-gradient(to bottom, var(--color-primary), rgba(137, 233, 0, 0.1));
 }
 
-/* Traveling Dot */
-.travelingDot {
-    position: absolute;
-    left: 4px;
-    width: 12px;
-    height: 12px;
-    background: #00f5ff;
-    border-radius: 50%;
-    box-shadow: 0 0 30px rgba(0, 245, 255, 0.8), 0 0 60px rgba(0, 245, 255, 0.4);
-    z-index: 2;
-    transform: translateX(-4px);
-    animation: pulse 2s ease-in-out infinite;
-}
-
-@keyframes pulse {
-
-    0%,
-    100% {
-        box-shadow: 0 0 30px rgba(0, 245, 255, 0.8), 0 0 60px rgba(0, 245, 255, 0.4);
-    }
-
-    50% {
-        box-shadow: 0 0 50px rgba(0, 245, 255, 1), 0 0 100px rgba(0, 245, 255, 0.6);
-    }
-}
-
+/* ─── Timeline Item ──────────────────────────────────────────────────── */
 .timelineItem {
-    display: flex;
-    gap: 30px;
-    position: relative;
-    z-index: 1;
+  position: relative;
+  padding-left: var(--space-7);
+  padding-bottom: var(--space-8);
 }
 
-.timelineMarker {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-top: 32px;
-    position: absolute;
-    left: -40px;
+.timelineItem:last-child {
+  padding-bottom: 0;
 }
 
-.markerDot {
-    width: 16px;
-    height: 16px;
-    background: linear-gradient(135deg, #00f5ff, #bf00ff);
-    border-radius: 50%;
-    box-shadow: 0 0 20px rgba(0, 245, 255, 0.5);
-    flex-shrink: 0;
-    position: relative;
-    z-index: 3;
+/* Dot */
+.timelineDot {
+  position: absolute;
+  left: -4px;
+  top: var(--space-6);
+  width: 9px;
+  height: 9px;
+  border: 1px solid var(--color-primary);
+  background: var(--color-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--dur-reveal) var(--ease-ui);
 }
 
-.markerDot::before {
-    content: '';
-    position: absolute;
-    inset: -4px;
-    border: 2px solid rgba(0, 245, 255, 0.3);
-    border-radius: 50%;
-    animation: ringPulse 2s ease-in-out infinite;
+.timelineDot::after {
+  content: '';
+  width: 3px;
+  height: 3px;
+  background: var(--color-primary);
 }
 
-@keyframes ringPulse {
-
-    0%,
-    100% {
-        transform: scale(1);
-        opacity: 1;
-    }
-
-    50% {
-        transform: scale(1.5);
-        opacity: 0;
-    }
+/* ─── Company Block ──────────────────────────────────────────────────── */
+.companyBlock {
+  padding: var(--space-6) var(--space-6);
+  border: var(--border-thin);
+  background: var(--glass-bg);
+  transition:
+    border-color var(--dur-reveal) var(--ease-ui),
+    background var(--dur-reveal) var(--ease-ui),
+    transform var(--dur-reveal) var(--ease-ui),
+    box-shadow var(--dur-reveal) var(--ease-ui);
+  position: relative;
+  overflow: hidden;
 }
 
-.markerLine {
-    width: 2px;
-    flex: 1;
-    background: linear-gradient(180deg, rgba(0, 245, 255, 0.3), transparent);
-    margin-top: 8px;
-    display: none;
+/* Top accent */
+.companyBlock::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--color-primary);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--dur-reveal) var(--ease-ui);
 }
 
-.companyCard {
-    flex: 1;
-    position: relative;
-    overflow: hidden;
+.companyBlock:hover {
+  border-color: rgba(137, 233, 0, 0.15);
+  background: var(--glass-bg-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
 }
 
-.companyCard::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 3px;
-    height: 100%;
-    background: linear-gradient(180deg, #00f5ff, #bf00ff, #4d7cff);
-    border-radius: 3px 0 0 3px;
+.companyBlock:hover::before {
+  transform: scaleX(1);
 }
 
+/* Spotlight glow effect */
+.companyGlow {
+  position: absolute;
+  pointer-events: none;
+  inset: 0;
+  z-index: 0;
+  opacity: 0;
+  transition: opacity var(--dur-reveal) var(--ease-ui);
+  background: radial-gradient(600px circle at var(--mouse-x, 0) var(--mouse-y, 0),
+      rgba(137, 233, 0, 0.05),
+      transparent 40%);
+}
+
+.companyBlock:hover .companyGlow {
+  opacity: 1;
+}
+
+/* Ensure contents stay above glow */
+.companyContent {
+  position: relative;
+  z-index: 1;
+}
+
+/* Make dot glow when card is hovered by changing DOM structure or using a trick */
+/* Since dot is a sibling, we can't easily hover card -> dot without :has() or changing DOM. */
+/* Let's just use :has() since it's supported in modern browsers */
+.timelineItem:hover .timelineDot {
+  background: var(--color-primary);
+  box-shadow: 0 0 15px rgba(137, 233, 0, 0.5);
+  border-color: var(--color-primary);
+}
+
+.timelineItem:hover .timelineDot::after {
+  background: var(--color-bg);
+}
+
+/* ─── Company Header ─────────────────────────────────────────────────── */
 .companyHeader {
-    margin-bottom: 24px;
-    padding-bottom: 20px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.companyInfo {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-bottom: var(--space-5);
+  padding-bottom: var(--space-4);
+  border-bottom: 1px solid var(--glass-border);
 }
 
 .companyName {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #ffffff;
+  font-family: var(--font-display);
+  font-size: clamp(20px, 3vw, 26px);
+  font-weight: 300;
+  letter-spacing: -0.01em;
+  color: var(--color-text-secondary);
+}
+
+.companyMeta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
 }
 
 .companyLocation {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 0.95rem;
-    color: #6b6b80;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 300;
+  letter-spacing: 1px;
+  color: var(--color-text-muted);
 }
 
-.icon {
-    color: #00f5ff;
-    font-size: 1rem;
-}
-
+/* ─── Roles ──────────────────────────────────────────────────────────── */
 .roles {
-    display: flex;
-    flex-direction: column;
-    gap: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
 }
 
 .role {
-    position: relative;
-}
-
-.role:not(:last-child)::after {
-    content: '';
-    position: absolute;
-    bottom: -14px;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: rgba(255, 255, 255, 0.05);
+  padding-left: var(--space-4);
+  border-left: 1px solid var(--glass-border);
 }
 
 .roleHeader {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin-bottom: 16px;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
 }
 
 .roleTitle {
-    font-size: 1.2rem;
-    font-weight: 600;
-    background: linear-gradient(135deg, #ffffff, #00f5ff);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  color: var(--color-text-secondary);
 }
 
 .rolePeriod {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 0.9rem;
-    color: #a0a0b0;
-    background: rgba(0, 245, 255, 0.1);
-    padding: 6px 14px;
-    border-radius: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  flex-shrink: 0;
 }
 
 .roleDescription {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
 }
 
 .roleDescription li {
-    position: relative;
-    padding-left: 24px;
-    color: #a0a0b0;
-    font-size: 0.95rem;
-    line-height: 1.6;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 200;
+  line-height: 1.6;
+  color: var(--color-text-primary);
 }
 
 .roleDescription li::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 10px;
-    width: 8px;
-    height: 8px;
-    background: linear-gradient(135deg, #00f5ff, #bf00ff);
-    border-radius: 50%;
+  content: '';
+  display: block;
+  flex-shrink: 0;
+  width: 12px;
+  height: 1px;
+  background: rgba(137, 233, 0, 0.4);
+  margin-top: 10px;
 }
 
+/* ─── Mobile ─────────────────────────────────────────────────────────── */
 @media (max-width: 768px) {
-    .timeline {
-        padding-left: 0;
-    }
+  .timelineItem {
+    padding-left: var(--space-5);
+  }
 
-    .timelineItem {
-        gap: 20px;
-    }
+  .companyBlock {
+    padding: var(--space-5) var(--space-4);
+  }
 
-    .timelineMarker {
-        display: none;
-    }
-
-    .pathSvg,
-    .travelingDot {
-        display: none;
-    }
-
-    .roleHeader {
-        flex-direction: column;
-    }
-
-    .floatingShape {
-        display: none;
-    }
+  .roleHeader {
+    flex-direction: column;
+  }
 }

@@ -36,7 +36,7 @@ interface ScoredChunk {
 
 interface StreamChatRequest {
     query: string;
-    messages: any[];
+    messages: { role: 'user' | 'model' | 'error'; content: string }[];
 }
 
 
@@ -189,13 +189,13 @@ export async function POST(req: Request) {
 
         // Extract metadata from headers (Supports Vercel and Netlify)
         const userAgent = req.headers.get("user-agent") || "unknown";
-        
+
         // IP Extraction: First check Netlify, then falling back to Vercel/Standard
-        const ip = req.headers.get("x-nf-client-connection-ip") || 
-                   req.headers.get("x-forwarded-for")?.split(',')[0].trim() || 
-                   req.headers.get("x-real-ip") || 
-                   "unknown";
-        
+        const ip = req.headers.get("x-nf-client-connection-ip") ||
+            req.headers.get("x-forwarded-for")?.split(',')[0].trim() ||
+            req.headers.get("x-real-ip") ||
+            "unknown";
+
         const country = req.headers.get("x-country") || req.headers.get("x-vercel-ip-country") || "unknown";
         const city = req.headers.get("x-city") || req.headers.get("x-vercel-ip-city") || "unknown";
 
@@ -322,7 +322,7 @@ export async function POST(req: Request) {
 
                             // 2. Look up existing location or insert new one
                             const effectiveIp = ip && ip !== "unknown" && ip !== "::1" && ip !== "127.0.0.1" ? ip : "hidden";
-                            
+
                             const { data: existingLoc, error: locLookupErr } = await supabase
                                 .from('locations')
                                 .select('id')
@@ -340,7 +340,7 @@ export async function POST(req: Request) {
                                         .insert([locParams])
                                         .select('id')
                                         .single();
-                                    
+
                                     if (error) console.error("Location Insert Error:", error);
                                     return data?.id || null;
                                 };

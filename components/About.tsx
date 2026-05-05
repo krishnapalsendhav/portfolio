@@ -1,153 +1,123 @@
 'use client';
 
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useInView } from 'framer-motion';
 import { useRef } from 'react';
-import { FiCode, FiUsers, FiCpu, FiLock } from 'react-icons/fi';
+import { FiArrowRight } from 'react-icons/fi';
+import dynamic from 'next/dynamic';
 import styles from './About.module.css';
 
-const highlights = [
-    {
-        icon: FiUsers,
-        title: '50,000+',
-        description: 'Active Users',
-    },
-    {
-        icon: FiCpu,
-        title: 'AI',
-        description: 'Integration',
-    },
-    {
-        icon: FiCode,
-        title: 'Cross-Platform',
-        description: 'Development',
-    },
-    {
-        icon: FiLock,
-        title: 'Secure Content',
-        description: 'DRM',
-    },
+const Scene3D = dynamic(() => import('./Scene3D'), { ssr: false });
+
+const stats = [
+    { value: '50K', accent: '+', label: 'Active Users', desc: 'Flutter apps in production at ClassIO' },
+    { value: '3+', accent: '', label: 'Years', desc: 'Building real-world production systems' },
+    { value: '10+', accent: '', label: 'Projects', desc: 'Cross-platform & backend delivered' },
+    { value: 'AI', accent: '', label: 'Integration', desc: 'LLMs, RAG, on-device inference' },
 ];
 
-// Floating code symbols
-const codeSymbols = ['<', '/>', '{', '}', '()', '[]', '=>', '&&', '||', '...'];
+const specializations = [
+    'Flutter & Dart', 'Backend APIs', 'AI / LLM Integration',
+    'Real-time Systems', 'Custom DRM', 'Clean Architecture',
+    'Firebase', 'Mobile CI/CD', 'LangChain RAG',
+];
+
+const ease = [0.4, 0, 0.2, 1] as const;
 
 export default function About() {
     const ref = useRef(null);
-    const containerRef = useRef(null);
-    const isInView = useInView(ref, { once: true, margin: '-100px' });
+    const isInView = useInView(ref, { once: true, margin: '-80px' });
 
-    const { scrollYProgress } = useScroll({
-        target: containerRef,
-        offset: ['start end', 'end start'],
+    const fadeUp = (delay = 0) => ({
+        initial: { opacity: 0, y: 24 },
+        animate: isInView ? { opacity: 1, y: 0 } : {},
+        transition: { duration: 0.5, delay, ease },
     });
 
-    const y1 = useTransform(scrollYProgress, [0, 1], [100, -100]);
-    const y2 = useTransform(scrollYProgress, [0, 1], [-50, 50]);
-    const rotate = useTransform(scrollYProgress, [0, 1], [0, 360]);
-
     return (
-        <section id="about" ref={containerRef} className={`section ${styles.about}`}>
-            {/* Floating Code Symbols */}
-            <div className={styles.floatingElements}>
-                {codeSymbols.map((symbol, index) => (
-                    <motion.span
-                        key={index}
-                        className={styles.codeSymbol}
-                        initial={{ opacity: 0, scale: 0 }}
-                        animate={isInView ? { opacity: 0.15, scale: 1 } : {}}
-                        transition={{ delay: index * 0.1, duration: 0.5 }}
-                        style={{
-                            left: `${10 + (index * 9)}%`,
-                            top: `${15 + (index % 5) * 18}%`,
-                            animationDelay: `${index * 0.5}s`,
-                        }}
-                    >
-                        {symbol}
-                    </motion.span>
-                ))}
+        <section id="about" className={`section ${styles.about}`}>
+            <div className={styles.sceneContainer}>
+                <Scene3D />
             </div>
-
-            {/* Animated Gradient Orbs */}
-            <motion.div className={styles.gradientOrb1} style={{ y: y1 }} />
-            <motion.div className={styles.gradientOrb2} style={{ y: y2 }} />
-            <motion.div className={styles.gradientOrb3} style={{ rotate }} />
-
-            <div className="container">
-                <motion.div
-                    ref={ref}
-                    initial={{ opacity: 0, y: 50 }}
-                    animate={isInView ? { opacity: 1, y: 0 } : {}}
-                    transition={{ duration: 0.6 }}
-                >
-                    <motion.span
-                        className={styles.journeyLabel}
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={isInView ? { opacity: 1, x: 0 } : {}}
-                        transition={{ delay: 0.2 }}
-                    >
-                        About Me
-                    </motion.span>
-                    <h2 className="section-title">Senior Software Engineer</h2>
+            <div className={`container ${styles.contentLayer}`}>
+                {/* Section Header */}
+                <motion.div className={styles.header} ref={ref} {...fadeUp(0)}>
+                    <span className="section-label">About</span>
+                    <h2 className="section-title">Engineering at Scale</h2>
                     <p className="section-subtitle">
-                        Building production-ready systems focused on scale, performance, and long-term maintainability
+                        I specialise in Flutter, backend systems, and applied AI — building production
+                        applications that serve real users across Android, iOS, Windows, and macOS.
                     </p>
                 </motion.div>
 
-                <div className={styles.content}>
-                    <motion.div
-                        className={styles.textContent}
-                        initial={{ opacity: 0, x: -50 }}
-                        animate={isInView ? { opacity: 1, x: 0 } : {}}
-                        transition={{ duration: 0.6, delay: 0.2 }}
-                    >
+                <div className={styles.grid}>
+                    {/* Left — Bio */}
+                    <motion.div {...fadeUp(0.1)}>
                         <p className={styles.bio}>
-                            Designing and building production-ready, <span className={styles.highlight}>AI-powered cross-platform</span> applications for Android, iOS, Windows, and macOS, focused on scale and performance.
+                            Based in{' '}
+                            <span className={styles.highlight}>Indore, India</span>,
+                            I build{' '}
+                            <span className={styles.accentWord}>performant cross-platform apps</span>,
+                            scalable backend services, and{' '}
+                            <span className={styles.accentWord}>AI-powered workflows</span>{' '}
+                            that solve real problems at scale.
                         </p>
-                        <div className={styles.achievementsList}>
+
+                        <div className={styles.achievements}>
                             <div className={styles.achievementItem}>
-                                <span className={styles.achievementDot} />
-                                Large-scale student platforms(<span className={styles.highlight}>50K+ active users</span>)
+                                Large-scale student platform serving <strong className={styles.achievementStrong}>50,000+ active users</strong>
                             </div>
                             <div className={styles.achievementItem}>
-                                <span className={styles.achievementDot} />
-                                Real-time systems (chat, polls, live classes)
+                                Real-time features: live classes, chat, polls, file sharing
                             </div>
                             <div className={styles.achievementItem}>
-                                <span className={styles.achievementDot} />
-                                Custom DRM and secure content delivery
+                                Custom DRM and encrypted content delivery pipelines
                             </div>
                             <div className={styles.achievementItem}>
-                                <span className={styles.achievementDot} />
-                                AI-powered features and workflow automation
+                                AI-powered features using LLMs, on-device inference, and RAG systems
+                            </div>
+                            <div className={styles.achievementItem}>
+                                End-to-end ownership: architecture, development, and App Store delivery
+                            </div>
+                        </div>
+
+                        <a href="#projects" className={styles.aboutCta}>
+                            View work
+                            <FiArrowRight className={styles.ctaArrow} size={13} />
+                        </a>
+                    </motion.div>
+
+                    {/* Right — Stat cards */}
+                    <motion.div {...fadeUp(0.2)}>
+                        <div className={styles.statsGrid}>
+                            {stats.map((s, i) => (
+                                <motion.div
+                                    key={s.label}
+                                    className={styles.statCard}
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={isInView ? { opacity: 1, y: 0 } : {}}
+                                    transition={{ duration: 0.4, delay: 0.25 + i * 0.07, ease }}
+                                >
+                                    <span className={styles.statCardValue}>
+                                        {s.value}
+                                        <span className={styles.statCardValueAccent}>{s.accent}</span>
+                                    </span>
+                                    <span className={styles.statCardLabel}>{s.label}</span>
+                                    <p className={styles.statCardDesc}>{s.desc}</p>
+                                </motion.div>
+                            ))}
+
+                            {/* Specializations */}
+                            <div className={styles.specializations}>
+                                <p className={styles.specTitle}>Specializations</p>
+                                <div className={styles.specList}>
+                                    {specializations.map((s) => (
+                                        <span key={s} className={styles.specTag}>{s}</span>
+                                    ))}
+                                </div>
                             </div>
                         </div>
                     </motion.div>
-
-                    <div className={styles.highlights}>
-                        {highlights.map((item, index) => (
-                            <motion.div
-                                key={item.title}
-                                className={`glass-card ${styles.highlightCard}`}
-                                initial={{ opacity: 0, y: 30, scale: 0.9 }}
-                                animate={isInView ? { opacity: 1, y: 0, scale: 1 } : {}}
-                                transition={{ duration: 0.5, delay: 0.3 + index * 0.1 }}
-                                whileHover={{
-                                    scale: 1.05,
-                                    boxShadow: '0 0 40px rgba(0, 245, 255, 0.3)'
-                                }}
-                            >
-                                <motion.div
-                                    animate={{ rotate: [0, 10, -10, 0] }}
-                                    transition={{ duration: 4, repeat: Infinity, delay: index * 0.5 }}
-                                >
-                                    <item.icon className={styles.highlightIcon} />
-                                </motion.div>
-                                <h3 className={styles.highlightTitle}>{item.title}</h3>
-                                <p className={styles.highlightDesc}>{item.description}</p>
-                            </motion.div>
-                        ))}
-                    </div>
                 </div>
             </div>
         </section>

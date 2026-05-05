@@ -1,32 +1,33 @@
-import type { Metadata } from 'next';
-import { Space_Grotesk, Outfit } from 'next/font/google';
+import type { Metadata, Viewport } from 'next';
+import { Inter } from 'next/font/google';
 import './globals.css';
 
-const spaceGrotesk = Space_Grotesk({
+const inter = Inter({
   subsets: ['latin'],
+  weight: ['200', '300', '400', '500', '600'],
   display: 'swap',
-  variable: '--font-heading',
+  variable: '--font-inter',
 });
 
-const outfit = Outfit({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-body',
-});
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  themeColor: '#0a0a0a',
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://krishnapalsendhav.netlify.app/'),
-  title: 'Krishnapal Sendhav | Senior Software Engineer',
-  description: 'AI Engineer & Senior Software Engineer at ClassIO, building scalable, privacy-first AI systems and cross-platform applications for 50,000+ users.',
+  title: 'Krishnapal Sendhav | Software Developer',
+  description:
+    'Flutter, backend, and AI-powered application developer. Building performant apps, scalable backends, and AI-driven user experiences.',
   keywords: [
-    'AI Engineer',
     'Flutter Developer',
-    'Full-Stack Developer',
-    'Cross-Platform Applications',
-    'Privacy-First AI',
-    'Production AI Systems',
-    'Backend Engineering',
-    'Krishnapal Sendhav'
+    'Backend Developer',
+    'AI Integration',
+    'Software Engineer',
+    'Cross-Platform Apps',
+    'Krishnapal Sendhav',
+    'Indore',
   ],
   authors: [{ name: 'Krishnapal Sendhav', url: 'https://krishnapalsendhav.netlify.app/' }],
   creator: 'Krishnapal Sendhav',
@@ -35,36 +36,29 @@ export const metadata: Metadata = {
     locale: 'en_US',
     url: 'https://krishnapalsendhav.netlify.app/',
     siteName: 'Krishnapal Sendhav',
-    title: 'Krishnapal Sendhav | Senior Software Engineer',
-    description: 'AI Engineer & Senior Software Engineer at ClassIO, building scalable, privacy-first AI systems and cross-platform applications for 50,000+ users.',
-    images: [
-      {
-        url: '/og-image.png',
-        width: 1200,
-        height: 630,
-        alt: 'Krishnapal Sendhav Portfolio',
-      },
-    ],
+    title: 'Krishnapal Sendhav | Software Developer',
+    description:
+      'Flutter, backend, and AI-powered application developer. Building performant apps, scalable backends, and AI-driven user experiences.',
+    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'Krishnapal Sendhav' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Krishnapal Sendhav | Senior Software Engineer',
-    description: 'AI Engineer & Senior Software Engineer at ClassIO, building scalable, privacy-first AI systems and cross-platform applications for 50,000+ users.',
+    title: 'Krishnapal Sendhav | Software Developer',
+    description:
+      'Flutter, backend, and AI-powered application developer.',
     images: ['/og-image.png'],
   },
-  robots: {
-    index: true,
-    follow: true,
-  },
+  robots: { index: true, follow: true },
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${spaceGrotesk.variable} ${outfit.variable}`} suppressHydrationWarning>
+    <html lang="en" className={inter.variable} suppressHydrationWarning>
+      <head>
+        {/* Malinton is served locally from /public/fonts/ */}
+        {/* Must run synchronously before browser restores scroll position */}
+        <script dangerouslySetInnerHTML={{ __html: "history.scrollRestoration='manual';document.documentElement.scrollTop=0;document.body.scrollTop=0;" }} />
+      </head>
       <body suppressHydrationWarning>{children}</body>
     </html>
   );

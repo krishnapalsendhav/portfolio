@@ -2,178 +2,171 @@
 
 import { motion } from 'framer-motion';
 import { useInView } from 'framer-motion';
-import { useRef } from 'react';
-import {
-    SiFlutter,
-    SiDart,
-    SiJavascript,
-    SiTypescript,
-    SiNodedotjs,
-    SiFirebase,
-    SiGit,
-    SiMongodb,
-    SiPostgresql,
-    SiDocker,
-    SiOpenai
-} from 'react-icons/si';
-import { FiCode, FiServer, FiDatabase, FiCpu } from 'react-icons/fi';
+import { useRef, MouseEvent } from 'react';
+import { SiOpenai } from 'react-icons/si';
+import { FiCode, FiServer, FiDatabase, FiCpu, FiGitBranch } from 'react-icons/fi';
+import dynamic from 'next/dynamic';
 import styles from './Skills.module.css';
+
+const SkillsTechCanvas = dynamic(() => import('./SkillsTechCanvas'), { ssr: false });
 
 const skillCategories = [
     {
-        title: 'Primary Expertise',
-        description: 'Core focus on high-scale production systems',
         icon: FiCode,
+        title: 'Mobile Development',
+        description: 'Production-scale cross-platform',
         items: [
-            'Flutter (production apps at 50K+ scale)',
-            'Dart (performance-focused UI & state handling)',
-            'Mobile system architecture & modular design',
-            'Full-stack mobile product ownership'
+            'Flutter — production apps at 50K+ scale',
+            'Dart — performance-focused UI & state',
+            'Mobile architecture & modular design',
+            'Android, iOS, Windows, macOS delivery',
         ],
     },
     {
-        title: 'Architecture & System Design',
-        description: 'Engineering judgment and scalability',
         icon: FiCpu,
+        title: 'Architecture & Systems',
+        description: 'Engineering judgment at scale',
         items: [
-            'Clean Architecture for long-term maintainability',
-            'Modular / feature-based design patterns',
-            'State management strategy at enterprise scale',
-            'Architected systems for high-concurrency mobile workloads',
-            'Security protocols & Custom DRM integration'
+            'Clean Architecture for maintainability',
+            'Feature-based modular design patterns',
+            'State management at enterprise scale',
+            'Security protocols & custom DRM',
         ],
     },
     {
-        title: 'Backend & Data Systems',
-        description: 'Cloud infrastructure and real-time connectivity',
         icon: FiServer,
+        title: 'Backend & APIs',
+        description: 'Cloud infrastructure & real-time',
         items: [
-            'Production backend APIs for engagement-driven platforms',
-            'Real-time interaction infrastructure (Firebase Realtime Database)',
-            'Live session state and participant management systems',
-            'AI-driven conversational backend systems',
-            "Event-driven notification infrastructure"
+            'Production REST APIs for engagement platforms',
+            'Real-time systems via Firebase & WebSockets',
+            'Live session state & participant management',
+            'Event-driven notification infrastructure',
         ],
     },
     {
-        title: 'Applied AI Engineering',
-        description: 'Production-ready AI integration',
         icon: SiOpenai,
+        title: 'AI / LLM Integration',
+        description: 'Production-ready AI engineering',
         items: [
             'On-device AI for low-latency mobile features',
             'LLM orchestration in production apps',
-            'Agentic workflows for automated learning & content systems',
+            'LangChain-based RAG implementations',
             'AI pipelines for automated media processing',
-            'LangChain-based RAG implementations'
         ],
     },
     {
-        title: 'Programming Languages',
-        description: 'Applied proficiency across the stack',
-        icon: FiCode,
-        items: [
-            'Dart (Primary: Core production development)',
-            'Java (Applied: Backend & Developer tooling)',
-            'JavaScript (Applied: Integration & Web features)',
-            'Python (Applied: AI automation & Pipelines)'
-        ],
-    },
-    {
-        title: 'Engineering Workflow & Delivery',
-        description: 'Release management and lead ownership',
         icon: FiDatabase,
+        title: 'Languages',
+        description: 'Applied proficiency across the stack',
+        items: [
+            'Dart — primary, core production work',
+            'Python — AI automation & pipelines',
+            'JavaScript / TypeScript — web & integration',
+            'Java — backend tooling & services',
+        ],
+    },
+    {
+        icon: FiGitBranch,
+        title: 'Delivery & Workflow',
+        description: 'Release governance & ownership',
         items: [
             'End-to-end App Store & Play Store delivery',
-            'Release coordination aligned with product milestones',
-            'Release governance and crash management',
-            'Post-release iteration based on user behavior and feedback',
-            'Cross-functional team collaboration & Git flows'
+            'Release coordination with product milestones',
+            'Crash management & post-release iteration',
+            'Cross-functional team collaboration',
         ],
     },
 ];
 
-import NeuralBackground from './NeuralBackground';
-import SkillsSpatial from './SkillsSpatial';
+const ease = [0.4, 0, 0.2, 1] as const;
 
 export default function Skills() {
     const ref = useRef(null);
-    const isInView = useInView(ref, { once: true, margin: '-100px' });
+    const isInView = useInView(ref, { once: true, margin: '-80px' });
+
+    const handleMouseMove = (e: MouseEvent<HTMLDivElement>) => {
+        const { currentTarget: target } = e;
+        const rect = target.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        target.style.setProperty('--mouse-x', `${x}px`);
+        target.style.setProperty('--mouse-y', `${y}px`);
+    };
 
     return (
         <section id="skills" className={`section ${styles.skills}`}>
-            <NeuralBackground />
             <div className="container">
+                {/* Header */}
                 <motion.div
                     ref={ref}
-                    initial={{ opacity: 0, y: 50 }}
+                    className={styles.header}
+                    initial={{ opacity: 0, y: 24 }}
                     animate={isInView ? { opacity: 1, y: 0 } : {}}
-                    transition={{ duration: 0.6 }}
+                    transition={{ duration: 0.5, ease }}
                 >
+                    <span className="section-label">Expertise</span>
                     <h2 className="section-title">Engineering & Architecture</h2>
                     <p className="section-subtitle">
-                        Building production-grade systems with focus on scale, performance, and maintainability.
+                        Building production-grade systems with focus on scale, performance, and long-term maintainability.
                     </p>
                 </motion.div>
 
-                {/* Spatial Skills Visualization */}
-                <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={isInView ? { opacity: 1, y: 0 } : {}}
-                    transition={{ duration: 0.6, delay: 0.2 }}
-                    style={{ marginBottom: '60px' }}
-                >
-                    <SkillsSpatial />
-                </motion.div>
-
-                <motion.h3
-                    className="section-subtitle"
-                    style={{ marginBottom: '30px', marginTop: '20px', color: 'rgba(255,255,255,0.5)', fontSize: '0.9rem' }}
-                    initial={{ opacity: 0 }}
-                    animate={isInView ? { opacity: 1 } : {}}
-                    transition={{ delay: 0.4 }}
-                >
-                    Detailed Breakdown
-                </motion.h3>
-
+                {/* Categories */}
                 <div className={styles.categories}>
-                    {skillCategories.map((category, catIndex) => (
+                    {skillCategories.map((cat, i) => (
                         <motion.div
-                            key={category.title}
-                            className={`glass-card ${styles.category}`}
-                            initial={{ opacity: 0, y: 30 }}
+                            key={cat.title}
+                            className={styles.category}
+                            onMouseMove={handleMouseMove}
+                            initial={{ opacity: 0, y: 24 }}
                             animate={isInView ? { opacity: 1, y: 0 } : {}}
-                            transition={{ duration: 0.5, delay: catIndex * 0.1 }}
+                            transition={{ duration: 0.5, delay: 0.1 + i * 0.07, ease }}
                         >
-                            <div className={styles.categoryHeader}>
-                                <div className={styles.iconWrapper}>
-                                    <category.icon className={styles.categoryIcon} />
+                            <div className={styles.categoryGlow} />
+                            <div className={styles.categoryContent}>
+                                <div className={styles.categoryHeader}>
+                                    <div className={styles.iconBox}>
+                                        <cat.icon size={14} />
+                                    </div>
+                                    <div className={styles.headerText}>
+                                        <h3 className={styles.categoryTitle}>{cat.title}</h3>
+                                        <p className={styles.categoryDescription}>{cat.description}</p>
+                                    </div>
                                 </div>
-                                <div className={styles.headerText}>
-                                    <h3 className={styles.categoryTitle}>{category.title}</h3>
-                                    <p className={styles.categoryDescription}>{category.description}</p>
-                                </div>
-                            </div>
 
-                            <ul className={styles.skillList}>
-                                {category.items.map((item, itemIndex) => (
-                                    <motion.li
-                                        key={itemIndex}
-                                        className={styles.skillItem}
-                                        initial={{ opacity: 0, x: -10 }}
-                                        animate={isInView ? { opacity: 1, x: 0 } : {}}
-                                        transition={{
-                                            duration: 0.4,
-                                            delay: catIndex * 0.1 + itemIndex * 0.05
-                                        }}
-                                    >
-                                        <span className={styles.bullet}></span>
-                                        {item}
-                                    </motion.li>
-                                ))}
-                            </ul>
+                                <ul className={styles.skillList}>
+                                    {cat.items.map((item, j) => (
+                                        <motion.li
+                                            key={j}
+                                            className={styles.skillItem}
+                                            initial={{ opacity: 0, x: -8 }}
+                                            animate={isInView ? { opacity: 1, x: 0 } : {}}
+                                            transition={{ duration: 0.3, delay: 0.15 + i * 0.07 + j * 0.04, ease }}
+                                        >
+                                            <span className={styles.bullet} />
+                                            {item}
+                                        </motion.li>
+                                    ))}
+                                </ul>
+                            </div>
                         </motion.div>
                     ))}
                 </div>
+
+                {/* Tech constellation viewport */}
+                <motion.div
+                    className={styles.techRow}
+                    initial={{ opacity: 0 }}
+                    animate={isInView ? { opacity: 1 } : {}}
+                    transition={{ duration: 0.5, delay: 0.6, ease }}
+                >
+                    <div className={styles.techRowHeader}>
+                        <span className={styles.techRowLabel}>Technology Map</span>
+                        <span className={styles.techRowMeta}>Fibonacci sphere — 12 nodes · 200 stars</span>
+                    </div>
+                    <SkillsTechCanvas />
+                </motion.div>
             </div>
         </section>
     );

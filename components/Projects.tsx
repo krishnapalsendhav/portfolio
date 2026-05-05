@@ -1,157 +1,215 @@
 'use client';
 
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { useInView } from 'framer-motion';
-import { useRef } from 'react';
-import { FiUsers, FiSmartphone, FiLayout, FiVideo, FiCpu, FiMessageCircle, FiUpload, FiUploadCloud, FiPackage, FiArrowRight } from 'react-icons/fi';
+import React from 'react';
+import {
+    motion,
+    useScroll,
+    useTransform,
+    useMotionValueEvent,
+    MotionValue,
+} from 'framer-motion';
+import { useRef, useState, MouseEvent } from 'react';
+import { FiArrowRight } from 'react-icons/fi';
 import { useRouter } from 'next/navigation';
-import ParallaxCard from './ParallaxCard';
+import dynamic from 'next/dynamic';
 import styles from './Projects.module.css';
-
 import { projects } from '@/lib/data/projects';
+import type { ProjectData } from '@/lib/data/projects';
 
-// Tech icons for floating effect
-const floatingIcons = ['⚛️', '🚀', '💡', '⚡', '🔮', '✨', '🎯', '💫'];
+const ProjectsThreeBackground = dynamic(
+    () => import('./ProjectsThreeBackground'),
+    { ssr: false }
+);
 
-export default function Projects() {
-    const ref = useRef(null);
-    const containerRef = useRef(null);
-    const isInView = useInView(ref, { once: true, margin: '-100px' });
+// ── Per-card props ────────────────────────────────────────────────────
+interface ProjectCardProps {
+    project: ProjectData;
+    index: number;
+    total: number;
+    scrollYProgress: MotionValue<number>;
+}
 
+// ── Card component ────────────────────────────────────────────────────
+function ProjectCard({ project, index, total, scrollYProgress }: ProjectCardProps) {
     const router = useRouter();
 
-    const { scrollYProgress } = useScroll({
-        target: containerRef,
-        offset: ['start end', 'end start'],
-    });
+    const seg = 1 / total;
+    const isFirst = index === 0;
+    const isLast = index === total - 1;
 
-    const rotate = useTransform(scrollYProgress, [0, 1], [0, 360]);
-    const rotateReverse = useTransform(scrollYProgress, [0, 1], [360, 0]);
-    const y1 = useTransform(scrollYProgress, [0, 1], [80, -80]);
+    // Entry window: card i starts entering 30% before its slot
+    // First card already starts in place so we use a tiny negative to avoid
+    // identical input points in useTransform.
+    const entryStart = isFirst ? -0.01 : Math.max(0, (index - 0.3) * seg);
+    const entryDone = index * seg;
+
+    // Exit window (non-last cards only)
+    const exitStart = (index + 0.65) * seg;
+    const exitDone = Math.min((index + 1) * seg, 1);
+
+    // Slide up from 80 px below; first card is already in place
+    const y = useTransform(
+        scrollYProgress,
+        [entryStart, Math.max(entryDone, entryStart + 0.001)],
+        [isFirst ? 0 : 80, 0],
+    );
+
+    // Opacity: fade-in on entry + fade-out on exit (last card keeps opacity=1)
+    const opacityInputs: number[] = isLast
+        ? [entryStart, Math.max(entryDone, entryStart + 0.001)]
+        : [entryStart, Math.max(entryDone, entryStart + 0.001), exitStart, exitDone];
+    const opacityOutputs: number[] = isLast
+        ? [isFirst ? 1 : 0, 1]
+        : [isFirst ? 1 : 0, 1, 1, 0];
+    const opacity = useTransform(scrollYProgress, opacityInputs, opacityOutputs);
+
+    // Scale: current card shrinks slightly as next one enters
+    const scale = useTransform(
+        scrollYProgress,
+        [isLast ? 0.9999 : exitStart, isLast ? 1 : exitDone],
+        [1, isLast ? 1 : 0.94],
+    );
+
+    const handleMouseMove = (e: MouseEvent<HTMLDivElement>) => {
+        const { currentTarget: target } = e;
+        const rect = target.getBoundingClientRect();
+        target.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
+        target.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
+    };
 
     return (
-        <section id="projects" ref={containerRef} className={`section ${styles.projects}`}>
-            {/* Orbital Rings */}
-            <div className={styles.orbitalContainer}>
-                <motion.div className={styles.orbitalRing1} style={{ rotate }} />
-                <motion.div className={styles.orbitalRing2} style={{ rotate: rotateReverse }} />
-                <motion.div className={styles.orbitalRing3} style={{ rotate }} />
+        <motion.div
+            className={styles.projectCard}
+            style={{ y, opacity, scale, zIndex: index }}
+        >
+            <div
+                className={styles.projectCardInner}
+                onMouseMove={handleMouseMove}
+            >
+                <div className={styles.projectGlow} />
+
+                {/* Left panel */}
+                <div className={styles.projectLeft}>
+                    {/* Icon visual */}
+                    <div className={styles.projectIconBox}>
+                        {React.createElement(
+                            project.icon as React.ComponentType<{ size?: number }>,
+                            { size: 48 }
+                        )}
+                    </div>
+
+                    <div className={styles.projectMeta}>
+                        <span className={styles.projectIndex}>
+                            {String(index + 1).padStart(2, '0')}&thinsp;/&thinsp;{String(total).padStart(2, '0')}
+                        </span>
+                        <h3 className={styles.projectTitle}>{project.title}</h3>
+                        {project.stats && (
+                            <span className={styles.projectStats}>{project.stats}</span>
+                        )}
+                    </div>
+
+                    <div className={styles.projectTags}>
+                        {project.tags.map((tag) => (
+                            <span key={tag} className={styles.tag}>{tag}</span>
+                        ))}
+                    </div>
+                </div>
+
+                {/* Right panel */}
+                <div className={styles.projectRight}>
+                    <p className={styles.projectDescription}>{project.oneLiner}</p>
+
+                    {project.highlights && project.highlights.length > 0 && (
+                        <div className={styles.projectHighlights}>
+                            {project.highlights.slice(0, 3).map((h, i) => (
+                                <div key={i} className={styles.highlight}>
+                                    <span className={styles.highlightDot} />
+                                    {h}
+                                </div>
+                            ))}
+                        </div>
+                    )}
+
+                    <div className={styles.projectFooter}>
+                        <button
+                            className={styles.caseStudyBtn}
+                            onClick={() => router.push(`/projects/${project.id}`)}
+                        >
+                            View Case Study
+                            <FiArrowRight size={12} />
+                        </button>
+                    </div>
+                </div>
             </div>
+        </motion.div>
+    );
+}
 
-            {/* Floating Icons */}
-            <div className={styles.floatingIcons}>
-                {floatingIcons.map((icon, index) => (
-                    <motion.span
-                        key={index}
-                        className={styles.floatingIcon}
-                        style={{
-                            left: `${8 + index * 12}%`,
-                            top: `${15 + (index % 4) * 20}%`,
-                            animationDelay: `${index * 0.7}s`,
-                        }}
-                        initial={{ opacity: 0, scale: 0 }}
-                        animate={isInView ? { opacity: 0.6, scale: 1 } : {}}
-                        transition={{ delay: index * 0.1, duration: 0.5 }}
-                    >
-                        {icon}
-                    </motion.span>
-                ))}
-            </div>
+// ── Section ───────────────────────────────────────────────────────────
+export default function Projects() {
+    const trackRef = useRef<HTMLDivElement>(null);
+    const total = projects.length;
+    const [activeIndex, setActiveIndex] = useState(0);
 
-            {/* Gradient Orb */}
-            <motion.div className={styles.gradientOrb} style={{ y: y1 }} />
+    const { scrollYProgress } = useScroll({
+        target: trackRef,
+        offset: ['start start', 'end end'],
+    });
 
-            <div className="container">
+    useMotionValueEvent(scrollYProgress, 'change', (v) => {
+        setActiveIndex(Math.min(Math.floor(v * total), total - 1));
+    });
+
+    return (
+        <section id="projects" className={`section ${styles.projects}`}>
+            <ProjectsThreeBackground />
+
+            {/* ── Header (normal flow, scrolls away before sticky zone) ── */}
+            <div className={`container ${styles.content}`}>
                 <motion.div
-                    ref={ref}
-                    initial={{ opacity: 0, y: 50 }}
-                    animate={isInView ? { opacity: 1, y: 0 } : {}}
-                    transition={{ duration: 0.6 }}
+                    className={styles.header}
+                    initial={{ opacity: 0, y: 24 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: '-80px' }}
+                    transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
                 >
-                    <motion.span
-                        className={styles.journeyLabel}
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={isInView ? { opacity: 1, x: 0 } : {}}
-                        transition={{ delay: 0.2 }}
-                    >
-                        Chapter 03
-                    </motion.span>
-                    <h2 className="section-title">The Creations</h2>
+                    <span className="section-label">Work</span>
+                    <h2 className="section-title">Featured Projects</h2>
                     <p className="section-subtitle">
-                        Impactful projects I&apos;ve built that make a difference
+                        Production systems built with engineering depth — real users, real scale, real impact.
                     </p>
                 </motion.div>
+            </div>
 
-                <div className={styles.projectsGrid}>
+            {/* ── Scroll track: N × 80 vh tall, sticky viewport inside ── */}
+            <div
+                ref={trackRef}
+                className={styles.stickyTrack}
+                style={{ height: `${total * 80}vh` }}
+            >
+                <div className={styles.stickyViewport}>
+                    {/* Progress dots */}
+                    <div className={styles.progressDots}>
+                        {projects.map((_, i) => (
+                            <div
+                                key={i}
+                                className={`${styles.progressDot}${i === activeIndex ? ` ${styles.progressDotActive}` : ''}`}
+                            />
+                        ))}
+                    </div>
+
+                    {/* One card per project, absolutely stacked */}
                     {projects.map((project, index) => (
-                        <ParallaxCard
-                            key={project.title}
-                            intensity={0.08 + (index % 3) * 0.04}
-                        >
-                            <motion.div
-                                className={`glass-card ${styles.projectCard}`}
-                                initial={{ opacity: 0, y: 30 }}
-                                animate={isInView ? { opacity: 1, y: 0 } : {}}
-                                transition={{ duration: 0.5, delay: index * 0.1 }}
-                                whileHover={{ scale: 1.02 }}
-                            >
-                                {/* Glow trail effect */}
-                                <div className={styles.glowTrail} />
-
-                                <div className={styles.projectHeader}>
-                                    <motion.div
-                                        className={styles.projectIcon}
-                                        animate={{ rotate: [0, 5, -5, 0] }}
-                                        transition={{ duration: 4, repeat: Infinity, delay: index * 0.3 }}
-                                    >
-                                        <project.icon />
-                                    </motion.div>
-                                    <span className={styles.projectStats}>{project.stats}</span>
-                                </div>
-
-                                <h3 className={styles.projectTitle}>{project.title}</h3>
-                                <p className={styles.projectDescription}>{project.oneLiner}</p>
-
-                                <div className={styles.projectHighlights}>
-                                    {project.highlights.map((highlight, i) => (
-                                        <motion.div
-                                            key={i}
-                                            className={styles.highlight}
-                                            initial={{ opacity: 0, x: -10 }}
-                                            animate={isInView ? { opacity: 1, x: 0 } : {}}
-                                            transition={{ delay: index * 0.1 + i * 0.05 }}
-                                        >
-                                            <span className={styles.highlightDot} />
-                                            {highlight}
-                                        </motion.div>
-                                    ))}
-                                </div>
-
-                                <div className={styles.projectTags}>
-                                    {project.tags.map((tag) => (
-                                        <span key={tag} className={styles.tag}>
-                                            {tag}
-                                        </span>
-                                    ))}
-                                </div>
-
-                                <motion.button
-                                    className={styles.caseStudyBtn}
-                                    onClick={() => router.push(`/projects/${project.id}`)}
-                                    whileHover={{ scale: 1.02, x: 5 }}
-                                    whileTap={{ scale: 0.98 }}
-                                    data-cursor
-                                    data-cursor-text="View"
-                                >
-                                    View Case Study
-                                    <FiArrowRight />
-                                </motion.button>
-                            </motion.div>
-                        </ParallaxCard>
+                        <ProjectCard
+                            key={project.id}
+                            project={project}
+                            index={index}
+                            total={total}
+                            scrollYProgress={scrollYProgress}
+                        />
                     ))}
                 </div>
             </div>
-
         </section>
     );
 }

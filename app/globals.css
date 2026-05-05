@@ -1,41 +1,108 @@
-:root {
-  /* Cinematic Color Palette */
-  --bg-primary: #0a0a0f;
-  --bg-secondary: #0d0d14;
-  --bg-tertiary: #12121a;
+/* ─────────────────────────────────────────────────────────────────────────
+   Kiwi & Deep Night Design System – globals.css
+   Primary: #89E900 (Kiwi) | Background: #0a0a0a (Deep Night)
+   Display font: Malinton (local OTF) | Body: Inter / system-ui sans
+────────────────────────────────────────────────────────────────────────── */
 
-  /* Neon Accent Colors */
-  --accent-cyan: #00f5ff;
-  --accent-purple: #ff9100;
-  --accent-blue: #4d7cff;
-  --accent-pink: #ff00a8;
-
-  /* Gradient Combinations */
-  --gradient-primary: linear-gradient(135deg, var(--accent-pink), var(--accent-cyan));
-  --gradient-secondary: linear-gradient(135deg, var(--accent-blue), var(--accent-pink));
-
-  /* Text Colors */
-  --text-primary: #ffffff;
-  --text-secondary: rgba(255, 255, 255, 0.6);
-  --text-muted: rgba(255, 255, 255, 0.3);
-
-  /* Glassmorphism */
-  --glass-bg: rgba(255, 255, 255, 0.02);
-  --glass-border: rgba(255, 255, 255, 0.05);
-  --glass-hover: rgba(255, 255, 255, 0.04);
-
-  /* Shadows */
-  --shadow-glow: 0 0 60px rgba(0, 245, 255, 0.15);
-
-  /* Spacing */
-  --section-padding: 120px 0;
-  --container-width: 1400px;
-
-  /* Typography - Variables are injected by Next.js font loader */
-  --font-main: var(--font-body);
+/* ─── Local Font: Malinton ───────────────────────────────────────────── */
+@font-face {
+  font-family: 'Malinton';
+  src: url('/fonts/Malinton-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
 }
 
-* {
+/* ─── Design Tokens ─────────────────────────────────────────────────── */
+:root {
+  /* ── Core Palette ── */
+  --color-bg: #0a0a0a;
+  --color-surface: #121212;
+  --color-surface-2: #1a1a1a;
+  --color-primary: #89E900;
+  /* Kiwi — accent */
+  --color-primary-dim: rgba(137, 233, 0, 0.7);
+  --color-tertiary: #0a0a0a;
+  /* Deep Night — secondary accent */
+  --color-neutral: #f0f0e8;
+
+  /* ── Text Hierarchy ── */
+  --color-text-primary: rgba(232, 232, 216, 0.72);
+  /* readable warm off-white */
+  --color-text-secondary: #e8e8d8;
+  /* warm off-white */
+  --color-text-muted: rgba(232, 232, 216, 0.35);
+  /* soft muted */
+
+  /* ── Glass System (wattle-tinted on dark) ── */
+  --glass-bg: rgba(232, 232, 216, 0.02);
+  --glass-bg-hover: rgba(232, 232, 216, 0.04);
+  --glass-border: rgba(137, 233, 0, 0.1);
+  --glass-border-strong: rgba(137, 233, 0, 0.25);
+  --glass-blur: blur(4px);
+
+  /* ── Gradients ── */
+  --gradient-scrim-t: linear-gradient(to top, rgba(10, 10, 10, 0.9), rgba(10, 10, 10, 0.2), transparent);
+  --gradient-scrim-b: linear-gradient(to bottom, #e8e8d8, rgba(137, 233, 0, 0.8));
+  --gradient-glass-t: linear-gradient(to top, rgba(137, 233, 0, 0.06), rgba(137, 233, 0, 0));
+  --gradient-primary: linear-gradient(135deg, #89E900 0%, #0a0a0a 100%);
+
+  /* ── Typography ── */
+  --font-display: 'Malinton', serif;
+  --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+
+  /* ── Type Scale ── */
+  --text-display: 128px;
+  --text-h1: clamp(48px, 8vw, 96px);
+  --text-h2: clamp(32px, 5vw, 56px);
+  --text-h3: clamp(20px, 3vw, 28px);
+  --text-body: 14px;
+  --text-label: 12px;
+
+  /* ── Spacing (16px base) ── */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 16px;
+  --space-4: 24px;
+  --space-5: 32px;
+  --space-6: 40px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --space-9: 80px;
+  --space-10: 96px;
+  --space-11: 112px;
+  --space-12: 128px;
+  --space-section: 120px;
+
+  /* ── Layout ── */
+  --container-width: 1280px;
+  --container-pad: 40px;
+
+  /* ── Borders ── */
+  --border-thin: 1px solid var(--glass-border);
+  --border-accent: 1px solid rgba(137, 233, 0, 0.35);
+
+  /* ── Radii ── */
+  --radius-pill: 9999px;
+  --radius-card: 2px;
+  --radius-sm: 4px;
+
+  /* ── Motion ── */
+  --ease-ui: cubic-bezier(0.4, 0, 0.2, 1);
+  --dur-micro: 150ms;
+  --dur-reveal: 500ms;
+  --dur-slow: 800ms;
+
+  /* ── Shadows / Glow ── */
+  --glow-primary: 0 0 24px rgba(137, 233, 0, 0.18);
+  --glow-primary-lg: 0 0 60px rgba(137, 233, 0, 0.25);
+  --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.35);
+}
+
+/* ─── Reset ──────────────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -44,19 +111,25 @@
 html {
   scroll-behavior: auto;
   /* Lenis handles smooth scroll */
+  font-size: 16px;
+  position: relative;
+  /* Required by Lenis v2 for correct scroll offset calculation */
 }
 
 body {
-  font-family: var(--font-main);
-  background: var(--bg-primary);
-  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: var(--text-body);
+  font-weight: 300;
   line-height: 1.6;
+  letter-spacing: 0.015em;
+  background: var(--color-bg);
+  color: var(--color-text-primary);
   overflow-x: hidden;
   cursor: none;
-  /* Hide default cursor */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Restore cursor on mobile and for inputs */
 @media (max-width: 768px) {
   body {
     cursor: auto;
@@ -66,163 +139,253 @@ body {
 input,
 textarea,
 select,
-button {
-  cursor: none;
-}
-
+button,
 a {
   cursor: none;
 }
 
-/* Container */
+@media (max-width: 768px) {
+
+  input,
+  textarea,
+  select,
+  button,
+  a {
+    cursor: auto;
+  }
+}
+
+/* ─── Scrollbar ──────────────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(137, 233, 0, 0.12);
+  border-radius: var(--radius-pill);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(137, 233, 0, 0.28);
+}
+
+/* ─── Selection ──────────────────────────────────────────────────────── */
+::selection {
+  background: rgba(137, 233, 0, 0.25);
+  color: #0a0a0a;
+}
+
+/* ─── Layout Utilities ───────────────────────────────────────────────── */
 .container {
+  width: 100%;
   max-width: var(--container-width);
   margin: 0 auto;
-  padding: 0 40px;
+  padding: 0 var(--container-pad);
 }
 
 @media (max-width: 768px) {
   .container {
-    padding: 0 20px;
+    padding: 0 var(--space-3);
   }
 }
 
-/* Section Styles */
 .section {
-  padding: var(--section-padding);
+  padding: var(--space-section) 0;
   position: relative;
+  overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  .section {
+    padding: var(--space-9) 0;
+  }
+}
+
+/* ─── Typography Utilities ───────────────────────────────────────────── */
+.display-lg {
+  font-family: var(--font-display);
+  font-size: var(--text-h1);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  color: var(--color-text-secondary);
+}
+
+.section-label {
+  font-family: var(--font-body);
+  font-size: var(--text-label);
+  font-weight: 400;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+}
+
+.section-label::before {
+  content: '';
+  display: block;
+  width: 24px;
+  height: 1px;
+  background: var(--color-primary);
 }
 
 .section-title {
-  font-family: var(--font-heading);
-  font-size: clamp(2.5rem, 6vw, 4rem);
-  font-weight: 700;
-  margin-bottom: 16px;
-  letter-spacing: -0.03em;
-  color: #ffffff;
+  font-family: var(--font-display);
+  font-size: var(--text-h2);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-3);
 }
 
 .section-subtitle {
-  font-size: 1.1rem;
-  color: var(--text-secondary);
-  margin-bottom: 60px;
-  max-width: 500px;
+  font-family: var(--font-body);
+  font-size: var(--text-body);
+  font-weight: 300;
+  line-height: 1.7;
+  letter-spacing: 0.015em;
+  color: var(--color-text-primary);
+  max-width: 520px;
+  margin-bottom: var(--space-8);
 }
 
-/* Glassmorphism Card */
+/* ─── Glass Card ─────────────────────────────────────────────────────── */
 .glass-card {
   background: var(--glass-bg);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid var(--glass-border);
-  border-radius: 24px;
-  padding: 32px;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: var(--border-thin);
+  border-radius: var(--radius-card);
+  position: relative;
+  transition:
+    background var(--dur-reveal) var(--ease-ui),
+    border-color var(--dur-reveal) var(--ease-ui),
+    box-shadow var(--dur-reveal) var(--ease-ui);
 }
 
 .glass-card:hover {
-  background: var(--glass-hover);
-  border-color: rgba(0, 245, 255, 0.15);
-  transform: translateY(-8px);
-  box-shadow: var(--shadow-glow);
+  background: var(--glass-bg-hover);
+  border-color: var(--glass-border-strong);
+  box-shadow: var(--glow-primary);
 }
 
-/* Gradient Text */
-.gradient-text {
-  background: var(--gradient-primary);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-/* Buttons */
+/* ─── Buttons ────────────────────────────────────────────────────────── */
 .btn-primary {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 16px 36px;
-  background: #fff;
-  color: var(--bg-primary);
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-5);
+  background: var(--color-primary);
+  color: var(--color-bg);
+  font-family: var(--font-body);
+  font-size: var(--text-label);
   font-weight: 600;
-  font-size: 0.95rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
   border: none;
-  border-radius: 50px;
-  cursor: none;
-  transition: all 0.3s ease;
+  border-radius: 0;
   text-decoration: none;
+  transition:
+    background var(--dur-micro) var(--ease-ui),
+    box-shadow var(--dur-micro) var(--ease-ui);
 }
 
 .btn-primary:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 15px 40px rgba(0, 245, 255, 0.3);
+  background: #9fff1a;
+  box-shadow: var(--glow-primary-lg);
 }
 
 .btn-secondary {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 16px 36px;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-5);
   background: transparent;
-  color: var(--text-primary);
-  font-weight: 500;
-  font-size: 0.95rem;
-  border: 1px solid var(--glass-border);
-  border-radius: 50px;
-  cursor: none;
-  transition: all 0.3s ease;
+  color: var(--color-text-secondary);
+  font-family: var(--font-body);
+  font-size: var(--text-label);
+  font-weight: 400;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  border: 1px solid rgba(137, 233, 0, 0.2);
+  border-radius: 0;
   text-decoration: none;
+  transition:
+    border-color var(--dur-micro) var(--ease-ui),
+    color var(--dur-micro) var(--ease-ui);
 }
 
 .btn-secondary:hover {
-  border-color: var(--accent-cyan);
-  color: var(--accent-cyan);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
 }
 
-/* Noise Texture Overlay */
+.btn-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--color-text-primary);
+  font-family: var(--font-body);
+  font-size: var(--text-label);
+  font-weight: 400;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: color var(--dur-micro) var(--ease-ui);
+}
+
+.btn-link:hover {
+  color: var(--color-primary);
+}
+
+/* ─── Noise Overlay ──────────────────────────────────────────────────── */
 .noise-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   pointer-events: none;
-  z-index: 9998;
-  opacity: 0.03;
+  z-index: 9999;
+  opacity: 0.02;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
 }
 
-/* Scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
+/* ─── Accent Line / Divider ──────────────────────────────────────────── */
+.accent-line {
+  display: block;
+  width: 40px;
+  height: 1px;
+  background: var(--color-primary);
+  margin-bottom: var(--space-4);
 }
 
-::-webkit-scrollbar-track {
-  background: var(--bg-primary);
+/* ─── Grid Decoration ────────────────────────────────────────────────── */
+.grid-bg {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(137, 233, 0, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(137, 233, 0, 0.04) 1px, transparent 1px);
+  background-size: 64px 64px;
+  pointer-events: none;
 }
 
-::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 3px;
-}
+/* ─── Reduced Motion ─────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
 
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.2);
-}
-
-/* Responsive Typography */
-@media (max-width: 768px) {
-  :root {
-    --section-padding: 80px 0;
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
   }
-
-  .glass-card {
-    padding: 24px;
-    border-radius: 16px;
-  }
-}
-
-/* Selection */
-::selection {
-  background: rgba(0, 245, 255, 0.3);
-  color: #ffffff;
 }

@@ -1,86 +1,93 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion, useMotionValue, useSpring } from 'framer-motion';
 import styles from './CustomCursor.module.css';
 
+// Ring trails with a soft spring; dot snaps to exact position
+const RING_SPRING = { damping: 26, stiffness: 200, mass: 0.7 };
+const DOT_TRANSITION = { duration: 0.12, ease: [0.4, 0, 0.2, 1] as const };
+const RING_TRANSITION = { duration: 0.18, ease: [0.4, 0, 0.2, 1] as const };
+
 export default function CustomCursor() {
-    const cursorRef = useRef<HTMLDivElement>(null);
     const [isHovering, setIsHovering] = useState(false);
-    const [isHidden, setIsHidden] = useState(false);
+    const [isClicking, setIsClicking] = useState(false);
+    const [isHidden, setIsHidden] = useState(true);   // hidden until first move
     const [cursorText, setCursorText] = useState('');
 
-    const cursorX = useMotionValue(0);
-    const cursorY = useMotionValue(0);
-
-    // Faster spring config for less lag
-    const springConfig = { damping: 35, stiffness: 800 };
-    const cursorXSpring = useSpring(cursorX, springConfig);
-    const cursorYSpring = useSpring(cursorY, springConfig);
+    const rawX = useMotionValue(-200);
+    const rawY = useMotionValue(-200);
+    const ringX = useSpring(rawX, RING_SPRING);
+    const ringY = useSpring(rawY, RING_SPRING);
 
     useEffect(() => {
-        const moveCursor = (e: MouseEvent) => {
-            cursorX.set(e.clientX);
-            cursorY.set(e.clientY);
-        };
+        let firstMove = true;
 
-        const handleMouseEnter = () => setIsHidden(false);
-        const handleMouseLeave = () => setIsHidden(true);
+        const onMove = (e: MouseEvent) => {
+            rawX.set(e.clientX);
+            rawY.set(e.clientY);
+            if (firstMove) { firstMove = false; setIsHidden(false); }
 
-        // Track hoverable elements
-        const handleElementHover = (e: MouseEvent) => {
             const target = e.target as HTMLElement;
-            const hoverableElement = target.closest('[data-cursor]');
-
-            if (hoverableElement) {
+            const el = target.closest<HTMLElement>(
+                '[data-cursor], a, button, [role="button"]',
+            );
+            if (el) {
                 setIsHovering(true);
-                const text = hoverableElement.getAttribute('data-cursor-text') || '';
-                setCursorText(text);
+                setCursorText(el.getAttribute('data-cursor-text') ?? '');
             } else {
                 setIsHovering(false);
                 setCursorText('');
             }
         };
 
-        window.addEventListener('mousemove', moveCursor);
-        window.addEventListener('mousemove', handleElementHover);
-        document.body.addEventListener('mouseenter', handleMouseEnter);
-        document.body.addEventListener('mouseleave', handleMouseLeave);
+        const onLeave = () => setIsHidden(true);
+        const onEnter = () => { if (!firstMove) setIsHidden(false); };
+        const onDown = () => setIsClicking(true);
+        const onUp = () => setIsClicking(false);
+
+        window.addEventListener('mousemove', onMove, { passive: true });
+        document.documentElement.addEventListener('mouseleave', onLeave);
+        document.documentElement.addEventListener('mouseenter', onEnter);
+        window.addEventListener('mousedown', onDown);
+        window.addEventListener('mouseup', onUp);
 
         return () => {
-            window.removeEventListener('mousemove', moveCursor);
-            window.removeEventListener('mousemove', handleElementHover);
-            document.body.removeEventListener('mouseenter', handleMouseEnter);
-            document.body.removeEventListener('mouseleave', handleMouseLeave);
+            window.removeEventListener('mousemove', onMove);
+            document.documentElement.removeEventListener('mouseleave', onLeave);
+            document.documentElement.removeEventListener('mouseenter', onEnter);
+            window.removeEventListener('mousedown', onDown);
+            window.removeEventListener('mouseup', onUp);
         };
-    }, [cursorX, cursorY]);
-
-    // Hide on mobile
-    if (typeof window !== 'undefined' && window.innerWidth < 768) {
-        return null;
-    }
+    }, [rawX, rawY]);
 
     return (
         <>
-            {/* Main cursor */}
+            {/* Lagged outer ring — scales via Framer to avoid layout reflow */}
             <motion.div
-                ref={cursorRef}
-                className={`${styles.cursor} ${isHovering ? styles.hovering : ''} ${isHidden ? styles.hidden : ''}`}
-                style={{
-                    x: cursorXSpring,
-                    y: cursorYSpring,
+                className={`${styles.ring} ${isHovering ? styles.ringHovering : ''}`}
+                style={{ x: ringX, y: ringY }}
+                animate={{
+                    opacity: isHidden ? 0 : 1,
+                    // 1 → normal (36px), ~1.72 → hover (≈62px), 0.72 → click
+                    scale: isClicking ? 0.72 : isHovering ? 1.72 : 1,
                 }}
+                transition={RING_TRANSITION}
             >
-                {cursorText && <span className={styles.cursorText}>{cursorText}</span>}
+                {cursorText && (
+                    <span className={styles.cursorText}>{cursorText}</span>
+                )}
             </motion.div>
 
-            {/* Cursor dot */}
+            {/* Precision dot — instant, kiwi-green, vanishes on hover */}
             <motion.div
-                className={`${styles.cursorDot} ${isHidden ? styles.hidden : ''}`}
-                style={{
-                    x: cursorX,
-                    y: cursorY,
+                className={styles.dot}
+                style={{ x: rawX, y: rawY }}
+                animate={{
+                    opacity: isHidden ? 0 : 1,
+                    scale: isClicking ? 0.4 : isHovering ? 0 : 1,
                 }}
+                transition={DOT_TRANSITION}
             />
         </>
     );

@@ -68,9 +68,9 @@ function ParticleNetwork() {
                 </bufferGeometry>
                 <pointsMaterial
                     size={0.08}
-                    color="#00f5ff"
+                    color="#89E900"
                     transparent
-                    opacity={0.8}
+                    opacity={0.6}
                     sizeAttenuation
                 />
             </points>
@@ -86,9 +86,9 @@ function ParticleNetwork() {
                     />
                 </bufferGeometry>
                 <lineBasicMaterial
-                    color="#00f5ff"
+                    color="#89E900"
                     transparent
-                    opacity={0.15}
+                    opacity={0.1}
                 />
             </lineSegments>
         </group>
@@ -113,27 +113,34 @@ function CentralSphere() {
 
     return (
         <Float speed={2} rotationIntensity={0.5} floatIntensity={1}>
-            <Sphere ref={meshRef} args={[1.2, 64, 64]}>
-                <MeshDistortMaterial
-                    color="#0a0a1a"
-                    attach="material"
-                    distort={0.4}
-                    speed={2}
-                    roughness={0.2}
-                    metalness={0.8}
+            <Sphere ref={meshRef} args={[1.2, 32, 32]}>
+                <meshPhongMaterial
+                    color="#0a0a0a"
+                    transparent
+                    opacity={0.8}
+                    shininess={100}
+                />
+            </Sphere>
+
+            <Sphere args={[1.21, 16, 16]}>
+                <meshBasicMaterial
+                    color="#89E900"
+                    wireframe
+                    transparent
+                    opacity={0.15}
                 />
             </Sphere>
 
             {/* Glow ring */}
             <mesh rotation={[Math.PI / 2, 0, 0]}>
                 <torusGeometry args={[1.8, 0.02, 16, 100]} />
-                <meshBasicMaterial color="#00f5ff" transparent opacity={0.6} />
+                <meshBasicMaterial color="#89E900" transparent opacity={0.4} />
             </mesh>
 
             {/* Second ring */}
             <mesh rotation={[Math.PI / 3, Math.PI / 4, 0]}>
                 <torusGeometry args={[2.2, 0.015, 16, 100]} />
-                <meshBasicMaterial color="#bf00ff" transparent opacity={0.4} />
+                <meshBasicMaterial color="#89E900" transparent opacity={0.15} />
             </mesh>
         </Float>
     );
@@ -163,7 +170,7 @@ function FloatingShapes() {
                     >
                         <octahedronGeometry args={[0.15]} />
                         <meshBasicMaterial
-                            color={i % 2 === 0 ? '#00f5ff' : '#bf00ff'}
+                            color={i % 2 === 0 ? '#89E900' : '#0a0a0a'}
                             wireframe
                         />
                     </mesh>
@@ -184,12 +191,16 @@ export default function Scene3D() {
                 width: '100%',
                 height: '100%',
                 pointerEvents: 'none',
+                background: 'transparent'
             }}
-            gl={{ antialias: true, alpha: true }}
+            gl={{ antialias: true, alpha: true, preserveDrawingBuffer: true }}
+            onCreated={({ gl }) => {
+                gl.setClearColor(0x000000, 0);
+            }}
         >
             <ambientLight intensity={0.5} />
-            <pointLight position={[10, 10, 10]} intensity={1} color="#00f5ff" />
-            <pointLight position={[-10, -10, -10]} intensity={0.5} color="#bf00ff" />
+            <pointLight position={[10, 10, 10]} intensity={1.5} color="#89E900" />
+            <pointLight position={[-10, -10, -10]} intensity={0.8} color="#0a0a0a" />
 
             <CentralSphere />
             <ParticleNetwork />

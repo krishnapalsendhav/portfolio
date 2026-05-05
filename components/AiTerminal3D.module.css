@@ -1,0 +1,423 @@
+/* ─── AiTerminal3D ───────────────────────────────────────────────────── */
+
+/* ─── Card Wrapper — 3D host ─────────────────────────────────────────── */
+.cardWrapper {
+  position: relative;
+  border-radius: 4px;
+  will-change: transform;
+  /* transform set inline via React state */
+}
+
+/* Ambient glow that intensifies on tilt */
+.edgeGlow {
+  position: absolute;
+  inset: -1px;
+  border-radius: 5px;
+  background: transparent;
+  border: 1px solid rgba(137, 233, 0, 0.18);
+  pointer-events: none;
+  z-index: 3;
+  transition: box-shadow 0.3s ease;
+}
+
+.cardWrapper:hover .edgeGlow,
+.cardWrapper:active .edgeGlow,
+.cardWrapper.tilted .edgeGlow {
+  box-shadow:
+    0 0 0 1px rgba(137, 233, 0, 0.25),
+    0 0 40px rgba(137, 233, 0, 0.1),
+    inset 0 0 40px rgba(137, 233, 0, 0.03);
+}
+
+/* ─── Three.js Canvas (bg layer) ─────────────────────────────────────── */
+.threeBg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 4px;
+  z-index: 0;
+  /* The Three.js renderer fills this element */
+}
+
+/* ─── Terminal UI (on top of canvas) ────────────────────────────────── */
+.terminal {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  background: rgba(10, 10, 10, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 4px;
+  overflow: hidden;
+  /* min-height so Three.js canvas has room */
+  min-height: 420px;
+}
+
+/* ─── Title Bar ──────────────────────────────────────────────────────── */
+.terminalBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  border-bottom: 1px solid rgba(137, 233, 0, 0.1);
+  background: rgba(137, 233, 0, 0.03);
+  flex-shrink: 0;
+}
+
+.terminalLabel {
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--color-primary);
+}
+
+.terminalDots {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.dotR {
+  background: rgba(255, 90, 90, 0.6);
+}
+
+.dotY {
+  background: rgba(137, 233, 0, 0.6);
+}
+
+.dotG {
+  background: rgba(10, 54, 37, 0.9);
+  border: 1px solid rgba(137, 233, 0, 0.3);
+}
+
+/* ─── Messages ───────────────────────────────────────────────────────── */
+.messages {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  min-height: 160px;
+  max-height: 220px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(137, 233, 0, 0.1) transparent;
+}
+
+.messages::-webkit-scrollbar {
+  width: 3px;
+}
+
+.messages::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.messages::-webkit-scrollbar-thumb {
+  background: rgba(137, 233, 0, 0.12);
+}
+
+/* Greeting */
+.greeting {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.greetLabel {
+  font-family: var(--font-body);
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--color-primary);
+}
+
+.greetText {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 300;
+  line-height: 1.65;
+  color: var(--color-text-secondary);
+}
+
+/* User bubble */
+.msgUser {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  animation: slideIn 0.25s ease;
+}
+
+.msgUserLabel {
+  font-family: var(--font-body);
+  font-size: 9px;
+  font-weight: 400;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(232, 232, 216, 0.4);
+  text-align: right;
+}
+
+.msgUserBubble {
+  align-self: flex-end;
+  background: rgba(137, 233, 0, 0.08);
+  border: 1px solid rgba(137, 233, 0, 0.18);
+  padding: 7px 11px;
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 300;
+  color: var(--color-text-secondary);
+  max-width: 90%;
+  line-height: 1.5;
+}
+
+/* Model bubble */
+.msgModel {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  animation: slideIn 0.25s ease;
+}
+
+.msgModelLabel {
+  font-family: var(--font-body);
+  font-size: 9px;
+  font-weight: 400;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--color-primary);
+}
+
+.msgModelBubble {
+  align-self: flex-start;
+  background: rgba(137, 233, 0, 0.03);
+  border: 1px solid rgba(137, 233, 0, 0.1);
+  padding: 7px 11px;
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 300;
+  color: var(--color-text-primary);
+  max-width: 95%;
+  line-height: 1.6;
+}
+
+/* Typing animation */
+.typingDots {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.typingDots span {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  opacity: 0.4;
+  animation: dotPulse 1.2s ease infinite;
+}
+
+.typingDots span:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.typingDots span:nth-child(3) {
+  animation-delay: 0.30s;
+}
+
+@keyframes dotPulse {
+
+  0%,
+  100% {
+    opacity: 0.2;
+    transform: scale(0.8);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ─── Suggestions ─────────────────────────────────────────────────────── */
+.suggestions {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background: rgba(137, 233, 0, 0.06);
+  border-top: 1px solid rgba(137, 233, 0, 0.08);
+  flex-shrink: 0;
+}
+
+.suggBtn {
+  background: rgba(10, 10, 10, 0.6);
+  border: none;
+  padding: 9px 16px;
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 300;
+  letter-spacing: 0.3px;
+  color: var(--color-text-primary);
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition:
+    background 150ms ease,
+    color 150ms ease;
+}
+
+.suggBtn::before {
+  content: '';
+  display: block;
+  width: 12px;
+  height: 1px;
+  background: rgba(137, 233, 0, 0.3);
+  flex-shrink: 0;
+  transition: background 150ms ease;
+}
+
+.suggBtn:hover {
+  background: rgba(137, 233, 0, 0.06);
+  color: var(--color-text-secondary);
+}
+
+.suggBtn:hover::before {
+  background: var(--color-primary);
+}
+
+/* ─── Input Row ──────────────────────────────────────────────────────── */
+.inputRow {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  padding: 10px 14px;
+  border-top: 1px solid rgba(137, 233, 0, 0.08);
+  background: rgba(10, 10, 10, 0.5);
+  flex-shrink: 0;
+}
+
+.prompt {
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 13px;
+  color: var(--color-primary);
+  padding-bottom: 7px;
+  flex-shrink: 0;
+  user-select: none;
+}
+
+.textarea {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--color-text-secondary);
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 300;
+  line-height: 1.5;
+  resize: none;
+  outline: none;
+  max-height: 120px;
+  overflow-y: auto;
+  scrollbar-width: none;
+  padding: 5px 0;
+}
+
+.textarea::placeholder {
+  color: rgba(137, 233, 0, 0.25);
+}
+
+.textarea::-webkit-scrollbar {
+  display: none;
+}
+
+.sendBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  background: transparent;
+  border: 1px solid rgba(137, 233, 0, 0.15);
+  color: rgba(137, 233, 0, 0.3);
+  flex-shrink: 0;
+  margin-bottom: 3px;
+  transition: all 150ms ease;
+}
+
+.sendActive {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #0a0a0a;
+}
+
+.sendActive:hover {
+  box-shadow: 0 0 20px rgba(137, 233, 0, 0.45);
+}
+
+/* ─── Footer ─────────────────────────────────────────────────────────── */
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 7px 14px;
+  border-top: 1px solid rgba(137, 233, 0, 0.06);
+  background: rgba(10, 10, 10, 0.5);
+  flex-shrink: 0;
+}
+
+.footerLabel {
+  font-family: var(--font-body);
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(137, 233, 0, 0.25);
+}
+
+.footerLink {
+  font-family: var(--font-body);
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  text-decoration: none;
+  opacity: 0.6;
+  transition: opacity 150ms ease;
+}
+
+.footerLink:hover {
+  opacity: 1;
+}
+
+/* ─── Mobile ─────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .terminal {
+    min-height: 360px;
+  }
+
+  .messages {
+    max-height: 180px;
+  }
+}

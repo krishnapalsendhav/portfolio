@@ -35,9 +35,14 @@ interface EmbeddingsData {
     chunks: EmbeddingChunk[];
 }
 
+interface ChatMessage {
+    role: 'user' | 'model' | 'error';
+    content: string;
+}
+
 interface ChatRequest {
     query: string;
-    messages: any[];
+    messages: ChatMessage[];
 }
 
 interface ScoredChunk {
@@ -131,7 +136,7 @@ async function embedQuery(query: string): Promise<number[]> {
 
 async function generateResponse(
     query: string,
-    messages: any[],
+    messages: ChatMessage[],
     contextChunks: ScoredChunk[]
 ): Promise<string> {
     if (!GEMINI_API_KEY) {
@@ -260,7 +265,7 @@ export async function POST(req: Request) {
         // Embed the query
         const queryVector = await embedQuery(query.trim());
 
-        // Find top-4 relevant chunks
+        // Find top-20 relevant chunks
         const topChunks = findTopKChunks(queryVector, embeddingsData.chunks, 20);
 
         // Generate response

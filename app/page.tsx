@@ -15,8 +15,6 @@ const CustomCursor = dynamic(() => import('@/components/CustomCursor'), {
   ssr: false,
 });
 
-
-
 export default function Home() {
   return (
     <LenisProvider>

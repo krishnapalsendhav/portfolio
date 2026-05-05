@@ -15,19 +15,25 @@ export default function LenisProvider({ children }: { children: React.ReactNode 
             smoothWheel: true,
         });
 
+        // Force scroll position to top — browser may restore position before this runs
+        lenis.scrollTo(0, { immediate: true });
+
         lenisRef.current = lenis;
+
+        let rafId: number;
 
         function raf(time: number) {
             lenis.raf(time);
-            requestAnimationFrame(raf);
+            rafId = requestAnimationFrame(raf);
         }
 
-        requestAnimationFrame(raf);
+        rafId = requestAnimationFrame(raf);
 
         // Expose lenis to window for GSAP ScrollTrigger
         (window as unknown as { lenis: Lenis }).lenis = lenis;
 
         return () => {
+            cancelAnimationFrame(rafId);
             lenis.destroy();
         };
     }, []);

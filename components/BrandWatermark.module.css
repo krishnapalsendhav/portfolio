@@ -1,0 +1,51 @@
+/* ─── Brand Watermark Section ────────────────────────────────────────── */
+
+.watermark {
+    background: var(--color-bg);
+    overflow: hidden;
+    position: relative;
+    height: 180px;
+    display: flex;
+    align-items: flex-end;
+    pointer-events: none;
+    user-select: none;
+}
+
+/* Top hairline border matching footer */
+.watermark::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--glass-border);
+}
+
+.wordmark {
+    display: block;
+    font-family: var(--font-display);
+    font-size: clamp(120px, 18vw, 240px);
+    font-weight: 400;
+    letter-spacing: -0.03em;
+    line-height: 0.85;
+    color: var(--color-text-secondary);
+    opacity: 0.035;
+    filter: blur(2px);
+    white-space: nowrap;
+    /* Crop bottom half — only show top portion */
+    transform: translateY(28%);
+    padding: 0 var(--container-pad);
+}
+
+@media (max-width: 768px) {
+    .watermark {
+        height: 120px;
+    }
+
+    .wordmark {
+        font-size: clamp(72px, 20vw, 120px);
+        transform: translateY(30%);
+        padding: 0 20px;
+    }
+}

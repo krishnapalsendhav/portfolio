@@ -1,67 +1,88 @@
-.cursor {
+/* ─── Custom Cursor ──────────────────────────────────────────────────── */
+
+/* Hide on touch / narrow screens */
+@media (hover: none),
+(max-width: 768px) {
+
+    .ring,
+    .dot {
+        display: none !important;
+    }
+}
+
+/* ── Outer ring (lagged spring) ─────────────────────────────────────── */
+.ring {
     position: fixed;
     top: 0;
     left: 0;
-    width: 40px;
-    height: 40px;
-    margin-left: -20px;
-    margin-top: -20px;
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    border-radius: 50%;
+    /* Fixed 36 × 36 — Framer scale handles the visual resize */
+    width: 36px;
+    height: 36px;
+    margin-left: -18px;
+    margin-top: -18px;
+    border: 1px solid rgba(137, 233, 0, 0.42);
+    border-radius: 0;
+    /* sharp square */
     pointer-events: none;
     z-index: 9999;
-    transition: width 0.2s ease, height 0.2s ease, background 0.2s ease, border-color 0.2s ease, margin 0.2s ease;
     display: flex;
     align-items: center;
     justify-content: center;
-    mix-blend-mode: difference;
+    /* Color / glow transitions in CSS; size/scale in Framer */
+    transition:
+        border-color 150ms cubic-bezier(0.4, 0, 0.2, 1),
+        background 150ms cubic-bezier(0.4, 0, 0.2, 1),
+        box-shadow 150ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.cursor.hovering {
-    width: 80px;
-    height: 80px;
-    margin-left: -40px;
-    margin-top: -40px;
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(0, 245, 255, 0.8);
-}
-
-.cursor.hidden {
+/* Corner-bracket accent via 8 gradient slices */
+.ring::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        /* top-left */
+        linear-gradient(var(--color-primary), var(--color-primary)) 0 0 / 7px 1px no-repeat,
+        linear-gradient(var(--color-primary), var(--color-primary)) 0 0 / 1px 7px no-repeat,
+        /* top-right */
+        linear-gradient(var(--color-primary), var(--color-primary)) 100% 0 / 7px 1px no-repeat,
+        linear-gradient(var(--color-primary), var(--color-primary)) 100% 0 / 1px 7px no-repeat,
+        /* bottom-left */
+        linear-gradient(var(--color-primary), var(--color-primary)) 0 100% / 7px 1px no-repeat,
+        linear-gradient(var(--color-primary), var(--color-primary)) 0 100% / 1px 7px no-repeat,
+        /* bottom-right */
+        linear-gradient(var(--color-primary), var(--color-primary)) 100% 100% / 7px 1px no-repeat,
+        linear-gradient(var(--color-primary), var(--color-primary)) 100% 100% / 1px 7px no-repeat;
     opacity: 0;
+    transition: opacity 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none;
 }
 
-.cursorDot {
+/* Hover state — brackets appear, border dims, green glow + tint */
+.ringHovering {
+    border-color: rgba(137, 233, 0, 0.14);
+    background: rgba(137, 233, 0, 0.05);
+    box-shadow:
+        0 0 28px rgba(137, 233, 0, 0.14),
+        inset 0 0 18px rgba(137, 233, 0, 0.04);
+}
+
+.ringHovering::before {
+    opacity: 1;
+}
+
+/* ── Precision dot (instant position) ──────────────────────────────── */
+.dot {
     position: fixed;
     top: 0;
     left: 0;
-    width: 6px;
-    height: 6px;
-    margin-left: -3px;
-    margin-top: -3px;
-    background: #00f5ff;
+    width: 5px;
+    height: 5px;
+    margin-left: -2.5px;
+    margin-top: -2.5px;
+    background: var(--color-primary);
     border-radius: 50%;
     pointer-events: none;
     z-index: 10000;
-    box-shadow: 0 0 10px #00f5ff, 0 0 20px rgba(0, 245, 255, 0.5);
-}
-
-.cursorDot.hidden {
-    opacity: 0;
-}
-
-.cursorText {
-    font-size: 10px;
-    font-weight: 600;
-    color: #ffffff;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    white-space: nowrap;
-}
-
-@media (max-width: 768px) {
-
-    .cursor,
-    .cursorDot {
-        display: none;
-    }
+    box-shadow: 0 0 8px 2px rgba(137, 233, 0, 0.55);
 }

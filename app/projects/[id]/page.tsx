@@ -1,8 +1,9 @@
 'use client';
 
-import { use, useEffect, useState } from 'react';
+import { use, useEffect, useState, useRef } from 'react';
+import type { ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
-import { motion } from 'framer-motion';
+import { motion, useScroll, useSpring, useInView } from 'framer-motion';
 import { FiArrowLeft, FiArrowRight } from 'react-icons/fi';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
@@ -10,30 +11,48 @@ import { projects } from '@/lib/data/projects';
 import LenisProvider from '@/components/LenisProvider';
 import styles from './page.module.css';
 
-// Dynamic import for custom cursor to avoid SSR issues
-const CustomCursor = dynamic(() => import('@/components/CustomCursor'), {
-  ssr: false,
-});
+const CustomCursor = dynamic(() => import('@/components/CustomCursor'), { ssr: false });
+
+const ease = [0.4, 0, 0.2, 1] as const;
+
+// ── Scroll-reveal section wrapper ───────────────────────────────────────────
+function RevealSection({ label, title, children }: { label: string; title: string; children: ReactNode }) {
+    const ref = useRef<HTMLDivElement>(null);
+    const inView = useInView(ref, { once: true, margin: '-60px 0px' });
+    return (
+        <motion.div
+            ref={ref}
+            className={styles.section}
+            initial={{ opacity: 0, y: 36 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.55, ease }}
+        >
+            <div className={styles.sectionHeader}>
+                <span className={styles.sectionNum}>{label}</span>
+                <h2 className={styles.sectionTitle}>{title}</h2>
+            </div>
+            <div className={styles.sectionBody}>{children}</div>
+        </motion.div>
+    );
+}
 
 export default function ProjectPage({ params }: { params: Promise<{ id: string }> }) {
     const router = useRouter();
-    // React `use()` unwraps the params
-    const resolvedParams = use(params);
-    const { id } = resolvedParams;
-
+    const { id } = use(params);
     const [mounted, setMounted] = useState(false);
 
-    useEffect(() => {
-        setMounted(true);
-    }, []);
+    // Scroll progress bar
+    const { scrollYProgress } = useScroll();
+    const scaleX = useSpring(scrollYProgress, { stiffness: 280, damping: 38, restDelta: 0.001 });
 
-    // Find current project
+    useEffect(() => { setMounted(true); }, []);
+
     const projectIndex = projects.findIndex((p) => p.id === id);
     const project = projects[projectIndex];
 
     if (!project) {
         return (
-            <div className={styles.main} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div className={styles.notFound}>
                 <h1>Project Not Found</h1>
             </div>
         );
@@ -41,176 +60,251 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
 
     const nextProject = projects[(projectIndex + 1) % projects.length];
     const prevProject = projects[(projectIndex - 1 + projects.length) % projects.length];
+    const indexLabel = String(projectIndex + 1).padStart(2, '0');
 
-    if (!mounted) return null; // Avoid hydration mismatch
+    if (!mounted) return null;
 
     return (
         <LenisProvider>
             <main className={styles.main}>
                 <CustomCursor />
                 <div className="noise-overlay" />
-                
-                {/* Decorative Elements */}
-                <div className={styles.gradientOrb1} />
-                <div className={styles.gradientOrb2} />
 
-                {/* Header Container */}
-                <div className={styles.headerContainer}>
-                    <button 
-                        onClick={() => router.push('/#projects')}
+                {/* Scroll progress bar */}
+                <motion.div className={styles.progressBar} style={{ scaleX }} />
+
+                {/* ── Hero ─────────────────────────────────────────── */}
+                <section className={styles.hero}>
+                    <motion.button
                         className={styles.backButton}
+                        onClick={() => router.push('/#projects')}
                         aria-label="Back to projects"
                         data-cursor
+                        initial={{ opacity: 0, x: -12 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.4, ease }}
                     >
-                        <FiArrowLeft size={24} />
-                    </button>
+                        <FiArrowLeft size={14} />
+                        <span>Projects</span>
+                    </motion.button>
 
+                    {/* Large faded project index */}
                     <motion.span
-                        className={styles.stats}
-                        initial={{ opacity: 0, y: -20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5 }}
-                    >
-                        {project.stats}
-                    </motion.span>
-
-                    <motion.h1
-                        className={styles.title}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, delay: 0.1 }}
-                    >
-                        {project.title}
-                    </motion.h1>
-
-                    <motion.p
-                        className={styles.oneLiner}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, delay: 0.2 }}
-                    >
-                        {project.oneLiner}
-                    </motion.p>
-
-                    <motion.div
-                        className={styles.tags}
+                        className={styles.heroIndex}
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        transition={{ duration: 0.5, delay: 0.3 }}
+                        transition={{ duration: 1.0, ease }}
                     >
-                        {project.tags.map((tag) => (
-                            <span key={tag} className={styles.tag}>
-                                {tag}
-                            </span>
-                        ))}
-                    </motion.div>
-                </div>
+                        {indexLabel}
+                    </motion.span>
 
-                {/* Content Container */}
-                <div className={styles.contentContainer}>
+                    <div className={styles.heroBody}>
+                        <span className={styles.heroAccent} />
+                        <motion.span
+                            className={styles.heroStats}
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.4, delay: 0.06, ease }}
+                        >
+                            {project.stats}
+                        </motion.span>
+
+                        <motion.h1
+                            className={styles.heroTitle}
+                            initial={{ opacity: 0, y: 28 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.55, delay: 0.12, ease }}
+                        >
+                            {project.title}
+                        </motion.h1>
+
+                        <motion.p
+                            className={styles.heroOneLiner}
+                            initial={{ opacity: 0, y: 14 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5, delay: 0.2, ease }}
+                        >
+                            {project.oneLiner}
+                        </motion.p>
+
+                        <motion.div
+                            className={styles.heroTags}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ duration: 0.4, delay: 0.3, ease }}
+                        >
+                            {project.tags.map((tag) => (
+                                <span key={tag} className={styles.tag}>{tag}</span>
+                            ))}
+                        </motion.div>
+                    </div>
+
                     <motion.div
-                        className={styles.caseStudy}
-                        initial={{ opacity: 0, y: 40 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6, delay: 0.4 }}
-                    >
-                        {/* Summary / Challenge */}
+                        className={styles.heroDivider}
+                        initial={{ scaleX: 0 }}
+                        animate={{ scaleX: 1 }}
+                        transition={{ duration: 0.75, delay: 0.38, ease }}
+                    />
+                </section>
+
+                {/* ── Body ─────────────────────────────────────────── */}
+                <div className={styles.body}>
+
+                    {/* Sticky sidebar — desktop only */}
+                    <aside className={styles.sidebar}>
+                        <div className={styles.sidebarSticky}>
+                            <span className={styles.sidebarIndex}>{indexLabel}</span>
+                            <div className={styles.sidebarDivider} />
+                            <div className={styles.sidebarNav}>
+                                <Link
+                                    href={`/projects/${prevProject.id}`}
+                                    className={styles.sideNavBtn}
+                                    data-cursor
+                                    aria-label="Previous project"
+                                >
+                                    <FiArrowLeft size={13} />
+                                </Link>
+                                <Link
+                                    href={`/projects/${nextProject.id}`}
+                                    className={styles.sideNavBtn}
+                                    data-cursor
+                                    aria-label="Next project"
+                                >
+                                    <FiArrowRight size={13} />
+                                </Link>
+                            </div>
+                        </div>
+                    </aside>
+
+                    {/* Main case-study content */}
+                    <div className={styles.content}>
+
                         {project.problemStatement && (
-                            <div className={styles.section}>
-                                <h3 className={styles.sectionTitle}>The Challenge</h3>
-                                <p className={styles.sectionText}>{project.problemStatement}</p>
-                            </div>
+                            <RevealSection label="01" title="The Challenge">
+                                <p className={styles.bodyText}>{project.problemStatement}</p>
+                            </RevealSection>
                         )}
 
-                        {/* Solution */}
                         {project.solution && (
-                            <div className={styles.section}>
-                                <h3 className={styles.sectionTitle}>The Solution</h3>
-                                <p className={styles.sectionText}>{project.solution}</p>
-                            </div>
+                            <RevealSection label="02" title="The Solution">
+                                <p className={styles.bodyText}>{project.solution}</p>
+                            </RevealSection>
                         )}
 
-                        {/* Metrics Grid */}
                         {project.metrics && project.metrics.length > 0 && (
-                            <div className={styles.metricsGrid}>
-                                {project.metrics.map((metric, index) => {
-                                    const Icon = metric.icon;
-                                    return (
-                                        <motion.div
-                                            key={metric.label}
-                                            className={styles.metricCard}
-                                            initial={{ opacity: 0, scale: 0.9 }}
-                                            whileInView={{ opacity: 1, scale: 1 }}
-                                            viewport={{ once: true }}
-                                            transition={{ delay: index * 0.1 }}
-                                        >
-                                            <Icon className={styles.metricIcon} />
-                                            <span className={styles.metricValue}>{metric.value}</span>
-                                            <span className={styles.metricLabel}>{metric.label}</span>
-                                        </motion.div>
-                                    );
-                                })}
-                            </div>
+                            <RevealSection label="03" title="Impact">
+                                <div className={styles.metricsGrid}>
+                                    {project.metrics.map((metric, i) => {
+                                        const Icon = metric.icon;
+                                        return (
+                                            <motion.div
+                                                key={metric.label}
+                                                className={styles.metricCard}
+                                                initial={{ opacity: 0, y: 20 }}
+                                                whileInView={{ opacity: 1, y: 0 }}
+                                                viewport={{ once: true, margin: '-40px' }}
+                                                transition={{ duration: 0.4, delay: i * 0.08, ease }}
+                                            >
+                                                <Icon className={styles.metricIcon} />
+                                                <span className={styles.metricValue}>{metric.value}</span>
+                                                <span className={styles.metricLabel}>{metric.label}</span>
+                                            </motion.div>
+                                        );
+                                    })}
+                                </div>
+                            </RevealSection>
                         )}
 
-                        {/* Tech Stack */}
                         {project.techStack && project.techStack.length > 0 && (
-                            <div className={styles.techSection}>
-                                <h3 className={styles.sectionTitle}>Tech Stack</h3>
-                                <div className={styles.techGrid}>
-                                    {project.techStack.map((tech, index) => (
+                            <RevealSection label="04" title="Tech Stack">
+                                <div className={styles.techRow}>
+                                    {project.techStack.map((tech, i) => (
                                         <motion.div
                                             key={tech.name}
-                                            className={styles.techItem}
-                                            initial={{ opacity: 0, x: -20 }}
-                                            whileInView={{ opacity: 1, x: 0 }}
+                                            className={styles.techPill}
+                                            initial={{ opacity: 0, scale: 0.88 }}
+                                            whileInView={{ opacity: 1, scale: 1 }}
                                             viewport={{ once: true }}
-                                            transition={{ delay: index * 0.05 }}
+                                            transition={{ duration: 0.28, delay: i * 0.05, ease }}
                                         >
-                                            <span className={styles.techName}>{tech.name}</span>
-                                            <span className={styles.techCategory}>{tech.category}</span>
+                                            <span className={styles.techPillName}>{tech.name}</span>
+                                            <span className={styles.techPillCat}>{tech.category}</span>
                                         </motion.div>
                                     ))}
                                 </div>
-                            </div>
+                            </RevealSection>
                         )}
 
-                        {/* Highlights */}
                         {project.highlights && project.highlights.length > 0 && (
-                            <div className={styles.highlights}>
-                                <h3 className={styles.sectionTitle}>Key Highlights</h3>
+                            <RevealSection label="05" title="Key Highlights">
                                 <ul className={styles.highlightsList}>
-                                    {project.highlights.map((highlight, index) => (
+                                    {project.highlights.map((h, i) => (
                                         <motion.li
-                                            key={index}
-                                            initial={{ opacity: 0, x: -20 }}
+                                            key={i}
+                                            className={styles.highlightItem}
+                                            initial={{ opacity: 0, x: -14 }}
                                             whileInView={{ opacity: 1, x: 0 }}
                                             viewport={{ once: true }}
-                                            transition={{ delay: index * 0.1 }}
+                                            transition={{ duration: 0.32, delay: i * 0.07, ease }}
                                         >
-                                            <span className={styles.highlightDot} />
-                                            {highlight}
+                                            <span className={styles.highlightLine} />
+                                            {h}
                                         </motion.li>
                                     ))}
                                 </ul>
-                            </div>
+                            </RevealSection>
                         )}
 
-                        {/* Next / Prev Navigation */}
-                        <div className={styles.navigation}>
-                            <Link href={`/projects/${prevProject.id}`} className={styles.navButton} data-cursor>
-                                <FiArrowLeft className={styles.navIconLeft} />
-                                Previous: {prevProject.title.length > 15 ? prevProject.title.substring(0, 15) + '...' : prevProject.title}
-                            </Link>
+                        {project.links && project.links.length > 0 && (
+                            <RevealSection label="06" title="Links">
+                                <div className={styles.linksRow}>
+                                    {project.links.map((link) => {
+                                        const Icon = link.icon as React.ComponentType<{ size?: number }>;
+                                        return (
+                                            <motion.a
+                                                key={link.label}
+                                                href={link.url}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className={styles.linkBtn}
+                                                data-cursor
+                                                initial={{ opacity: 0, y: 10 }}
+                                                whileInView={{ opacity: 1, y: 0 }}
+                                                viewport={{ once: true }}
+                                                transition={{ duration: 0.3, ease }}
+                                            >
+                                                <Icon size={13} />
+                                                {link.label}
+                                            </motion.a>
+                                        );
+                                    })}
+                                </div>
+                            </RevealSection>
+                        )}
 
-                            <Link href={`/projects/${nextProject.id}`} className={styles.navButton} data-cursor>
-                                Next: {nextProject.title.length > 15 ? nextProject.title.substring(0, 15) + '...' : nextProject.title}
-                                <FiArrowRight className={styles.navIconRight} />
-                            </Link>
-                        </div>
-                    </motion.div>
+                    </div>
                 </div>
+
+                {/* ── Next Project Teaser ───────────────────────────── */}
+                <Link href={`/projects/${nextProject.id}`} className={styles.nextTeaser} data-cursor>
+                    <div className={styles.nextTeaserInner}>
+                        <span className={styles.nextLabel}>Next Project</span>
+                        <div className={styles.nextTitleRow}>
+                            <span className={styles.nextTitle}>{nextProject.title}</span>
+                            <FiArrowRight className={styles.nextArrow} />
+                        </div>
+                        <span className={styles.nextOneLiner}>{nextProject.oneLiner}</span>
+                    </div>
+                    <motion.div
+                        className={styles.nextFill}
+                        initial={{ scaleX: 0 }}
+                        whileHover={{ scaleX: 1 }}
+                        transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
+                    />
+                </Link>
+
             </main>
         </LenisProvider>
     );
 }
+

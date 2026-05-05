@@ -326,10 +326,11 @@ export default function ChatPage() {
                             aria-label="Back to home"
                             data-cursor
                         >
-                            <FiArrowLeft size={24} />
+                            <FiArrowLeft size={16} />
                         </button>
                         <div className={styles.headerTitle}>
                             <h2>Krishnapal Sendhav</h2>
+                            <div className={styles.headerSubtitle}>AI Assistant</div>
                         </div>
                         {messages.length > 0 && (
                             <button
